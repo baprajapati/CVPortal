@@ -1,0 +1,326 @@
+﻿@model CVPortal.ViewModels.VendorStep1
+
+@{
+    ViewBag.Title = "Vendor Form";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".back-button-1").click(function () {
+                window.location.href = "/Vendors/VendorStep1/" + $("#Id").val();
+            });
+
+            //State details by country id
+            $("#ddlCountry1").change(function () {
+                var CountryId = parseInt($(this).val());
+                if (!isNaN(CountryId)) {
+                    var ddlState = $('#ddlState1');
+                    ddlState.empty();
+                    ddlState.append($("<option></option>").val('').html('Please wait ...'));
+
+                    $.ajax({
+                        url: '/Vendors/StateDetails',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { CountryId: CountryId },
+                        success: function (d) {
+                            ddlState.empty(); // Clear the please wait
+                            ddlState.append($("<option></option>").val('').html('Select State'));
+                            $.each(d, function (i, states) {
+                                ddlState.append($("<option></option>").val(states.id).html(states.name));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+            });
+
+            //City Bind By satate id
+            $("#ddlState1").change(function () {
+                var StateId = parseInt($(this).val());
+                if (!isNaN(StateId)) {
+                    var ddlCity = $('#ddlCity1');
+                    ddlCity.append($("<option></option>").val('').html('Please wait ...'));
+
+                    $.ajax({
+                        url: '/Vendors/CityDetails',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { stateId: StateId },
+                        success: function (d) {
+                            ddlCity.empty(); // Clear the plese wait
+                            ddlCity.append($("<option></option>").val('').html('Select City'));
+                            $.each(d, function (i, cities) {
+                                ddlCity.append($("<option></option>").val(cities.id).html(cities.name));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+            });
+
+            //State details by country id
+            $("#ddlCountry2").change(function () {
+                var CountryId = parseInt($(this).val());
+                if (!isNaN(CountryId)) {
+                    var ddlState = $('#ddlState2');
+                    ddlState.empty();
+                    ddlState.append($("<option></option>").val('').html('Please wait ...'));
+
+                    $.ajax({
+                        url: '/Vendors/StateDetails',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { CountryId: CountryId },
+                        success: function (d) {
+                            ddlState.empty(); // Clear the please wait
+                            ddlState.append($("<option></option>").val('').html('Select State'));
+                            $.each(d, function (i, states) {
+                                ddlState.append($("<option></option>").val(states.id).html(states.name));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+            });
+
+            //City Bind By satate id
+            $("#ddlState2").change(function () {
+                var StateId = parseInt($(this).val());
+                if (!isNaN(StateId)) {
+                    var ddlCity = $('#ddlCity2');
+                    ddlCity.append($("<option></option>").val('').html('Please wait ...'));
+
+                    $.ajax({
+                        url: '/Vendors/CityDetails',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { stateId: StateId },
+                        success: function (d) {
+                            ddlCity.empty(); // Clear the plese wait
+                            ddlCity.append($("<option></option>").val('').html('Select City'));
+                            $.each(d, function (i, cities) {
+                                ddlCity.append($("<option></option>").val(cities.id).html(cities.name));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+            });
+
+            var newVendorReason = $('input[type=radio][name=NewVendorReason]:checked').val();
+            changeNewVendorReason(newVendorReason);
+
+            $('input[type=radio][name=NewVendorReason]').change(function () {
+                changeNewVendorReason(this.value);
+            });
+        });
+
+        function changeNewVendorReason(value) {
+            if (value == 'Other (Specify Reasons)') {
+                $(".bank-account").val("");
+                $(".other-reason").removeAttr("disabled");
+                $(".bank-account").attr("disabled", "disabled");
+            }
+            else if (value == 'Vendor Bank detail Changed* (Supported by Vendor Letter)s') {
+                $(".other-reason").val("");
+                $(".bank-account").removeAttr("disabled");
+                $(".other-reason").attr("disabled", "disabled");
+            } else {
+                $(".other-reason").val("");
+                $(".bank-account").val("");
+
+                $(".other-reason").attr("disabled", "disabled");
+                $(".bank-account").attr("disabled", "disabled");
+            }
+        }
+    </script>
+}
+
+<div class="jumbotron" style="padding-top:10px !important;">
+    @using (Html.BeginForm("VendorStep1", "Vendors", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.IsMain)
+
+        <div>
+            <h3 class="form-signin-heading text-center" style="text-decoration:underline;">Domestic Vendor Registration Form</h3>
+            <label>General Instructions</label>
+            <ol>
+                <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
+                <li>All fields are mandatory. Tick in appropriate box.</li>
+            </ol>
+            <br />
+            <div class="row row-margin text-center main-step-bg-color">
+                <div class="col-md-3 steps steps-active back-button-1">
+                    <label>Step 1</label>
+                </div>
+                <div class="col-md-3 steps">
+                    <label>Step 2</label>
+                </div>
+                <div class="col-md-3 steps">
+                    <label>Step 3</label>
+                </div>
+                <div class="col-md-3 steps">
+                    <label>Step 4</label>
+                </div>
+            </div>
+            <br />
+            <label>Vendor Information</label>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-2">
+                        <span>1.</span>
+                    </div>
+                    <div class="col-md-10">
+                        <span>Organization Status</span><br />
+                        <span>(tick  as applicable)</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @Html.RadioButtonFor(model => model.Org_Sts, "1", Model.IsMain ? (object)new { @id = "orgStatus1" } : new { @id = "orgStatus1", disabled = "disabled" })
+                    <label for="orgStatus1" style="font-weight: 500;">Private Ltd</label>
+                    <br />
+                    @Html.RadioButtonFor(model => model.Org_Sts, "2", Model.IsMain ? (object)new { @id = "orgStatus2" } : new { @id = "orgStatus2", disabled = "disabled" })
+                    <label for="orgStatus2" style="font-weight: 500;">Partnership/LLP</label>
+                    <br />
+                    @Html.RadioButtonFor(model => model.Org_Sts, "3", Model.IsMain ? (object)new { @id = "orgStatus3" } : new { @id = "orgStatus3", disabled = "disabled" })
+                    <label for="orgStatus3" style="font-weight: 500;">Proprietorship</label><br />
+                    @Html.ValidationMessageFor(model => model.Org_Sts)
+                </div>
+                <div class="col-md-6">
+                    @Html.RadioButtonFor(model => model.Org_Sts, "4", Model.IsMain ? (object)new { @id = "orgStatus4" } : new { @id = "orgStatus4", disabled = "disabled" })
+                    <label for="orgStatus4" style="font-weight: 500;">Public Ltd (Listed)</label>
+                    <br />
+                    @Html.RadioButtonFor(model => model.Org_Sts, "5", Model.IsMain ? (object)new { @id = "orgStatus5" } : new { @id = "orgStatus5", disabled = "disabled" })
+                    <label for="orgStatus5" style="font-weight: 500;">Others</label>
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-2">
+                        <span>2.</span>
+                    </div>
+                    <div class="col-md-10">
+                        <span>Vendor Name</span>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.vend_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.vend_name)
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-2">
+                        <span>3.</span>
+                    </div>
+                    <div class="col-md-10">
+                        <span>CEO Name</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.CEO_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.CEO_name)
+                </div>
+                <div class="col-md-1">
+                    <span>Designation</span>
+                </div>
+                <div class="col-md-5">
+                    @Html.TextBoxFor(model => model.Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Designation)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-offset-2 col-md-10">
+                        <span>Contact Numbers</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(model => model.Contact_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Contact_no)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-offset-2 col-md-10">
+                        <span>Email Address</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @Html.HiddenFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-2">
+                        <span>4.</span>
+                    </div>
+                    <div class="col-md-10">
+                        <span>Address (Registered / Corporate Office)</span>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Address1, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address1)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-3">
+                    @Html.DropDownListFor(model => model.Address1CountryId, (List<SelectListItem>)ViewBag.Country1, Model.IsMain ? (object)new { @id = "ddlCountry1", @class = "form-control" } : new { @id = "ddlCountry1", @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address1CountryId)
+                </div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.Address1StateId, (List<SelectListItem>)ViewBag.State1, Model.IsMain ? (object)new { @id = "ddlState1", @class = "form-control" } : new { @id = "ddlState1", @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address1StateId)
+                </div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.Address1CityId, (List<SelectListItem>)ViewBag.City1, Model.IsMain ? (object)new { @id = "ddlCity1", @class = "form-control" } : new { @id = "ddlCity1", @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address1CityId)
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-2">
+                        <span>5.</span>
+                    </div>
+                    <div class="col-md-10">
+                        <span>Address (PO/Supplies/Mfg/Trd.)</span>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Address2, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-3">
+                    @Html.DropDownListFor(model => model.Address2CountryId, (List<SelectListItem>)ViewBag.Country2, Model.IsMain ? (object)new { @id = "ddlCountry2", @class = "form-control" } : new { @id = "ddlCountry2", @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address2CountryId)
+                </div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.Address2StateId, (List<SelectListItem>)ViewBag.State2, Model.IsMain ? (object)new { @id = "ddlState2", @class = "form-control" } : new { @id = "ddlState2", @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address2StateId)
+                </div>
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.Address2CityId, (List<SelectListItem>)ViewBag.City2, Model.IsMain ? (object)new { @id = "ddlCity2", @class = "form-control" } : new { @id = "ddlCity2", @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address2CityId)
+                </div>
+            </div>
+            <br /><br />
+            <input type="submit" value="Next" class="btn btn-success pull-right" />
+        </div>
+    }
+</div>

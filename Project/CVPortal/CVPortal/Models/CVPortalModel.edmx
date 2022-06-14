@@ -1,0 +1,1528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CVPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="state_id" Type="int" Nullable="false" />
+          <Property Name="state_code" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="country_id" Type="int" Nullable="false" />
+          <Property Name="country_code" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="latitude" Type="decimal" Precision="10" Scale="8" Nullable="false" />
+          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="updated_at" Type="datetime" Nullable="false" />
+          <Property Name="flag" Type="tinyint" Nullable="false" />
+          <Property Name="wikiDataId" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="iso3" Type="char" MaxLength="3" />
+          <Property Name="numeric_code" Type="char" MaxLength="3" />
+          <Property Name="iso2" Type="char" MaxLength="2" />
+          <Property Name="phonecode" Type="varchar" MaxLength="255" />
+          <Property Name="capital" Type="varchar" MaxLength="255" />
+          <Property Name="currency" Type="varchar" MaxLength="255" />
+          <Property Name="currency_name" Type="varchar" MaxLength="255" />
+          <Property Name="currency_symbol" Type="varchar" MaxLength="255" />
+          <Property Name="tld" Type="varchar" MaxLength="255" />
+          <Property Name="native" Type="varchar" MaxLength="255" />
+          <Property Name="region" Type="varchar" MaxLength="255" />
+          <Property Name="subregion" Type="varchar" MaxLength="255" />
+          <Property Name="timezones" Type="text" />
+          <Property Name="translations" Type="text" />
+          <Property Name="latitude" Type="decimal" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" />
+          <Property Name="emoji" Type="varchar" MaxLength="191" />
+          <Property Name="emojiU" Type="varchar" MaxLength="191" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="updated_at" Type="datetime" Nullable="false" />
+          <Property Name="flag" Type="tinyint" Nullable="false" />
+          <Property Name="wikiDataId" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="CurrencyCodeMaster">
+          <Key>
+            <PropertyRef Name="Crncy_Code" />
+          </Key>
+          <Property Name="Crncy_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Crncy_Code" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="Crncy_Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Create_On" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CVPortal.dbo.ExceptionLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ExceptionLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ErrorLine" Type="int" />
+          <Property Name="ErrorMessage" Type="nvarchar" MaxLength="4000" />
+          <Property Name="ErrorNumber" Type="int" />
+          <Property Name="ErrorProcedure" Type="nvarchar" MaxLength="128" />
+          <Property Name="ErrorSeverity" Type="int" />
+          <Property Name="ErrorState" Type="int" />
+          <Property Name="DateErrorRaised" Type="datetime" />
+        </EntityType>
+        <EntityType Name="GSTType_Master">
+          <Key>
+            <PropertyRef Name="GSTType" />
+          </Key>
+          <Property Name="GSTyp_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GSTType" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="GSTTypDesc" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LoginLogs">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LogonUser" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="TempSessionId" Type="nvarchar" MaxLength="50" />
+          <Property Name="IPAddresses" Type="nvarchar" MaxLength="100" />
+          <Property Name="Log-on" Type="datetime" />
+          <Property Name="Logout-on" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Lx_AVM">
+          <Key>
+            <PropertyRef Name="AVM_ID" />
+            <PropertyRef Name="Vendor_Code" />
+          </Key>
+          <Property Name="AV_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AVM_ID" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="Vendor_Code" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="Vendor_Name" Type="nvarchar" MaxLength="85" />
+          <Property Name="Currency_Code" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="Vendor_Add1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Vendor_Add2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Vendor_StateCode" Type="nvarchar" MaxLength="3" />
+          <Property Name="Vendor_Pincode" Type="nvarchar" MaxLength="9" />
+          <Property Name="Vendor_Type" Type="nvarchar" MaxLength="4" />
+          <Property Name="Vendor_ContactName" Type="nvarchar" MaxLength="30" />
+          <Property Name="Vendor_CountryCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="Vendor_PhoneNo" Type="nvarchar" MaxLength="25" />
+          <Property Name="Vendor_EmailAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="RecDate" Type="nvarchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="Lx_CustomerMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="RecID" Type="nvarchar" MaxLength="2" />
+          <Property Name="CustCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="CustName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustAdd1" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustAdd2" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustAdd3" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustStateCode" Type="nvarchar" MaxLength="3" />
+          <Property Name="CustPincode" Type="nvarchar" MaxLength="6" />
+          <Property Name="CustConuntryCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="CustType" Type="nvarchar" MaxLength="4" />
+          <Property Name="CustPhNo" Type="nvarchar" MaxLength="25" />
+          <Property Name="CustContactName" Type="nvarchar" MaxLength="30" />
+          <Property Name="CurrencyCode" Type="nvarchar" MaxLength="3" />
+          <Property Name="CustEmailAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOnDate" Type="nvarchar" MaxLength="25" />
+          <Property Name="RecDate" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CVPortal.dbo.LX_TaxCode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="LX_TaxCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemTaxCDE" Type="char" MaxLength="5" />
+          <Property Name="TaxDSC" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Orginzation_StatusMaster">
+          <Key>
+            <PropertyRef Name="Orginzation_Status" />
+          </Key>
+          <Property Name="OrgZ_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Orginzation_Status" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Orginzation_StsDesc" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ParameterConfiguration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParameterName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ParameterValue" Type="nvarchar" MaxLength="500" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PaymentTermsMaster">
+          <Key>
+            <PropertyRef Name="PTerms_Code" />
+          </Key>
+          <Property Name="PTerms_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PTerms_Code" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="PTerms_CodeDesc" Type="nvarchar" MaxLength="50" />
+          <Property Name="PTerms_Status" Type="bit" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PayTypeMaster">
+          <Key>
+            <PropertyRef Name="PayType_Code" />
+          </Key>
+          <Property Name="PayType_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PayType_Code" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="PayType_Desc" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Create_On" Type="datetime" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="country_id" Type="int" Nullable="false" />
+          <Property Name="country_code" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="fips_code" Type="varchar" MaxLength="255" />
+          <Property Name="iso2" Type="varchar" MaxLength="255" />
+          <Property Name="type" Type="varchar" MaxLength="191" />
+          <Property Name="latitude" Type="decimal" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="updated_at" Type="datetime" Nullable="false" />
+          <Property Name="flag" Type="tinyint" Nullable="false" />
+          <Property Name="wikiDataId" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="tbl_Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HAID" Type="char" MaxLength="2" />
+          <Property Name="HAUSER" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="HACOMP" Type="int" />
+          <Property Name="HANAME" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="HANEXT" Type="nvarchar" MaxLength="15" />
+          <Property Name="Dept_Code" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="Amount" Type="decimal" Precision="15" Scale="5" />
+          <Property Name="OTP" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Vend_reg_tbl">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Org_Sts" Type="nvarchar" MaxLength="1" Nullable="false" />
+          <Property Name="vend_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CEO_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Designation" Type="nvarchar" MaxLength="30" />
+          <Property Name="Contact_no" Type="nvarchar" MaxLength="25" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address1CountryId" Type="int" />
+          <Property Name="Address1StateId" Type="int" />
+          <Property Name="Address1CityId" Type="int" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address2CountryId" Type="int" />
+          <Property Name="Address2StateId" Type="int" />
+          <Property Name="Address2CityId" Type="int" />
+          <Property Name="AC_contact_Desig" Type="nvarchar" MaxLength="30" />
+          <Property Name="AC_contact_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="AC_contact_Phno" Type="nvarchar" MaxLength="15" />
+          <Property Name="AC_contact_Email" Type="nvarchar" MaxLength="30" />
+          <Property Name="Spy_contact_Desig" Type="nvarchar" MaxLength="30" />
+          <Property Name="Spy_contact_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Spy_contact_Phno" Type="nvarchar" MaxLength="15" />
+          <Property Name="Spy_contact_Email" Type="nvarchar" MaxLength="30" />
+          <Property Name="CIN_No" Type="nvarchar" MaxLength="21" />
+          <Property Name="PAN_No" Type="nvarchar" MaxLength="30" />
+          <Property Name="Type_vend_gst" Type="nvarchar" MaxLength="1" />
+          <Property Name="GST_Reg_no" Type="nvarchar" MaxLength="30" />
+          <Property Name="Item_Desc" Type="nvarchar" MaxLength="50" />
+          <Property Name="HSN_SAC_code" Type="nvarchar" MaxLength="24" />
+          <Property Name="MSME_no" Type="nvarchar" MaxLength="30" />
+          <Property Name="Annu_TurnOver" Type="numeric" Precision="15" Scale="0" />
+          <Property Name="Nature_of_service" Type="nvarchar" MaxLength="15" />
+          <Property Name="FinancialYear1" Type="int" />
+          <Property Name="FinancialYear2" Type="int" />
+          <Property Name="IsITRFiled1" Type="bit" />
+          <Property Name="IsITRFiled2" Type="bit" />
+          <Property Name="AcknowledgeNo1" Type="nvarchar" MaxLength="50" />
+          <Property Name="AcknowledgeNo2" Type="nvarchar" MaxLength="50" />
+          <Property Name="ITR_Field_dtl" Type="nvarchar" MaxLength="24" />
+          <Property Name="Benificiary_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Bank_name" Type="nvarchar" MaxLength="30" />
+          <Property Name="Branch_name_Add" Type="nvarchar" MaxLength="25" />
+          <Property Name="Account_no" Type="nvarchar" MaxLength="25" />
+          <Property Name="MICR_code" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="IFSC_RTGS_code" Type="nvarchar" MaxLength="11" />
+          <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
+          <Property Name="Type_of_Vend" Type="nvarchar" MaxLength="1" />
+          <Property Name="OTP" Type="nvarchar" MaxLength="20" />
+          <Property Name="NewVendorReason" Type="nvarchar" MaxLength="1000" />
+          <Property Name="NewVendorReasonDescription" Type="nvarchar(max)" />
+          <Property Name="Step1" Type="bit" />
+          <Property Name="Step2" Type="bit" />
+          <Property Name="Step3" Type="bit" />
+          <Property Name="Step4" Type="bit" />
+        </EntityType>
+        <EntityType Name="VendorFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VendorId" Type="int" Nullable="false" />
+          <Property Name="FileUploadType" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ContentType" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Data" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CVPortal.dbo.VendorTypeMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VendorTypeMaster">
+          <Key>
+            <PropertyRef Name="VT_ID" />
+            <PropertyRef Name="Company" />
+            <PropertyRef Name="VendorType" />
+            <PropertyRef Name="Currency" />
+          </Key>
+          <Property Name="VT_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Company" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="VendorType" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="webpages_Membership">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ConfirmationToken" Type="nvarchar" MaxLength="128" />
+          <Property Name="IsConfirmed" Type="bit" />
+          <Property Name="LastPasswordFailureDate" Type="datetime" />
+          <Property Name="PasswordFailuresSinceLastSuccess" Type="int" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PasswordChangedDate" Type="datetime" />
+          <Property Name="PasswordSalt" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PasswordVerificationToken" Type="nvarchar" MaxLength="128" />
+          <Property Name="PasswordVerificationTokenExpirationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="webpages_OAuthMembership">
+          <Key>
+            <PropertyRef Name="Provider" />
+            <PropertyRef Name="ProviderUserId" />
+          </Key>
+          <Property Name="Provider" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ProviderUserId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="webpages_Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="webpages_UsersInRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="cities_ibfk_1">
+          <End Role="State" Type="Self.State" Multiplicity="1" />
+          <End Role="City" Type="Self.City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="City">
+              <PropertyRef Name="state_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="cities_ibfk_2">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="City" Type="Self.City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="City">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="country_region_final">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="State" Type="Self.State" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="State">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RoleId">
+          <End Role="webpages_Roles" Type="Self.webpages_Roles" Multiplicity="1" />
+          <End Role="webpages_UsersInRoles" Type="Self.webpages_UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="webpages_Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="webpages_UsersInRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_UserId">
+          <End Role="tbl_Users" Type="Self.tbl_Users" Multiplicity="1" />
+          <End Role="webpages_UsersInRoles" Type="Self.webpages_UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="webpages_UsersInRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_City">
+          <End Role="City" Type="Self.City" Multiplicity="0..1" />
+          <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address1CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_City1">
+          <End Role="City" Type="Self.City" Multiplicity="0..1" />
+          <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address2CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address1CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_Country1">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+          <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address2CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_State">
+          <End Role="State" Type="Self.State" Multiplicity="0..1" />
+          <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address1StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_State1">
+          <End Role="State" Type="Self.State" Multiplicity="0..1" />
+          <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address2StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorFiles_Vend_reg_tbl">
+          <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="1" />
+          <End Role="VendorFiles" Type="Self.VendorFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vend_reg_tbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VendorFiles">
+              <PropertyRef Name="VendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CVPortalModelStoreContainer">
+          <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrencyCodeMaster" EntityType="Self.CurrencyCodeMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GSTType_Master" EntityType="Self.GSTType_Master" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginLogs" EntityType="Self.LoginLogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lx_AVM" EntityType="Self.Lx_AVM" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lx_CustomerMaster" EntityType="Self.Lx_CustomerMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orginzation_StatusMaster" EntityType="Self.Orginzation_StatusMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParameterConfiguration" EntityType="Self.ParameterConfiguration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentTermsMaster" EntityType="Self.PaymentTermsMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayTypeMaster" EntityType="Self.PayTypeMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Users" EntityType="Self.tbl_Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vend_reg_tbl" EntityType="Self.Vend_reg_tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VendorFiles" EntityType="Self.VendorFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_Membership" EntityType="Self.webpages_Membership" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_OAuthMembership" EntityType="Self.webpages_OAuthMembership" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_UsersInRoles" EntityType="Self.webpages_UsersInRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExceptionLog" EntityType="Self.ExceptionLog" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ExceptionLog].[id] AS [id], 
+    [ExceptionLog].[ErrorLine] AS [ErrorLine], 
+    [ExceptionLog].[ErrorMessage] AS [ErrorMessage], 
+    [ExceptionLog].[ErrorNumber] AS [ErrorNumber], 
+    [ExceptionLog].[ErrorProcedure] AS [ErrorProcedure], 
+    [ExceptionLog].[ErrorSeverity] AS [ErrorSeverity], 
+    [ExceptionLog].[ErrorState] AS [ErrorState], 
+    [ExceptionLog].[DateErrorRaised] AS [DateErrorRaised]
+    FROM [dbo].[ExceptionLog] AS [ExceptionLog]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="LX_TaxCode" EntityType="Self.LX_TaxCode" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [LX_TaxCode].[Id] AS [Id], 
+    [LX_TaxCode].[ItemTaxCDE] AS [ItemTaxCDE], 
+    [LX_TaxCode].[TaxDSC] AS [TaxDSC]
+    FROM [dbo].[LX_TaxCode] AS [LX_TaxCode]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VendorTypeMaster" EntityType="Self.VendorTypeMaster" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VendorTypeMaster].[VT_ID] AS [VT_ID], 
+    [VendorTypeMaster].[Company] AS [Company], 
+    [VendorTypeMaster].[VendorType] AS [VendorType], 
+    [VendorTypeMaster].[Currency] AS [Currency], 
+    [VendorTypeMaster].[Description] AS [Description], 
+    [VendorTypeMaster].[Status] AS [Status], 
+    [VendorTypeMaster].[CreatedOn] AS [CreatedOn]
+    FROM [dbo].[VendorTypeMaster] AS [VendorTypeMaster]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="cities_ibfk_1" Association="Self.cities_ibfk_1">
+            <End Role="State" EntitySet="State" />
+            <End Role="City" EntitySet="City" />
+          </AssociationSet>
+          <AssociationSet Name="cities_ibfk_2" Association="Self.cities_ibfk_2">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="City" EntitySet="City" />
+          </AssociationSet>
+          <AssociationSet Name="country_region_final" Association="Self.country_region_final">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="State" EntitySet="State" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RoleId" Association="Self.fk_RoleId">
+            <End Role="webpages_Roles" EntitySet="webpages_Roles" />
+            <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_UserId" Association="Self.fk_UserId">
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+            <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_City" Association="Self.FK_Vend_reg_tbl_City">
+            <End Role="City" EntitySet="City" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_City1" Association="Self.FK_Vend_reg_tbl_City1">
+            <End Role="City" EntitySet="City" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_Country" Association="Self.FK_Vend_reg_tbl_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_Country1" Association="Self.FK_Vend_reg_tbl_Country1">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_State" Association="Self.FK_Vend_reg_tbl_State">
+            <End Role="State" EntitySet="State" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_State1" Association="Self.FK_Vend_reg_tbl_State1">
+            <End Role="State" EntitySet="State" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorFiles_Vend_reg_tbl" Association="Self.FK_VendorFiles_Vend_reg_tbl">
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+            <End Role="VendorFiles" EntitySet="VendorFiles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CVPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CVPortalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cities" EntityType="CVPortalModel.City" />
+          <EntitySet Name="Countries" EntityType="CVPortalModel.Country" />
+          <EntitySet Name="CurrencyCodeMasters" EntityType="CVPortalModel.CurrencyCodeMaster" />
+          <EntitySet Name="GSTType_Master" EntityType="CVPortalModel.GSTType_Master" />
+          <EntitySet Name="LoginLogs" EntityType="CVPortalModel.LoginLog" />
+          <EntitySet Name="Lx_AVM" EntityType="CVPortalModel.Lx_AVM" />
+          <EntitySet Name="Lx_CustomerMaster" EntityType="CVPortalModel.Lx_CustomerMaster" />
+          <EntitySet Name="Orginzation_StatusMaster" EntityType="CVPortalModel.Orginzation_StatusMaster" />
+          <EntitySet Name="ParameterConfigurations" EntityType="CVPortalModel.ParameterConfiguration" />
+          <EntitySet Name="PaymentTermsMasters" EntityType="CVPortalModel.PaymentTermsMaster" />
+          <EntitySet Name="PayTypeMasters" EntityType="CVPortalModel.PayTypeMaster" />
+          <EntitySet Name="States" EntityType="CVPortalModel.State" />
+          <EntitySet Name="tbl_Users" EntityType="CVPortalModel.tbl_Users" />
+          <EntitySet Name="Vend_reg_tbl" EntityType="CVPortalModel.Vend_reg_tbl" />
+          <EntitySet Name="VendorFiles" EntityType="CVPortalModel.VendorFile" />
+          <EntitySet Name="webpages_Membership" EntityType="CVPortalModel.webpages_Membership" />
+          <EntitySet Name="webpages_OAuthMembership" EntityType="CVPortalModel.webpages_OAuthMembership" />
+          <EntitySet Name="webpages_Roles" EntityType="CVPortalModel.webpages_Roles" />
+          <EntitySet Name="ExceptionLogs" EntityType="CVPortalModel.ExceptionLog" />
+          <EntitySet Name="LX_TaxCode" EntityType="CVPortalModel.LX_TaxCode" />
+          <EntitySet Name="VendorTypeMasters" EntityType="CVPortalModel.VendorTypeMaster" />
+          <AssociationSet Name="cities_ibfk_1" Association="CVPortalModel.cities_ibfk_1">
+            <End Role="State" EntitySet="States" />
+            <End Role="City" EntitySet="Cities" />
+          </AssociationSet>
+          <AssociationSet Name="cities_ibfk_2" Association="CVPortalModel.cities_ibfk_2">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="City" EntitySet="Cities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_City" Association="CVPortalModel.FK_Vend_reg_tbl_City">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_City1" Association="CVPortalModel.FK_Vend_reg_tbl_City1">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="country_region_final" Association="CVPortalModel.country_region_final">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="State" EntitySet="States" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_Country" Association="CVPortalModel.FK_Vend_reg_tbl_Country">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_Country1" Association="CVPortalModel.FK_Vend_reg_tbl_Country1">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_State" Association="CVPortalModel.FK_Vend_reg_tbl_State">
+            <End Role="State" EntitySet="States" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vend_reg_tbl_State1" Association="CVPortalModel.FK_Vend_reg_tbl_State1">
+            <End Role="State" EntitySet="States" />
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorFiles_Vend_reg_tbl" Association="CVPortalModel.FK_VendorFiles_Vend_reg_tbl">
+            <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+            <End Role="VendorFile" EntitySet="VendorFiles" />
+          </AssociationSet>
+          <AssociationSet Name="webpages_UsersInRoles" Association="CVPortalModel.webpages_UsersInRoles">
+            <End Role="webpages_Roles" EntitySet="webpages_Roles" />
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="state_id" Type="Int32" Nullable="false" />
+          <Property Name="state_code" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="country_id" Type="Int32" Nullable="false" />
+          <Property Name="country_code" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="latitude" Type="Decimal" Nullable="false" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Nullable="false" Precision="11" Scale="8" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="flag" Type="Byte" Nullable="false" />
+          <Property Name="wikiDataId" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="State" Relationship="CVPortalModel.cities_ibfk_1" FromRole="City" ToRole="State" />
+          <NavigationProperty Name="Country" Relationship="CVPortalModel.cities_ibfk_2" FromRole="City" ToRole="Country" />
+          <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_Vend_reg_tbl_City" FromRole="City" ToRole="Vend_reg_tbl" />
+          <NavigationProperty Name="Vend_reg_tbl1" Relationship="CVPortalModel.FK_Vend_reg_tbl_City1" FromRole="City" ToRole="Vend_reg_tbl" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="iso3" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="numeric_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="iso2" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="phonecode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="capital" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="currency" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="currency_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="currency_symbol" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="tld" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="native" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="region" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="subregion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="timezones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="translations" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="latitude" Type="Decimal" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" />
+          <Property Name="emoji" Type="String" MaxLength="191" FixedLength="false" Unicode="false" />
+          <Property Name="emojiU" Type="String" MaxLength="191" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="flag" Type="Byte" Nullable="false" />
+          <Property Name="wikiDataId" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cities" Relationship="CVPortalModel.cities_ibfk_2" FromRole="Country" ToRole="City" />
+          <NavigationProperty Name="States" Relationship="CVPortalModel.country_region_final" FromRole="Country" ToRole="State" />
+          <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_Vend_reg_tbl_Country" FromRole="Country" ToRole="Vend_reg_tbl" />
+          <NavigationProperty Name="Vend_reg_tbl1" Relationship="CVPortalModel.FK_Vend_reg_tbl_Country1" FromRole="Country" ToRole="Vend_reg_tbl" />
+        </EntityType>
+        <EntityType Name="CurrencyCodeMaster">
+          <Key>
+            <PropertyRef Name="Crncy_Code" />
+          </Key>
+          <Property Name="Crncy_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Crncy_Code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Crncy_Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Create_On" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="GSTType_Master">
+          <Key>
+            <PropertyRef Name="GSTType" />
+          </Key>
+          <Property Name="GSTyp_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GSTType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="GSTTypDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LoginLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogonUser" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="TempSessionId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IPAddresses" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Log_on" Type="DateTime" Precision="3" />
+          <Property Name="Logout_on" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Lx_AVM">
+          <Key>
+            <PropertyRef Name="AVM_ID" />
+            <PropertyRef Name="Vendor_Code" />
+          </Key>
+          <Property Name="AV_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AVM_ID" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="Vendor_Code" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_Name" Type="String" MaxLength="85" FixedLength="false" Unicode="true" />
+          <Property Name="Currency_Code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_Add1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_Add2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_StateCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_Pincode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_Type" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_ContactName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_CountryCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_PhoneNo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecDate" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Lx_CustomerMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="RecID" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="CustCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="CustName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustAdd1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustAdd2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustAdd3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustStateCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="CustPincode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="CustConuntryCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CustType" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CustPhNo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CustContactName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CurrencyCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="CustEmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOnDate" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="RecDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Orginzation_StatusMaster">
+          <Key>
+            <PropertyRef Name="Orginzation_Status" />
+          </Key>
+          <Property Name="OrgZ_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Orginzation_Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Orginzation_StsDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ParameterConfiguration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParameterName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ParameterValue" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PaymentTermsMaster">
+          <Key>
+            <PropertyRef Name="PTerms_Code" />
+          </Key>
+          <Property Name="PTerms_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PTerms_Code" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="PTerms_CodeDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PTerms_Status" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PayTypeMaster">
+          <Key>
+            <PropertyRef Name="PayType_Code" />
+          </Key>
+          <Property Name="PayType_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PayType_Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="PayType_Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Create_On" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="country_id" Type="Int32" Nullable="false" />
+          <Property Name="country_code" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="fips_code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="iso2" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="191" FixedLength="false" Unicode="false" />
+          <Property Name="latitude" Type="Decimal" Precision="10" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="flag" Type="Byte" Nullable="false" />
+          <Property Name="wikiDataId" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cities" Relationship="CVPortalModel.cities_ibfk_1" FromRole="State" ToRole="City" />
+          <NavigationProperty Name="Country" Relationship="CVPortalModel.country_region_final" FromRole="State" ToRole="Country" />
+          <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_Vend_reg_tbl_State" FromRole="State" ToRole="Vend_reg_tbl" />
+          <NavigationProperty Name="Vend_reg_tbl1" Relationship="CVPortalModel.FK_Vend_reg_tbl_State1" FromRole="State" ToRole="Vend_reg_tbl" />
+        </EntityType>
+        <EntityType Name="tbl_Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HAID" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="HAUSER" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="HACOMP" Type="Int32" />
+          <Property Name="HANAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HANEXT" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Dept_Code" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="15" Scale="5" />
+          <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="webpages_Roles" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="tbl_Users" ToRole="webpages_Roles" />
+        </EntityType>
+        <EntityType Name="Vend_reg_tbl">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Org_Sts" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="vend_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CEO_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Designation" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Contact_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1CountryId" Type="Int32" />
+          <Property Name="Address1StateId" Type="Int32" />
+          <Property Name="Address1CityId" Type="Int32" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2CountryId" Type="Int32" />
+          <Property Name="Address2StateId" Type="Int32" />
+          <Property Name="Address2CityId" Type="Int32" />
+          <Property Name="AC_contact_Desig" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Phno" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_Desig" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_Phno" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CIN_No" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
+          <Property Name="PAN_No" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Type_vend_gst" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="GST_Reg_no" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Item_Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HSN_SAC_code" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="MSME_no" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Annu_TurnOver" Type="Decimal" Precision="15" Scale="0" />
+          <Property Name="Nature_of_service" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FinancialYear1" Type="Int32" />
+          <Property Name="FinancialYear2" Type="Int32" />
+          <Property Name="IsITRFiled1" Type="Boolean" />
+          <Property Name="IsITRFiled2" Type="Boolean" />
+          <Property Name="AcknowledgeNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AcknowledgeNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ITR_Field_dtl" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="Benificiary_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Bank_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Branch_name_Add" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Account_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="MICR_code" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NewVendorReason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="NewVendorReasonDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Step1" Type="Boolean" />
+          <Property Name="Step2" Type="Boolean" />
+          <Property Name="Step3" Type="Boolean" />
+          <Property Name="Step4" Type="Boolean" />
+          <NavigationProperty Name="City" Relationship="CVPortalModel.FK_Vend_reg_tbl_City" FromRole="Vend_reg_tbl" ToRole="City" />
+          <NavigationProperty Name="City1" Relationship="CVPortalModel.FK_Vend_reg_tbl_City1" FromRole="Vend_reg_tbl" ToRole="City" />
+          <NavigationProperty Name="Country" Relationship="CVPortalModel.FK_Vend_reg_tbl_Country" FromRole="Vend_reg_tbl" ToRole="Country" />
+          <NavigationProperty Name="Country1" Relationship="CVPortalModel.FK_Vend_reg_tbl_Country1" FromRole="Vend_reg_tbl" ToRole="Country" />
+          <NavigationProperty Name="State" Relationship="CVPortalModel.FK_Vend_reg_tbl_State" FromRole="Vend_reg_tbl" ToRole="State" />
+          <NavigationProperty Name="State1" Relationship="CVPortalModel.FK_Vend_reg_tbl_State1" FromRole="Vend_reg_tbl" ToRole="State" />
+          <NavigationProperty Name="VendorFiles" Relationship="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorFile" />
+        </EntityType>
+        <EntityType Name="VendorFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VendorId" Type="Int32" Nullable="false" />
+          <Property Name="FileUploadType" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Data" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" FromRole="VendorFile" ToRole="Vend_reg_tbl" />
+        </EntityType>
+        <EntityType Name="webpages_Membership">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ConfirmationToken" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="IsConfirmed" Type="Boolean" />
+          <Property Name="LastPasswordFailureDate" Type="DateTime" Precision="3" />
+          <Property Name="PasswordFailuresSinceLastSuccess" Type="Int32" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordChangedDate" Type="DateTime" Precision="3" />
+          <Property Name="PasswordSalt" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordVerificationToken" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordVerificationTokenExpirationDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="webpages_OAuthMembership">
+          <Key>
+            <PropertyRef Name="Provider" />
+            <PropertyRef Name="ProviderUserId" />
+          </Key>
+          <Property Name="Provider" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderUserId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="webpages_Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="tbl_Users" />
+        </EntityType>
+        <EntityType Name="ExceptionLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ErrorLine" Type="Int32" />
+          <Property Name="ErrorMessage" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="ErrorNumber" Type="Int32" />
+          <Property Name="ErrorProcedure" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ErrorSeverity" Type="Int32" />
+          <Property Name="ErrorState" Type="Int32" />
+          <Property Name="DateErrorRaised" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LX_TaxCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemTaxCDE" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="TaxDSC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VendorTypeMaster">
+          <Key>
+            <PropertyRef Name="VT_ID" />
+            <PropertyRef Name="Company" />
+            <PropertyRef Name="VendorType" />
+            <PropertyRef Name="Currency" />
+          </Key>
+          <Property Name="VT_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Company" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="VendorType" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="cities_ibfk_1">
+          <End Type="CVPortalModel.State" Role="State" Multiplicity="1" />
+          <End Type="CVPortalModel.City" Role="City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="City">
+              <PropertyRef Name="state_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="cities_ibfk_2">
+          <End Type="CVPortalModel.Country" Role="Country" Multiplicity="1" />
+          <End Type="CVPortalModel.City" Role="City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="City">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_City">
+          <End Type="CVPortalModel.City" Role="City" Multiplicity="0..1" />
+          <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address1CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_City1">
+          <End Type="CVPortalModel.City" Role="City" Multiplicity="0..1" />
+          <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address2CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="country_region_final">
+          <End Type="CVPortalModel.Country" Role="Country" Multiplicity="1" />
+          <End Type="CVPortalModel.State" Role="State" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="State">
+              <PropertyRef Name="country_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_Country">
+          <End Type="CVPortalModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address1CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_Country1">
+          <End Type="CVPortalModel.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address2CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_State">
+          <End Type="CVPortalModel.State" Role="State" Multiplicity="0..1" />
+          <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address1StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vend_reg_tbl_State1">
+          <End Type="CVPortalModel.State" Role="State" Multiplicity="0..1" />
+          <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="Address2StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorFiles_Vend_reg_tbl">
+          <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="1" />
+          <End Type="CVPortalModel.VendorFile" Role="VendorFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vend_reg_tbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="VendorFile">
+              <PropertyRef Name="VendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="webpages_UsersInRoles">
+          <End Type="CVPortalModel.webpages_Roles" Role="webpages_Roles" Multiplicity="*" />
+          <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="*" />
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CVPortalModelStoreContainer" CdmEntityContainer="CVPortalEntities">
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="CVPortalModel.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="wikiDataId" ColumnName="wikiDataId" />
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="country_id" ColumnName="country_id" />
+                <ScalarProperty Name="state_code" ColumnName="state_code" />
+                <ScalarProperty Name="state_id" ColumnName="state_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="CVPortalModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="wikiDataId" ColumnName="wikiDataId" />
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="emojiU" ColumnName="emojiU" />
+                <ScalarProperty Name="emoji" ColumnName="emoji" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="translations" ColumnName="translations" />
+                <ScalarProperty Name="timezones" ColumnName="timezones" />
+                <ScalarProperty Name="subregion" ColumnName="subregion" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="native" ColumnName="native" />
+                <ScalarProperty Name="tld" ColumnName="tld" />
+                <ScalarProperty Name="currency_symbol" ColumnName="currency_symbol" />
+                <ScalarProperty Name="currency_name" ColumnName="currency_name" />
+                <ScalarProperty Name="currency" ColumnName="currency" />
+                <ScalarProperty Name="capital" ColumnName="capital" />
+                <ScalarProperty Name="phonecode" ColumnName="phonecode" />
+                <ScalarProperty Name="iso2" ColumnName="iso2" />
+                <ScalarProperty Name="numeric_code" ColumnName="numeric_code" />
+                <ScalarProperty Name="iso3" ColumnName="iso3" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrencyCodeMasters">
+            <EntityTypeMapping TypeName="CVPortalModel.CurrencyCodeMaster">
+              <MappingFragment StoreEntitySet="CurrencyCodeMaster">
+                <ScalarProperty Name="Create_On" ColumnName="Create_On" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Crncy_Description" ColumnName="Crncy_Description" />
+                <ScalarProperty Name="Crncy_Code" ColumnName="Crncy_Code" />
+                <ScalarProperty Name="Crncy_ID" ColumnName="Crncy_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GSTType_Master">
+            <EntityTypeMapping TypeName="CVPortalModel.GSTType_Master">
+              <MappingFragment StoreEntitySet="GSTType_Master">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="GSTTypDesc" ColumnName="GSTTypDesc" />
+                <ScalarProperty Name="GSTType" ColumnName="GSTType" />
+                <ScalarProperty Name="GSTyp_ID" ColumnName="GSTyp_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginLogs">
+            <EntityTypeMapping TypeName="CVPortalModel.LoginLog">
+              <MappingFragment StoreEntitySet="LoginLogs">
+                <ScalarProperty Name="Logout_on" ColumnName="Logout-on" />
+                <ScalarProperty Name="Log_on" ColumnName="Log-on" />
+                <ScalarProperty Name="IPAddresses" ColumnName="IPAddresses" />
+                <ScalarProperty Name="TempSessionId" ColumnName="TempSessionId" />
+                <ScalarProperty Name="LogonUser" ColumnName="LogonUser" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lx_AVM">
+            <EntityTypeMapping TypeName="CVPortalModel.Lx_AVM">
+              <MappingFragment StoreEntitySet="Lx_AVM">
+                <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+                <ScalarProperty Name="Vendor_EmailAddress" ColumnName="Vendor_EmailAddress" />
+                <ScalarProperty Name="Vendor_PhoneNo" ColumnName="Vendor_PhoneNo" />
+                <ScalarProperty Name="Vendor_CountryCode" ColumnName="Vendor_CountryCode" />
+                <ScalarProperty Name="Vendor_ContactName" ColumnName="Vendor_ContactName" />
+                <ScalarProperty Name="Vendor_Type" ColumnName="Vendor_Type" />
+                <ScalarProperty Name="Vendor_Pincode" ColumnName="Vendor_Pincode" />
+                <ScalarProperty Name="Vendor_StateCode" ColumnName="Vendor_StateCode" />
+                <ScalarProperty Name="Vendor_Add2" ColumnName="Vendor_Add2" />
+                <ScalarProperty Name="Vendor_Add1" ColumnName="Vendor_Add1" />
+                <ScalarProperty Name="Currency_Code" ColumnName="Currency_Code" />
+                <ScalarProperty Name="Vendor_Name" ColumnName="Vendor_Name" />
+                <ScalarProperty Name="Vendor_Code" ColumnName="Vendor_Code" />
+                <ScalarProperty Name="AVM_ID" ColumnName="AVM_ID" />
+                <ScalarProperty Name="AV_ID" ColumnName="AV_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lx_CustomerMaster">
+            <EntityTypeMapping TypeName="CVPortalModel.Lx_CustomerMaster">
+              <MappingFragment StoreEntitySet="Lx_CustomerMaster">
+                <ScalarProperty Name="RecDate" ColumnName="RecDate" />
+                <ScalarProperty Name="CreatedOnDate" ColumnName="CreatedOnDate" />
+                <ScalarProperty Name="CustEmailAddress" ColumnName="CustEmailAddress" />
+                <ScalarProperty Name="CurrencyCode" ColumnName="CurrencyCode" />
+                <ScalarProperty Name="CustContactName" ColumnName="CustContactName" />
+                <ScalarProperty Name="CustPhNo" ColumnName="CustPhNo" />
+                <ScalarProperty Name="CustType" ColumnName="CustType" />
+                <ScalarProperty Name="CustConuntryCode" ColumnName="CustConuntryCode" />
+                <ScalarProperty Name="CustPincode" ColumnName="CustPincode" />
+                <ScalarProperty Name="CustStateCode" ColumnName="CustStateCode" />
+                <ScalarProperty Name="CustAdd3" ColumnName="CustAdd3" />
+                <ScalarProperty Name="CustAdd2" ColumnName="CustAdd2" />
+                <ScalarProperty Name="CustAdd1" ColumnName="CustAdd1" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="CustCode" ColumnName="CustCode" />
+                <ScalarProperty Name="RecID" ColumnName="RecID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orginzation_StatusMaster">
+            <EntityTypeMapping TypeName="CVPortalModel.Orginzation_StatusMaster">
+              <MappingFragment StoreEntitySet="Orginzation_StatusMaster">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Orginzation_StsDesc" ColumnName="Orginzation_StsDesc" />
+                <ScalarProperty Name="Orginzation_Status" ColumnName="Orginzation_Status" />
+                <ScalarProperty Name="OrgZ_ID" ColumnName="OrgZ_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParameterConfigurations">
+            <EntityTypeMapping TypeName="CVPortalModel.ParameterConfiguration">
+              <MappingFragment StoreEntitySet="ParameterConfiguration">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ParameterValue" ColumnName="ParameterValue" />
+                <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentTermsMasters">
+            <EntityTypeMapping TypeName="CVPortalModel.PaymentTermsMaster">
+              <MappingFragment StoreEntitySet="PaymentTermsMaster">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="PTerms_Status" ColumnName="PTerms_Status" />
+                <ScalarProperty Name="PTerms_CodeDesc" ColumnName="PTerms_CodeDesc" />
+                <ScalarProperty Name="PTerms_Code" ColumnName="PTerms_Code" />
+                <ScalarProperty Name="PTerms_ID" ColumnName="PTerms_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayTypeMasters">
+            <EntityTypeMapping TypeName="CVPortalModel.PayTypeMaster">
+              <MappingFragment StoreEntitySet="PayTypeMaster">
+                <ScalarProperty Name="Create_On" ColumnName="Create_On" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PayType_Desc" ColumnName="PayType_Desc" />
+                <ScalarProperty Name="PayType_Code" ColumnName="PayType_Code" />
+                <ScalarProperty Name="PayType_ID" ColumnName="PayType_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="States">
+            <EntityTypeMapping TypeName="CVPortalModel.State">
+              <MappingFragment StoreEntitySet="State">
+                <ScalarProperty Name="wikiDataId" ColumnName="wikiDataId" />
+                <ScalarProperty Name="flag" ColumnName="flag" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="iso2" ColumnName="iso2" />
+                <ScalarProperty Name="fips_code" ColumnName="fips_code" />
+                <ScalarProperty Name="country_code" ColumnName="country_code" />
+                <ScalarProperty Name="country_id" ColumnName="country_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Users">
+            <EntityTypeMapping TypeName="CVPortalModel.tbl_Users">
+              <MappingFragment StoreEntitySet="tbl_Users">
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="Dept_Code" ColumnName="Dept_Code" />
+                <ScalarProperty Name="HANEXT" ColumnName="HANEXT" />
+                <ScalarProperty Name="HANAME" ColumnName="HANAME" />
+                <ScalarProperty Name="HACOMP" ColumnName="HACOMP" />
+                <ScalarProperty Name="HAUSER" ColumnName="HAUSER" />
+                <ScalarProperty Name="HAID" ColumnName="HAID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vend_reg_tbl">
+            <EntityTypeMapping TypeName="CVPortalModel.Vend_reg_tbl">
+              <MappingFragment StoreEntitySet="Vend_reg_tbl">
+                <ScalarProperty Name="Step4" ColumnName="Step4" />
+                <ScalarProperty Name="Step3" ColumnName="Step3" />
+                <ScalarProperty Name="Step2" ColumnName="Step2" />
+                <ScalarProperty Name="Step1" ColumnName="Step1" />
+                <ScalarProperty Name="NewVendorReasonDescription" ColumnName="NewVendorReasonDescription" />
+                <ScalarProperty Name="NewVendorReason" ColumnName="NewVendorReason" />
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="Type_of_Vend" ColumnName="Type_of_Vend" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="IFSC_RTGS_code" ColumnName="IFSC_RTGS_code" />
+                <ScalarProperty Name="MICR_code" ColumnName="MICR_code" />
+                <ScalarProperty Name="Account_no" ColumnName="Account_no" />
+                <ScalarProperty Name="Branch_name_Add" ColumnName="Branch_name_Add" />
+                <ScalarProperty Name="Bank_name" ColumnName="Bank_name" />
+                <ScalarProperty Name="Benificiary_name" ColumnName="Benificiary_name" />
+                <ScalarProperty Name="ITR_Field_dtl" ColumnName="ITR_Field_dtl" />
+                <ScalarProperty Name="AcknowledgeNo2" ColumnName="AcknowledgeNo2" />
+                <ScalarProperty Name="AcknowledgeNo1" ColumnName="AcknowledgeNo1" />
+                <ScalarProperty Name="IsITRFiled2" ColumnName="IsITRFiled2" />
+                <ScalarProperty Name="IsITRFiled1" ColumnName="IsITRFiled1" />
+                <ScalarProperty Name="FinancialYear2" ColumnName="FinancialYear2" />
+                <ScalarProperty Name="FinancialYear1" ColumnName="FinancialYear1" />
+                <ScalarProperty Name="Nature_of_service" ColumnName="Nature_of_service" />
+                <ScalarProperty Name="Annu_TurnOver" ColumnName="Annu_TurnOver" />
+                <ScalarProperty Name="MSME_no" ColumnName="MSME_no" />
+                <ScalarProperty Name="HSN_SAC_code" ColumnName="HSN_SAC_code" />
+                <ScalarProperty Name="Item_Desc" ColumnName="Item_Desc" />
+                <ScalarProperty Name="GST_Reg_no" ColumnName="GST_Reg_no" />
+                <ScalarProperty Name="Type_vend_gst" ColumnName="Type_vend_gst" />
+                <ScalarProperty Name="PAN_No" ColumnName="PAN_No" />
+                <ScalarProperty Name="CIN_No" ColumnName="CIN_No" />
+                <ScalarProperty Name="Spy_contact_Email" ColumnName="Spy_contact_Email" />
+                <ScalarProperty Name="Spy_contact_Phno" ColumnName="Spy_contact_Phno" />
+                <ScalarProperty Name="Spy_contact_name" ColumnName="Spy_contact_name" />
+                <ScalarProperty Name="Spy_contact_Desig" ColumnName="Spy_contact_Desig" />
+                <ScalarProperty Name="AC_contact_Email" ColumnName="AC_contact_Email" />
+                <ScalarProperty Name="AC_contact_Phno" ColumnName="AC_contact_Phno" />
+                <ScalarProperty Name="AC_contact_name" ColumnName="AC_contact_name" />
+                <ScalarProperty Name="AC_contact_Desig" ColumnName="AC_contact_Desig" />
+                <ScalarProperty Name="Address2CityId" ColumnName="Address2CityId" />
+                <ScalarProperty Name="Address2StateId" ColumnName="Address2StateId" />
+                <ScalarProperty Name="Address2CountryId" ColumnName="Address2CountryId" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1CityId" ColumnName="Address1CityId" />
+                <ScalarProperty Name="Address1StateId" ColumnName="Address1StateId" />
+                <ScalarProperty Name="Address1CountryId" ColumnName="Address1CountryId" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Contact_no" ColumnName="Contact_no" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="CEO_name" ColumnName="CEO_name" />
+                <ScalarProperty Name="vend_name" ColumnName="vend_name" />
+                <ScalarProperty Name="Org_Sts" ColumnName="Org_Sts" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VendorFiles">
+            <EntityTypeMapping TypeName="CVPortalModel.VendorFile">
+              <MappingFragment StoreEntitySet="VendorFiles">
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FileUploadType" ColumnName="FileUploadType" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="webpages_Membership">
+            <EntityTypeMapping TypeName="CVPortalModel.webpages_Membership">
+              <MappingFragment StoreEntitySet="webpages_Membership">
+                <ScalarProperty Name="PasswordVerificationTokenExpirationDate" ColumnName="PasswordVerificationTokenExpirationDate" />
+                <ScalarProperty Name="PasswordVerificationToken" ColumnName="PasswordVerificationToken" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+                <ScalarProperty Name="PasswordChangedDate" ColumnName="PasswordChangedDate" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PasswordFailuresSinceLastSuccess" ColumnName="PasswordFailuresSinceLastSuccess" />
+                <ScalarProperty Name="LastPasswordFailureDate" ColumnName="LastPasswordFailureDate" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="ConfirmationToken" ColumnName="ConfirmationToken" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="webpages_OAuthMembership">
+            <EntityTypeMapping TypeName="CVPortalModel.webpages_OAuthMembership">
+              <MappingFragment StoreEntitySet="webpages_OAuthMembership">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderUserId" ColumnName="ProviderUserId" />
+                <ScalarProperty Name="Provider" ColumnName="Provider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="webpages_Roles">
+            <EntityTypeMapping TypeName="CVPortalModel.webpages_Roles">
+              <MappingFragment StoreEntitySet="webpages_Roles">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExceptionLogs">
+            <EntityTypeMapping TypeName="CVPortalModel.ExceptionLog">
+              <MappingFragment StoreEntitySet="ExceptionLog">
+                <ScalarProperty Name="DateErrorRaised" ColumnName="DateErrorRaised" />
+                <ScalarProperty Name="ErrorState" ColumnName="ErrorState" />
+                <ScalarProperty Name="ErrorSeverity" ColumnName="ErrorSeverity" />
+                <ScalarProperty Name="ErrorProcedure" ColumnName="ErrorProcedure" />
+                <ScalarProperty Name="ErrorNumber" ColumnName="ErrorNumber" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="ErrorLine" ColumnName="ErrorLine" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LX_TaxCode">
+            <EntityTypeMapping TypeName="CVPortalModel.LX_TaxCode">
+              <MappingFragment StoreEntitySet="LX_TaxCode">
+                <ScalarProperty Name="TaxDSC" ColumnName="TaxDSC" />
+                <ScalarProperty Name="ItemTaxCDE" ColumnName="ItemTaxCDE" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VendorTypeMasters">
+            <EntityTypeMapping TypeName="CVPortalModel.VendorTypeMaster">
+              <MappingFragment StoreEntitySet="VendorTypeMaster">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="VendorType" ColumnName="VendorType" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="VT_ID" ColumnName="VT_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="webpages_UsersInRoles" TypeName="CVPortalModel.webpages_UsersInRoles" StoreEntitySet="webpages_UsersInRoles">
+            <EndProperty Name="tbl_Users">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="webpages_Roles">
+              <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

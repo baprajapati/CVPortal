@@ -1,0 +1,31 @@
+<br/><br/>
+<table style="width:100%;text-align:center;border-collapse:collapse;">
+    <thead>
+        <tr>
+            <td colspan="3">
+                <table style="width: 100%; border: 1px solid; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 7%;vertical-align: middle;text-align: center;border-right: 0;">Supplier </td>
+                        <td style="width: 45%; border-left: 0;">
+                            <b style="font-size: 20px;">[DispName]</b><br />
+                            [DispAddress]
+                        </td>
+                        <td style="width:43%">
+                            <b style="font-size: 20px;">GSTIN: [DispGSTIN]</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align: center;font-size: 18px;"><b>Engine Information</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>Invoice No.: </b>[InvoiceNum]</td>
+                        <td><b>Invoice Date: </b>[InvoiceDate]</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        [EngineTableData]
+    </tbody>
+</table>

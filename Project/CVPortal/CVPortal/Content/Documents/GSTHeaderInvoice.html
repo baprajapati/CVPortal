@@ -1,0 +1,167 @@
+<table style="width:100%;border:1px solid;border-collapse:collapse;">
+    <tr>
+        <td style="text-align: center;" colspan="2">
+            <img src="[LogoPath]" style="width: 135px; height: 30px; float: left;" />
+            <label style="font-size:22px;margin-left:-9%;"><b>Invoice Type : [InvoiceType]</b></label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">Original for Recipient/Duplicate for Transporter/Triplicate for Supplier/Extra Copy</td>
+    </tr>
+    <tr>
+        <td style="width: 55%;">
+            <div style="[InvoiceDataWidth]">
+                <b>Version Number: </b>[VersionNumber]<br />
+                <b>Invoice Type Code: </b>[InvoiceTypeCode]<br />
+                <b>Invoice Number: </b><span style="word-break:break-all;">[InvoiceNum]</span><br />
+                <b>Invoice Date: </b>[InvoiceDate]
+            </div>
+            [OriginalInvoiceData]
+        </td>
+        <td style="width: 45%; font-size: 14px;">
+            <b>[DispName]</b><br />
+            [DispAddress],<br/> Tel: [DispPhone], Fax: [DispFax]<br />
+            GSTIN: [DispGSTIN] CIN- [DispCIN]<br />
+            Email- [DispEmail] website-[DispWebsite]
+        </td>
+    </tr>
+    [IRN]
+    <tr>
+        <td>
+            <div style="[BuyerWidth]float:left;"><b>Buyer (Billed To)</b></div>[BuyerCode]<br />
+            <b>Name: </b><span>[BuyerName]</span><br />
+            <b>Address: </b><span>[BuyerAddress]</span><br />
+            <b>PIN Code: </b>[BuyerPinCode]<br />
+            <div style="width:25%;float:left;"><b>State Code: </b>[BuyerStateCode]</div><div style="width: 75%; float: right;"><b>State Name: </b>[BuyerStateName]</div><br />
+            <b>GSTIN: </b><span>[BuyerGSTN]</span><br />
+            <div style="width:50%;float:left;"><b>Reverse Charge: </b>[IsReverseCharge]</div><div style="width: 50%; float: right;"><b>Supply Code: </b>[SupplyCode]</div><br />
+        </td>
+        <td>
+            <div style="[ShippingToWidth]float:left;"><b>Consignee (Shipped To)</b></div>[ShippingToCode]<br />
+            <b>Name: </b><span>[ShippingToName]</span><br />
+            <b>Address: </b><span>[ShippingToAddress]</span><br />
+            <b>PIN Code: </b>[ShippingToPinCode]<br />
+            <div style="width:30%;float:left;"><b>State Code: </b>[ShippingToStateCode]</div><div style="width: 70%; float: right;"><b>State Name: </b>[ShippingToStateName]</div><br />
+            <b>GSTIN: </b><span>[ShippingToGSTIN]</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div style="float:left;width:62%;">
+                <img src="[QRCode]" style="width:300px;height:300px;" />
+            </div>
+            <div style="float: left;width:38%;">
+                <div style="word-break:break-all;">
+                    <b>D.O. No.: </b>[DONo]<br />
+                    <b>Order No.: </b>[OrderNo]<br />
+                    <b>P.O. No.(Buyer): </b>[PONoBuyer]<br />
+                    <b>Ins. Policy Issued By: </b>[InsPolicyIssuedBy]<br />
+                    <b>Ins. No. & Date: </b>[InsNoAndDate]
+                </div>
+            </div>
+        </td>
+        <td>
+            <b>Weight in Kgs: </b>[WightInKgs]<b style="margin-left: 50px;">No. of Cases: </b>[NoOfCases]<br />
+            <b>Picking Number: </b>[PickingNumber]<br />
+            <b>Transport Mode: </b>[TransportMode]<br />
+            <b>Transporter: </b>[Transporter]<br />
+            <b>RR/LR No./GR No. & Date: </b>[RRLRNoGRNoDate]<br />
+            <b>Vehicle Number: </b>[VehicleNumber]<br />
+            <span><b>Payment Terms: </b>[PaymentTerms]</span>
+        </td>
+    </tr>
+    <tr>
+        <td>Part Number</td>
+        <td>Detail as  Per Annexure Attached</td>
+    </tr>
+    <tr>
+        <td>Goods Description</td>
+        <td>Detail as  Per Annexure Attached</td>
+    </tr>
+    <tr>
+        <td>HSN Code</td>
+        <td>Detail as  Per Annexure Attached</td>
+    </tr>
+    <tr>
+        <td>Rate per unit</td>
+        <td>Detail as  Per Annexure Attached</td>
+    </tr>
+    <tr>
+        <td>Quantity</td>
+        <td>Detail as  Per Annexure Attached</td>
+    </tr>
+    <tr>
+        <td>Total Taxable Amount</td>
+        <td>[TotalTaxableValue]</td>
+    </tr>
+    <tr>
+        <td>CGST</td>
+        <td>[CGSTAmount]</td>
+    </tr>
+    <tr>
+        <td>SGST</td>
+        <td>[SGSTAmount]</td>
+    </tr>
+    <tr>
+        <td>IGST</td>
+        <td>[IGSTAmount]</td>
+    </tr>
+    <tr>
+        <td>CESS</td>
+        <td>[CessAmount]</td>
+    </tr>
+    <tr>
+        <td>Total (Basic +GST)=</td>
+        <td>[TotalBasicGST]</td>
+    </tr>
+    <tr>
+        <td>TCS [TCSText]%=</td>
+        <td>[TCS]</td>
+    </tr>
+    <tr>
+        <td>Total Invoice Value</td>
+        <td>[TotalInvoiceValue]</td>
+    </tr>
+    [ExpSupplymeant]
+    <tr>
+        <td colspan="2">
+            <b style="font-size:14px;">Total Invoice Value in words: </b><b>[TotalInvoiceValueInWords]</b>
+        </td>
+    </tr>
+    <tr style="[AccessoryDisplay]">
+        <td colspan="2">
+            <b style="font-size:14px;">
+                Accessories:<br />
+                <span style="padding-right:20px;">Manual, 2Keys:</span>
+                <span style="padding-right:20px;">Other Accessories:</span>
+                <span style="padding-right:20px;">Rear view mirror:</span>
+                <span style="padding-right:20px;">Set of tool kits:</span>
+                <span style="padding-right:20px;">Set of leg guard</span>
+                <span style="padding-right:20px;">Rear Mud Flap:</span>
+            </b>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="font-size:12px;">
+            Certified that the particulars given above true and correct and the amount indicated represents the price actually charged & there is no additional consideration flowing directly or indirectly from the buyer.
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="width:50%;float:left;"><b>Place: [DispPlace]</b></div>
+            <div style="width:50%;float:right;">
+                <b>SUZUKI MOTORCYCLE INDIA PVT.LTD.</b><br /><br />
+                <b>AUTHORIZED SIGNATORY</b>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="width:50%;float:left;"><b>SECURITY</b></div>
+            <div style="width:50%;float:left;"><b>RECEIVER</b></div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>Regd. Office: IInd Floor, Plot No. 1, Nelson Mandela Road, Vasant Kunj, New Delhi - 110070</b></td>
+    </tr>
+</table>

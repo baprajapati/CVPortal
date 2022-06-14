@@ -1,0 +1,169 @@
+﻿using CVPortal.App_Code;
+using CVPortal.Models;
+using CVPortal.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Security;
+using WebMatrix.WebData;
+
+namespace CVPortal.Controllers
+{
+    public class AccountController : Controller
+    {
+        CVPortalEntities dataContext = new CVPortalEntities();
+
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View(new LoginViewModel());
+        }
+
+        [AllowAnonymous]
+        public ActionResult VendorCustomerLogin(int? id)
+        {
+            return View(new VendorCustomerLoginViewModel()
+            {
+                Id = id
+            });
+        }
+
+        [AllowAnonymous]
+        public JsonResult SendOTP(string email)
+        {
+            try
+            {
+                var objVendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == email);
+                if (objVendor != null)
+                {
+                    objVendor.OTP = new Random().Next(111111, 999999).ToString();
+                    dataContext.SaveChanges();
+
+                    string mailTo = email;
+                    string CC = string.Empty;
+                    string BCC = string.Empty;
+                    string subject = "Your OTP details";
+                    string body = "OTP: " + objVendor.OTP;
+
+                    string displayName = string.Empty;
+                    string attachments = string.Empty;
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+
+                    return Json(new { status = true });
+                }
+
+                var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == email);
+                if (objUser != null)
+                {
+                    objUser.OTP = new Random().Next(111111, 999999).ToString();
+                    dataContext.SaveChanges();
+
+                    string mailTo = email;
+                    string CC = string.Empty;
+                    string BCC = string.Empty;
+                    string subject = "Your OTP details";
+                    string body = "OTP: " + objUser.OTP;
+
+                    string displayName = string.Empty;
+                    string attachments = string.Empty;
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+
+                    return Json(new { status = true });
+                }
+
+                return Json(new { status = false, result = "Email not exists in system." });
+            }
+            catch (Exception)
+            {
+                return Json(new { status = false, result = "Some error occured, please try again." });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult VendorCustomerLogin(VendorCustomerLoginViewModel model)
+        {
+            try
+            {
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == model.Email);
+                if (vendor != null && vendor.OTP == model.OTP)
+                {
+                    Utility.UserCode = model.Email;
+
+                    var stepViewName = vendor.Step4 ?? false ? "FinalForm" : vendor.Step3 ?? false ? "VendorStep4" : vendor.Step2 ?? false ? "VendorStep3" : vendor.Step1 ?? false ? "VendorStep2" : "VendorStep1";
+                    return Json(new { status = true, result = Utility.UserCode.Equals(vendor.Email) ? stepViewName : "VendorStep1" });
+                }
+
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == model.Email);
+                if (user != null && user.OTP == model.OTP)
+                {
+                    Utility.UserCode = model.Email;
+
+                    vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+
+                    if (vendor != null)
+                    {
+                        var stepViewName = vendor.Step4 ?? false ? "FinalForm" : vendor.Step3 ?? false ? "VendorStep4" : vendor.Step2 ?? false ? "VendorStep3" : vendor.Step1 ?? false ? "VendorStep2" : "VendorStep1";
+                        return Json(new { status = true, result = Utility.UserCode.Equals(vendor.Email) ? stepViewName : "VendorStep1" });
+                    }
+                }
+
+                return Json(new { status = false });
+            }
+            catch (Exception)
+            {
+                return Json(new { status = false });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (WebSecurity.Login(model.Email, model.Password, false))
+                {
+                    Utility.UserCode = model.Email;
+                    FormsAuthentication.SetAuthCookie(model.Email, false);
+
+                    string[] userRoles = Roles.GetRolesForUser(model.Email);
+
+                    if (userRoles.Contains("Admin"))
+                    {
+                        return RedirectToAction("../Admin/User/UserIndex");
+                    }
+                    else if (userRoles.Contains("InitiatorAdmin"))
+                    {
+                        return RedirectToAction("../InitiatorAdmin/Vendor/VendorIndex");
+                    }
+                    else
+                    {
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Incorrect user name or password.");
+                }
+            }
+
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            Utility.UserCode = string.Empty;
+            return RedirectToAction("Login");
+        }
+
+        public ActionResult VendorCustomerLogout(int id)
+        {
+            FormsAuthentication.SignOut();
+            Utility.UserCode = string.Empty;
+            return RedirectToAction("VendorCustomerLogin/" + id);
+        }
+    }
+}

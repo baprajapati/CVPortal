@@ -1,0 +1,135 @@
+﻿@model CVPortal.ViewModels.VendorStep4
+
+@{
+    ViewBag.Title = "Vendor Form";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".back-button-1").click(function () {
+                window.location.href = "/Vendors/VendorStep1/" + $("#Id").val();
+            });
+
+            $(".back-button-2").click(function () {
+                window.location.href = "/Vendors/VendorStep2/" + $("#Id").val();
+            });
+
+            $(".back-button-3").click(function () {
+                window.location.href = "/Vendors/VendorStep3/" + $("#Id").val();
+            });
+
+            $(".back-button-4").click(function () {
+                window.location.href = "/Vendors/VendorStep4/" + $("#Id").val();
+            });
+
+            $('#AuditedFile').change(function (e) {
+                var file = e.target.files[0];
+
+                if (file.type != "application/pdf") {
+                    $("#AuditedFile").val("");
+                    alert("Only PDF file allowed.");
+                } else if (file.size > 5242880) {
+                    $("#AuditedFile").val("");
+                    alert("Maximum 5 MB size allowed, your uploaded Audited Balance sheet file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                }
+            });
+
+            $('#MOAFile').change(function (e) {
+                var file = e.target.files[0];
+
+                if (file.type != "application/pdf") {
+                    $("#MOAFile").val("");
+                    alert("Only PDF file allowed.");
+                } else if (file.size > 5242880) {
+                    $("#MOAFile").val("");
+                    alert("Maximum 5 MB size allowed, your uploaded AOA & MOA file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                }
+            });
+        });
+    </script>
+}
+
+<div class="jumbotron" style="padding-top:10px !important;">
+    @using (Html.BeginForm("VendorStep4", "Vendors", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.IsMain)
+
+        <div>
+            <h3 class="form-signin-heading text-center" style="text-decoration:underline;">Domestic Vendor Registration Form</h3>
+            <label>General Instructions</label>
+            <ol>
+                <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
+                <li>All fields are mandatory. Tick in appropriate box.</li>
+            </ol>
+            <br />
+            <div class="row row-margin text-center main-step-bg-color">
+                <div class="col-md-3 steps steps-active back-button-1">
+                    <label>Step 1</label>
+                </div>
+                <div class="col-md-3 steps steps-active back-button-2">
+                    <label>Step 2</label>
+                </div>
+                <div class="col-md-3 steps steps-active back-button-3">
+                    <label>Step 3</label>
+                </div>
+                <div class="col-md-3 steps steps-active back-button-4">
+                    <label>Step 4</label>
+                </div>
+            </div>
+            <br />
+            <label style="font-size:20px;text-decoration:underline;">For Internal Use Only (SMIPL)</label>
+            <br /><br />
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Type of Vendor</label><br />
+                    <span>(put tick Mark)</span>
+                </div>
+                <div class="col-md-9">
+                    @Html.RadioButtonFor(model => model.Type_of_Vend, "1", Model.IsMain ? (object)new { @id = "vendorType1" } : new { @id = "vendorType1", @disabled = "disabled" })
+                    <label for="vendorType1" style="font-weight: 500; margin-right: 30px;">Regular Supply/Services</label>
+                    @Html.RadioButtonFor(model => model.Type_of_Vend, "2", Model.IsMain ? (object)new { @id = "vendorType2" } : new { @id = "vendorType2", @disabled = "disabled" })
+                    <label for="vendorType2" style="font-weight: 500; margin-right: 30px;">One time Supply/Services</label>
+                    <br />
+                    @Html.ValidationMessageFor(model => model.Type_of_Vend)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    Audited Balance Sheet
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.AuditedFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                    <a href="@Url.Action("Download", "Vendors", new { id = Model.Id, fileName = Model.AuditedFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.AuditedFileName) ? "hidden" : "")">
+                        View File
+                    </a>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    AOA & MOA File
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.MOAFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                    <a href="@Url.Action("Download", "Vendors", new { id = Model.Id, fileName = Model.MOAFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.MOAFileName) ? "hidden" : "")">
+                        View File
+                    </a>
+                </div>
+            </div>
+            <br /><br />
+            <input type="button" value="Back" class="btn btn-primary pull-left back-button-3" />
+            @if (Model.IsMain)
+            {
+                <input type="submit" value="Submit" class="btn btn-success pull-right" />
+            }
+            else
+            {
+                <input type="submit" value="Reject" class="btn btn-danger pull-right" />
+                <input type="submit" value="Approve" class="btn btn-success pull-right" style="margin-right:20px;" />
+            }
+        </div>
+    }
+</div>

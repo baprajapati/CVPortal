@@ -1,0 +1,84 @@
+﻿@model CVPortal.ViewModels.UserViewModel
+@{
+    ViewBag.Title = "Add User";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Add User</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("UserIndex","User")">Users</a></li>
+                        <li class="breadcrumb-item active">Add User</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="RoleName">Role</label>
+                                    @Html.DropDownListFor(model => model.RoleName, ViewBag.RoleList as SelectList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RoleName, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Email</label>
+                                    @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control", placeholder = "Email" })
+                                    @Html.ValidationMessageFor(model => model.Email, "")
+                                </div>
+                                <div class="form-group password">
+                                    <label for="Password">Password</label>
+                                    @Html.HiddenFor(model => model.Password)
+                                    @Html.PasswordFor(model => model.Password, new { id = "txtPassword", @class = "form-control", placeholder = "Password" })
+                                    @Html.ValidationMessageFor(model => model.Password, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="RoleName">Next User</label>
+                                    @Html.DropDownListFor(model => model.HANEXT, ViewBag.UserList as SelectList, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <a href="@Url.Action("UserIndex","User")" class="btn btn-default">Cancel</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#RoleName").change(function (e) {
+                setRoles(this.value);
+            });
+
+            setRoles($("#RoleName").val());
+            function setRoles(value) {
+                if (value != "InitiatorAdmin") {
+                    $("#Password").val("test#123");
+                    $(".password").addClass("hidden");
+                } else {
+                    $("#Password").val("");
+                    $(".password").removeClass("hidden");
+                }
+            }
+        });
+    </script>
+}

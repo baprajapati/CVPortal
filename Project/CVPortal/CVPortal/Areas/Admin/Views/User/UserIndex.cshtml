@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "User";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+    <script>
+        var users;
+        var onClickSearch = false;
+
+        function getUsers() {
+            users = $('#lstUsers').DataTable
+                ({
+                    "language":
+                    {
+                        "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "lengthMenu": convertStringToArray('10,50,100,200,500', ','),
+                    "pageLength": '50',
+                    "ajax":
+                    {
+                        "url": '@Url.Action("GetUser", new { area = "Admin", controller = "User" })',
+                        "type": "POST",
+                        "dataType": "JSON",
+                        "data": function (d) {
+                            return d;
+                        }
+                    },
+                    "bFilter": false,
+                    "scrollX": true,
+                    "autoWidth": false,
+                    "searching": true,
+                    "info": true,
+                    'aaSorting': [[0, 'desc']],
+                    "columns": [
+                        {
+                            "data": "Email", "name": "Email"
+                        },
+                        {
+                            "data": "RoleName", "name": "RoleName"
+                        },
+                        {
+                            "data": "HAUSER", "name": "HAUSER"
+                        },
+                        {
+                            "data": "HANEXT", "name": "HANEXT"
+                        },
+                        {
+                            "render": function (data, type, row, meta) {
+                                return "<a href='@Url.Action("EditUser", new { area = "Admin", controller = "User" })/" + row.Id + "' class='icon-pencil' title='Edit'>Edit</a>"
+                            }, "targets": 'no-sort', "orderable": false
+                        },
+                        {
+                            "render": function (data, type, row, meta) {
+                                return "<a  href='javascript:void(0);' data-userid=" + row.Id + " title='Delete' class='icon-remove btn-cross-red deleteUser'>Delete</a>"
+                            }, "targets": 'no-sort', "orderable": false
+                        }
+                    ]
+                });
+        }
+
+        jQuery(document).ready(function () {
+            getUsers();
+
+            $('#lstUsers').on('click', '.deleteUser', function () {
+                var userID = $(this).data('userid');
+                bootbox.confirm("Are you sure want to delete ?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteUser", new { area = "Admin", controller = "User" })',
+                            type: "POST",
+                            data: JSON.stringify({ id: userID }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response) {
+                                    toastr.success("User deleted successfully.", "User");
+                                    users.draw();
+                                } else {
+                                    toastr.error("Failed to delete User.", "User");
+                                }
+                            },
+                            error: function (response) {
+                                toastr.error(response.responseText, "User");
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Users</h1>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form_group text-right">
+                        @Html.ActionLink("Add New User", "AddUser", new { controller = "User" }, new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-hover" id="lstUsers">
+                            <thead class="table_header">
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>User Code</th>
+                                    <th>Next Code</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

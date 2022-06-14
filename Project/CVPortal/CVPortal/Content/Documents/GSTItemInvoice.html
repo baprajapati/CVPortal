@@ -1,0 +1,63 @@
+<div style="page-break-after:always;"></div>
+<table style="width:100%;text-align:center;border-collapse:collapse;">
+    <thead>
+        <tr>
+            <td colspan="13">
+                <table style="width: 100%; border: 1px solid; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 7%;vertical-align: middle;text-align: center;border-right: 0;">Supplier </td>
+                        <td style="width: 45%; border-left: 0;">
+                            <b style="font-size: 20px;">[DispName]</b><br />
+                            [DispAddress]
+                        </td>
+                        <td style="width:43%">
+                            <b style="font-size: 20px;">GSTIN: [DispGSTIN]</b>
+                        </td>
+                    </tr>
+                    <tr>                        
+                        <td colspan="3" style="text-align: center;font-size: 18px;"><b>Annexure to Tax Invoice</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b>Invoice No.: </b>[InvoiceNum]</td>
+                        <td><b>Invoice Date: </b>[InvoiceDate]</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th rowspan="2">S.No.</th>
+            <th rowspan="2" style="white-space: nowrap;padding:5px 60px;">Description Of Goods</th>
+            <th rowspan="2">HSN/SAC CODE</th>
+            <th rowspan="2" style="text-align:right;">Rate</th>
+            <th rowspan="2">UOM</th>
+            <th rowspan="2" style="text-align:right;">Qty.</th>
+            <th rowspan="2" style="text-align:right;">Total Taxable Amount</th>
+            <th colspan="2">[IGSTCGST]</th>
+            <th colspan="2">SGST</th>
+            <th colspan="2">CESS</th>
+        </tr>
+        <tr>
+            <th style="text-align:right;">Rate</th>
+            <th style="text-align:right;">Amount</th>
+            <th style="text-align:right;">Rate</th>
+            <th style="text-align:right;">Amount</th>
+            <th style="text-align:right;">Rate</th>
+            <th style="text-align:right;">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        [TableData]
+        <tr>
+            <td colspan="5" style="text-align:right;"><b>Total</b></td>
+            <td></td>
+            <td style="text-align:right;">[TotalTaxableValue]</td>
+            <td></td>
+            <td style="text-align:right;">[TotalCGSTAmount]</td>
+            <td></td>
+            <td style="text-align:right;">[TotalSGSTAmount]</td>
+            <td></td>
+            <td style="text-align:right;">[TotalCessAmount]</td>
+        </tr>
+    </tbody>
+</table>
+[EngineData]

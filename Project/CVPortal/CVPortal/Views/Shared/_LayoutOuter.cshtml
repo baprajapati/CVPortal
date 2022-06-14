@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | CVPortal</title>
+    <link href="~/Content/Login/app.5db8a232.css" rel="preload" as="style">
+    <link href="~/Content/Login/chunk-vendors.94fe66b6.css" rel="preload" as="style">
+    <link href="~/Content/Login/chunk-vendors.94fe66b6.css" rel="stylesheet">
+    <link href="~/Content/Login/app.5db8a232.css" rel="stylesheet">
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+
+        .validation-summary-errors ul {
+            margin: 1em !important;
+            padding: 0 !important;
+        }
+
+        .hide {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

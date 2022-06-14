@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Vendor";
+    Layout = "~/Areas/InitiatorAdmin/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+    <script>
+        var users;
+        var onClickSearch = false;
+
+        function getVendors() {
+            users = $('#lstUsers').DataTable
+                ({
+                    "language":
+                    {
+                        "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "lengthMenu": convertStringToArray('10,50,100,200,500', ','),
+                    "pageLength": '50',
+                    "ajax":
+                    {
+                        "url": '@Url.Action("GetVendor", new { area = "InitiatorAdmin", controller = "Vendor" })',
+                        "type": "POST",
+                        "dataType": "JSON",
+                        "data": function (d) {
+                            return d;
+                        }
+                    },
+                    "bFilter": false,
+                    "scrollX": true,
+                    "autoWidth": false,
+                    "searching": true,
+                    "info": true,
+                    'aaSorting': [[0, 'desc']],
+                    "columns": [
+                        {
+                            "data": "Email", "name": "Email"
+                        },
+                        {
+                            "data": "vend_name", "name": "vend_name"
+                        }
+                    ]
+                });
+        }
+
+        jQuery(document).ready(function () {
+            getVendors();
+        });
+    </script>
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Vendors</h1>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form_group text-right">
+                        @Html.ActionLink("Add New Vendor", "AddVendor", new { controller = "Vendor" }, new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-hover" id="lstUsers">
+                            <thead class="table_header">
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Vendor Name</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
