@@ -6,6 +6,10 @@
     <title>@ViewBag.Title | CVPortal</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/AdminLTE/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="~/Content/css/toastr.css" rel="stylesheet" />
+
     <style type="text/css">
         .field-validation-error {
             color: red;
@@ -64,7 +68,13 @@
                 </button>
                 <img src="~/Content/Documents/suzuki-green-logo.PNG" style="height:43px;padding-top:7px;" />
             </div>
-            @Html.ActionLink("Logout", "VendorCustomerLogout", "Account", new { id = ViewBag.Id }, new { @class = "navbar-brand", @style = "float: right;padding-right: 0;" })
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav pull-right">
+                    <li><a href="../VendorIndex/@ViewBag.Id">Vendors</a></li>
+                    <li><a href="/Account/VendorCustomerLogout/@ViewBag.Id">Logout</a></li>
+                </ul>
+            </div>
+            @*@Html.ActionLink("Logout", "VendorCustomerLogout", "Account", new { id = ViewBag.Id }, new { @class = "navbar-brand", @style = "float: right;padding-right: 0;" })*@
         </div>
     </div>
     <div class="container body-content">
@@ -77,6 +87,21 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript">
+        function convertStringToArray(value, delimiter) {
+            var strArr = value.split(delimiter);
+            var lstArr = [];
+            for (i = 0; i < strArr.length; i++)
+                lstArr.push(strArr[i]);
+            return lstArr;
+        }
+    </script>
+    <script src="~/Content/AdminLTE/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/AdminLTE/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/js/toastr.js"></script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

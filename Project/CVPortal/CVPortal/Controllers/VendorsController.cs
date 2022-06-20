@@ -11,6 +11,7 @@ using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using WebMatrix.WebData;
 
 namespace CVPortal.Controllers
 {
@@ -43,13 +44,15 @@ namespace CVPortal.Controllers
                 model.Contact_no = vendor.Contact_no;
                 model.Email = vendor.Email;
                 model.Address1 = vendor.Address1;
-                model.Address1CountryId = vendor.Address1CountryId;
-                model.Address1StateId = vendor.Address1StateId;
-                model.Address1CityId = vendor.Address1CityId;
+                model.Address1Country = vendor.Address1Country;
+                model.Address1State = vendor.Address1State;
+                model.Address1City = vendor.Address1City;
+                model.Address1Pincode = vendor.Address1Pincode;
                 model.Address2 = vendor.Address2;
-                model.Address2CountryId = vendor.Address2CountryId;
-                model.Address2StateId = vendor.Address2StateId;
-                model.Address2CityId = vendor.Address2CityId;
+                model.Address2Country = vendor.Address2Country;
+                model.Address2State = vendor.Address2State;
+                model.Address2City = vendor.Address2City;
+                model.Address2Pincode = vendor.Address2Pincode;
                 model.IsMain = Utility.UserCode.Equals(vendor.Email);
             }
             else
@@ -57,7 +60,6 @@ namespace CVPortal.Controllers
                 return RedirectToAction("../Account/VendorCustomerLogin/" + id);
             }
 
-            SetDroddownData(model);
             ViewBag.Id = id;
             return View(model);
         }
@@ -201,6 +203,70 @@ namespace CVPortal.Controllers
                 model.Id = vendor.ID;
                 model.Type_of_Vend = vendor.Type_of_Vend;
                 model.IsMain = Utility.UserCode.Equals(vendor.Email);
+                model.IsApprover = vendor.Step4 ?? false && !vendor.IsFinalApproved;
+
+                if (model.IsApprover)
+                {
+                    var vendorApprover = vendor.VendorApprovals.Where(x => !x.IsDeleted && x.VendorId == id).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
+                    if (vendorApprover != null)
+                    {
+                        if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
+                        {
+                            if (!string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT))
+                            {
+                                var user = dataContext.tbl_Users.First(x => x.HAUSER == vendorApprover.tbl_Users.HANEXT);
+                                model.IsApprover = user.Id == Utility.UserId;
+                            }
+                            else
+                            {
+                                var role = dataContext.webpages_Roles.First(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString());
+                                model.IsApprover = role.tbl_Users.Any(x => x.Id == Utility.UserId);
+                            }
+                        }
+                        else
+                        {
+                            var roles = dataContext.webpages_Roles.ToList();
+                            if (vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())
+                            {
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                            }
+                            else if (vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())
+                            {
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.HODDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                            }
+                            else if (vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
+                            {
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.LegalDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                            }
+                            else if (vendorApprover.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())
+                            {
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                            }
+                            else if (vendorApprover.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
+                            {
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.ITDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(vendor.tbl_Users.HANEXT))
+                        {
+                            var user = dataContext.tbl_Users.First(x => x.HAUSER == vendor.tbl_Users.HANEXT);
+                            model.IsApprover = user.Id == Utility.UserId;
+                        }
+                        else
+                        {
+                            var role = dataContext.webpages_Roles.First(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString());
+                            model.IsApprover = role.tbl_Users.Any(x => x.Id == Utility.UserId);
+                        }
+                    }
+                }
 
                 var auditedFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Audited.ToString());
                 if (auditedFile != null)
@@ -235,6 +301,18 @@ namespace CVPortal.Controllers
             return View();
         }
 
+        public ActionResult VendorIndex(int? id)
+        {
+            if (id == null)
+                return RedirectToAction("../Account/Login/");
+
+            if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
+                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+
+            ViewBag.Id = id;
+            return View();
+        }
+
         [HttpPost]
         public ActionResult VendorStep1(VendorStep1 model)
         {
@@ -255,13 +333,15 @@ namespace CVPortal.Controllers
                         vendor.Designation = model.Designation;
                         vendor.Contact_no = model.Contact_no;
                         vendor.Address1 = model.Address1;
-                        vendor.Address1CountryId = model.Address1CountryId;
-                        vendor.Address1StateId = model.Address1StateId;
-                        vendor.Address1CityId = model.Address1CityId;
+                        vendor.Address1Country = model.Address1Country;
+                        vendor.Address1State = model.Address1State;
+                        vendor.Address1City = model.Address1City;
+                        vendor.Address1Pincode = model.Address1Pincode;
                         vendor.Address2 = model.Address2;
-                        vendor.Address2CountryId = model.Address2CountryId;
-                        vendor.Address2StateId = model.Address2StateId;
-                        vendor.Address2CityId = model.Address2CityId;
+                        vendor.Address2Country = model.Address2Country;
+                        vendor.Address2State = model.Address2State;
+                        vendor.Address2City = model.Address2City;
+                        vendor.Address2Pincode = model.Address2Pincode;
                         vendor.Step1 = true;
                         dataContext.SaveChanges();
                     }
@@ -269,7 +349,6 @@ namespace CVPortal.Controllers
                     return RedirectToAction("VendorStep2", new { id = model.Id });
                 }
 
-                SetDroddownData(model);
                 return View(model);
             }
             else
@@ -285,6 +364,12 @@ namespace CVPortal.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (!string.IsNullOrEmpty(model.CIN_No) && string.IsNullOrEmpty(model.CINFileName))
+                    {
+                        ModelState.AddModelError(nameof(model.CINFileName), "Please upload CIN file");
+                        return View(model);
+                    }
+
                     var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (vendor != null)
                     {
@@ -669,150 +754,158 @@ namespace CVPortal.Controllers
             return File(Server.MapPath($"~/Content/FileUpload/Vendor/{id}/{fileName}"), "application/pdf");
         }
 
-        [HttpGet]
-        public JsonResult StateDetails(int CountryId)
-        {
-
-            try
-            {
-                return Json(dataContext.States.Where(x => x.country_id == CountryId).Select(x => new StateViewModel() { id = x.id, name = x.name }).ToList(), JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        [HttpGet]
-        public JsonResult CityDetails(int stateId)
+        public JsonResult ApproveVendorDetails(int id)
         {
             try
             {
-                return Json(dataContext.Cities.Where(x => x.state_id == stateId).Select(x => new CityViewModel() { id = x.id, name = x.name }).ToList(), JsonRequestBehavior.AllowGet);
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
+                if (vendor != null)
+                {
+                    var vendorApprover = vendor.VendorApprovals.Where(x => !x.IsDeleted && x.VendorId == id).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
+
+                    var data = new VendorApproval()
+                    {
+                        VendorId = id,
+                        Status = VendorApprovalEnum.Approved.ToString(),
+                        CreatedById = Utility.UserId,
+                        CreatedByDate = DateTime.Now
+                    };
+
+                    if (vendorApprover != null)
+                    {
+                        if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
+                        {
+                            data.ApproverRole = !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                        }
+                        else
+                        {
+                            data.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
+                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? ApprovarRoleEnum.LegalDepartment.ToString()
+                                : vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
+                                : ApprovarRoleEnum.ITDepartment.ToString();
+                        }
+                    }
+                    else
+                    {
+                        data.ApproverRole = !string.IsNullOrEmpty(vendor.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                    }
+
+                    vendor.VendorApprovals.Add(data);
+
+                    if (data.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
+                    {
+                        vendor.IsFinalApproved = true;
+                    }
+
+                    dataContext.SaveChanges();
+
+                    return Json(new { status = true });
+                }
+
+                return Json(new { status = false, result = "Vendor not exists in system." });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Json(new { status = false, result = "Some error occured, please try again." });
             }
         }
 
-        private void SetDroddownData(VendorStep1 model)
+        public JsonResult RejectVendorDetails(int id, string remarks)
         {
-            var country1 = new List<SelectListItem>() {
-                new SelectListItem()
-                {
-                    Text = "Select Country",
-                    Value = ""
-                }
-            };
-
-            dataContext.Countries.ToList().ForEach(item =>
+            try
             {
-                country1.Add(new SelectListItem()
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
+                if (vendor != null)
                 {
-                    Text = item.name,
-                    Value = item.id.ToString(),
-                    Selected = item.id == model.Address1CountryId
-                });
-            });
+                    var vendorApprover = vendor.VendorApprovals.Where(x => !x.IsDeleted && x.VendorId == id).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
 
-            var state1 = new List<SelectListItem>() {
-                new SelectListItem()
-                {
-                    Text = "Select State",
-                    Value = ""
+                    foreach (var item in vendor.VendorApprovals)
+                    {
+                        item.IsDeleted = true;
+                    }
+
+                    var data = new VendorApproval()
+                    {
+                        VendorId = id,
+                        Status = VendorApprovalEnum.Rejected.ToString(),
+                        Remarks = remarks,
+                        IsDeleted = true,
+                        CreatedById = Utility.UserId,
+                        CreatedByDate = DateTime.Now
+                    };
+
+                    if (vendorApprover != null)
+                    {
+                        if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
+                        {
+                            data.ApproverRole = !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                        }
+                        else
+                        {
+                            data.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
+                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? ApprovarRoleEnum.LegalDepartment.ToString()
+                                : vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
+                                : ApprovarRoleEnum.ITDepartment.ToString();
+                        }
+                    }
+                    else
+                    {
+                        data.ApproverRole = !string.IsNullOrEmpty(vendor.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                    }
+
+                    vendor.VendorApprovals.Add(data);
+
+                    vendor.Step1 = false;
+                    vendor.Step2 = false;
+                    vendor.Step3 = false;
+                    vendor.Step4 = false;
+
+                    dataContext.SaveChanges();
+
+                    return Json(new { status = true });
                 }
-            };
 
-            dataContext.States.Where(x => x.country_id == model.Address1CountryId).ToList().ForEach(item =>
+                return Json(new { status = false, result = "Vendor not exists in system." });
+            }
+            catch (Exception ex)
             {
-                state1.Add(new SelectListItem()
-                {
-                    Text = item.name,
-                    Value = item.id.ToString(),
-                    Selected = item.id == model.Address1StateId
-                });
-            });
+                return Json(new { status = false, result = "Some error occured, please try again." });
+            }
+        }
 
-            var city1 = new List<SelectListItem>() {
-                new SelectListItem()
-                {
-                    Text = "Select State",
-                    Value = ""
-                }
-            };
-
-            dataContext.Cities.Where(x => x.state_id == model.Address1StateId).ToList().ForEach(item =>
+        public ActionResult GetVendor()
+        {
+            var result = new JsonResult();
+            try
             {
-                city1.Add(new SelectListItem()
+                var data = dataContext.Vend_reg_tbl.ToList();
+                var vendorApprovers = dataContext.VendorApprovals.Where(x => !x.IsDeleted).ToList();
+                var vendors = new List<VendorListModel>();
+
+                data.ForEach(item =>
                 {
-                    Text = item.name,
-                    Value = item.id.ToString(),
-                    Selected = item.id == model.Address1CityId
+                    vendors.Add(new VendorListModel()
+                    {
+                        Id = item.ID,
+                        Email = item.Email,
+                        vend_name = item.vend_name,
+                        Status = vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending"
+                    });
                 });
-            });
 
-            var country2 = new List<SelectListItem>() {
-                new SelectListItem()
+                result = this.Json(new
                 {
-                    Text = "Select Country",
-                    Value = ""
-                }
-            };
-
-            dataContext.Countries.ToList().ForEach(item =>
+                    draw = Convert.ToInt32(Request.Form.GetValues("draw")[0]),
+                    recordsTotal = (vendors.Count > 0) ? vendors.Count : 0,
+                    recordsFiltered = (vendors.Count > 0) ? vendors.Count : 0,
+                    data = vendors
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
             {
-                country2.Add(new SelectListItem()
-                {
-                    Text = item.name,
-                    Value = item.id.ToString(),
-                    Selected = item.id == model.Address2CountryId
-                });
-            });
+            }
 
-            var state2 = new List<SelectListItem>() {
-                new SelectListItem()
-                {
-                    Text = "Select State",
-                    Value = ""
-                }
-            };
-
-            dataContext.States.Where(x => x.country_id == model.Address2CountryId).ToList().ForEach(item =>
-            {
-                state2.Add(new SelectListItem()
-                {
-                    Text = item.name,
-                    Value = item.id.ToString(),
-                    Selected = item.id == model.Address2StateId
-                });
-            });
-
-            var city2 = new List<SelectListItem>() {
-                new SelectListItem()
-                {
-                    Text = "Select State",
-                    Value = ""
-                }
-            };
-
-            dataContext.Cities.Where(x => x.state_id == model.Address2StateId).ToList().ForEach(item =>
-            {
-                city2.Add(new SelectListItem()
-                {
-                    Text = item.name,
-                    Value = item.id.ToString(),
-                    Selected = item.id == model.Address2CityId
-                });
-            });
-
-            ViewBag.Country1 = country1;
-            ViewBag.State1 = state1;
-            ViewBag.City1 = city1;
-
-            ViewBag.Country2 = country2;
-            ViewBag.State2 = state2;
-            ViewBag.City2 = city2;
+            return result;
         }
     }
 }

@@ -187,6 +187,8 @@
     <Content Include="Content\js\demo.js" />
     <Content Include="Content\js\jquery.dataTables.min.js" />
     <Content Include="Content\js\toastr.js" />
+    <Compile Include="App_Code\ApprovarRoleEnum.cs" />
+    <Compile Include="App_Code\VendorApprovalEnum.cs" />
     <Compile Include="App_Code\FileUploadEnum.cs" />
     <Compile Include="App_Code\Utility.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -200,12 +202,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\City.cs">
-      <DependentUpon>CVPortalModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Country.cs">
-      <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CurrencyCodeMaster.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
@@ -255,10 +251,10 @@
     <Compile Include="Models\PayTypeMaster.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\State.cs">
+    <Compile Include="Models\tbl_Users.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tbl_Users.cs">
+    <Compile Include="Models\VendorApproval.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VendorFile.cs">
@@ -284,6 +280,7 @@
     <Compile Include="ViewModels\StateViewModel.cs" />
     <Compile Include="ViewModels\CountryViewModel.cs" />
     <Compile Include="ViewModels\VendorCustomerLoginViewModel.cs" />
+    <Compile Include="ViewModels\VendorListModel.cs" />
     <Compile Include="ViewModels\VendorViewModel.cs" />
     <Compile Include="ViewModels\VendorStep4.cs" />
     <Compile Include="ViewModels\VendorStep3.cs" />
@@ -296,6 +293,7 @@
     <Content Include="Views\Vendors\VendorStep3.cshtml" />
     <Content Include="Views\Vendors\VendorStep4.cshtml" />
     <Content Include="Views\Vendors\FinalForm.cshtml" />
+    <Content Include="Views\Vendors\VendorIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Login\app.5db8a232.css" />

@@ -30,8 +30,22 @@
                             @Html.HiddenFor(model => model.Id)
                             @Html.HiddenFor(model => model.Password)
                             @Html.HiddenFor(model => model.RoleName)
-                            @Html.HiddenFor(model => model.HAUSER)
                             <div class="card-body">
+                                <div class="form-group">
+                                    <label for="Email">User Code</label>
+                                    @Html.TextBoxFor(model => model.HAUSER, new { id = "txtHAUSER", @class = "form-control", placeholder = "User Code" })
+                                    @Html.ValidationMessageFor(model => model.HAUSER, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Department Code</label>
+                                    @Html.TextBoxFor(model => model.Dept_Code, new { id = "txtDept_Code", @class = "form-control", placeholder = "Department Code" })
+                                    @Html.ValidationMessageFor(model => model.Dept_Code, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Name</label>
+                                    @Html.TextBoxFor(model => model.HANAME, new { id = "txtHANAME", @class = "form-control", placeholder = "Name" })
+                                    @Html.ValidationMessageFor(model => model.HANAME, "")
+                                </div>
                                 <div class="form-group">
                                     <label for="Email">Email</label>
                                     @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control", placeholder = "Email" })

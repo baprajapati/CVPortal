@@ -5,144 +5,61 @@
 }
 
 @section scripts {
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEppryGKRW0Nqe0JHtGQZ5l2BXTnOyL5k"></script>
+    @*<script language="javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7Fr--PIVfC4atUGJ6_2Ru_T4so77KM2g"></script>*@
+
     <script type="text/javascript">
         $(document).ready(function () {
             $(".back-button-1").click(function () {
                 window.location.href = "/Vendors/VendorStep1/" + $("#Id").val();
             });
 
-            //State details by country id
-            $("#ddlCountry1").change(function () {
-                var CountryId = parseInt($(this).val());
-                if (!isNaN(CountryId)) {
-                    var ddlState = $('#ddlState1');
-                    ddlState.empty();
-                    ddlState.append($("<option></option>").val('').html('Please wait ...'));
+            $("#Address1Pincode").change(function () {
+                $("#Address1Country").val("Loading...");
+                $("#Address1State").val("Loading...");
+                $("#Address1City").val("Loading...");
 
-                    $.ajax({
-                        url: '/Vendors/StateDetails',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: { CountryId: CountryId },
-                        success: function (d) {
-                            ddlState.empty(); // Clear the please wait
-                            ddlState.append($("<option></option>").val('').html('Select State'));
-                            $.each(d, function (i, states) {
-                                ddlState.append($("<option></option>").val(states.id).html(states.name));
-                            });
-                        },
-                        error: function () {
-                            alert('Error!');
-                        }
-                    });
-                }
+                var pinCode = $(this).val();
+                $.getJSON("https://api.postalpincode.in/pincode/" + pinCode, function (data) {
+                    if (data[0].PostOffice) {
+                        var country = data[0].PostOffice[0].Country;
+                        var state = data[0].PostOffice[0].State;
+                        var city = data[0].PostOffice[0].District;
+
+                        $("#Address1Country").val(country);
+                        $("#Address1State").val(state);
+                        $("#Address1City").val(city);
+                    } else {
+                        $("#Address1Country").val("");
+                        $("#Address1State").val("");
+                        $("#Address1City").val("");
+                    }
+                })
             });
 
-            //City Bind By satate id
-            $("#ddlState1").change(function () {
-                var StateId = parseInt($(this).val());
-                if (!isNaN(StateId)) {
-                    var ddlCity = $('#ddlCity1');
-                    ddlCity.append($("<option></option>").val('').html('Please wait ...'));
+            $("#Address2Pincode").change(function () {
+                $("#Address2Country").val("Loading...");
+                $("#Address2State").val("Loading...");
+                $("#Address2City").val("Loading...");
 
-                    $.ajax({
-                        url: '/Vendors/CityDetails',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: { stateId: StateId },
-                        success: function (d) {
-                            ddlCity.empty(); // Clear the plese wait
-                            ddlCity.append($("<option></option>").val('').html('Select City'));
-                            $.each(d, function (i, cities) {
-                                ddlCity.append($("<option></option>").val(cities.id).html(cities.name));
-                            });
-                        },
-                        error: function () {
-                            alert('Error!');
-                        }
-                    });
-                }
-            });
+                var pinCode = $(this).val();
+                $.getJSON("https://api.postalpincode.in/pincode/" + pinCode, function (data) {
+                    if (data[0].PostOffice) {
+                        var country = data[0].PostOffice[0].Country;
+                        var state = data[0].PostOffice[0].State;
+                        var city = data[0].PostOffice[0].District;
 
-            //State details by country id
-            $("#ddlCountry2").change(function () {
-                var CountryId = parseInt($(this).val());
-                if (!isNaN(CountryId)) {
-                    var ddlState = $('#ddlState2');
-                    ddlState.empty();
-                    ddlState.append($("<option></option>").val('').html('Please wait ...'));
-
-                    $.ajax({
-                        url: '/Vendors/StateDetails',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: { CountryId: CountryId },
-                        success: function (d) {
-                            ddlState.empty(); // Clear the please wait
-                            ddlState.append($("<option></option>").val('').html('Select State'));
-                            $.each(d, function (i, states) {
-                                ddlState.append($("<option></option>").val(states.id).html(states.name));
-                            });
-                        },
-                        error: function () {
-                            alert('Error!');
-                        }
-                    });
-                }
-            });
-
-            //City Bind By satate id
-            $("#ddlState2").change(function () {
-                var StateId = parseInt($(this).val());
-                if (!isNaN(StateId)) {
-                    var ddlCity = $('#ddlCity2');
-                    ddlCity.append($("<option></option>").val('').html('Please wait ...'));
-
-                    $.ajax({
-                        url: '/Vendors/CityDetails',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: { stateId: StateId },
-                        success: function (d) {
-                            ddlCity.empty(); // Clear the plese wait
-                            ddlCity.append($("<option></option>").val('').html('Select City'));
-                            $.each(d, function (i, cities) {
-                                ddlCity.append($("<option></option>").val(cities.id).html(cities.name));
-                            });
-                        },
-                        error: function () {
-                            alert('Error!');
-                        }
-                    });
-                }
-            });
-
-            var newVendorReason = $('input[type=radio][name=NewVendorReason]:checked').val();
-            changeNewVendorReason(newVendorReason);
-
-            $('input[type=radio][name=NewVendorReason]').change(function () {
-                changeNewVendorReason(this.value);
+                        $("#Address2Country").val(country);
+                        $("#Address2State").val(state);
+                        $("#Address2City").val(city);
+                    } else {
+                        $("#Address2Country").val("");
+                        $("#Address2State").val("");
+                        $("#Address2City").val("");
+                    }
+                })
             });
         });
-
-        function changeNewVendorReason(value) {
-            if (value == 'Other (Specify Reasons)') {
-                $(".bank-account").val("");
-                $(".other-reason").removeAttr("disabled");
-                $(".bank-account").attr("disabled", "disabled");
-            }
-            else if (value == 'Vendor Bank detail Changed* (Supported by Vendor Letter)s') {
-                $(".other-reason").val("");
-                $(".bank-account").removeAttr("disabled");
-                $(".other-reason").attr("disabled", "disabled");
-            } else {
-                $(".other-reason").val("");
-                $(".bank-account").val("");
-
-                $(".other-reason").attr("disabled", "disabled");
-                $(".bank-account").attr("disabled", "disabled");
-            }
-        }
     </script>
 }
 
@@ -153,7 +70,7 @@
         @Html.HiddenFor(model => model.IsMain)
 
         <div>
-            <h3 class="form-signin-heading text-center" style="text-decoration:underline;">Domestic Vendor Registration Form</h3>
+            <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
             <label>General Instructions</label>
             <ol>
                 <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
@@ -182,7 +99,7 @@
                         <span>1.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Organization Status</span><br />
+                        <span>Organization Status</span><span class="color-red"> * </span><br />
                         <span>(tick  as applicable)</span>
                     </div>
                 </div>
@@ -211,7 +128,7 @@
                         <span>2.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Vendor Name</span>
+                        <span>Vendor Name</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -225,15 +142,15 @@
                         <span>3.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>CEO Name</span>
+                        <span>CEO Name</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     @Html.TextBoxFor(model => model.CEO_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.CEO_name)
                 </div>
-                <div class="col-md-1">
-                    <span>Designation</span>
+                <div class="col-md-1" style="padding-right:0;padding-left:0;">
+                    <span>Designation</span><span class="color-red"> * </span>
                 </div>
                 <div class="col-md-5">
                     @Html.TextBoxFor(model => model.Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
@@ -243,7 +160,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-offset-2 col-md-10">
-                        <span>Contact Numbers</span>
+                        <span>Contact Numbers</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -254,7 +171,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-offset-2 col-md-10">
-                        <span>Email Address</span>
+                        <span>Email Address</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -269,26 +186,30 @@
                         <span>4.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Address (Registered / Corporate Office)</span>
+                        <span>Address (Registered / Corporate Office)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-7">
                     @Html.TextBoxFor(model => model.Address1, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Address1)
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Address1Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
+                    @Html.ValidationMessageFor(model => model.Address1Pincode)
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-offset-3 col-md-3">
-                    @Html.DropDownListFor(model => model.Address1CountryId, (List<SelectListItem>)ViewBag.Country1, Model.IsMain ? (object)new { @id = "ddlCountry1", @class = "form-control" } : new { @id = "ddlCountry1", @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address1CountryId)
+                    @Html.TextBoxFor(model => model.Address1Country, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Address1Country)
                 </div>
                 <div class="col-md-3">
-                    @Html.DropDownListFor(model => model.Address1StateId, (List<SelectListItem>)ViewBag.State1, Model.IsMain ? (object)new { @id = "ddlState1", @class = "form-control" } : new { @id = "ddlState1", @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address1StateId)
+                    @Html.TextBoxFor(model => model.Address1State, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Address1State)
                 </div>
                 <div class="col-md-3">
-                    @Html.DropDownListFor(model => model.Address1CityId, (List<SelectListItem>)ViewBag.City1, Model.IsMain ? (object)new { @id = "ddlCity1", @class = "form-control" } : new { @id = "ddlCity1", @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address1CityId)
+                    @Html.TextBoxFor(model => model.Address1City, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Address1City)
                 </div>
             </div><br />
             <div class="row">
@@ -297,26 +218,30 @@
                         <span>5.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Address (PO/Supplies/Mfg/Trd.)</span>
+                        <span>Address (PO/Supplies/Mfg/Trd.)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-7">
                     @Html.TextBoxFor(model => model.Address2, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Address2Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
+                    @Html.ValidationMessageFor(model => model.Address2Pincode)
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-offset-3 col-md-3">
-                    @Html.DropDownListFor(model => model.Address2CountryId, (List<SelectListItem>)ViewBag.Country2, Model.IsMain ? (object)new { @id = "ddlCountry2", @class = "form-control" } : new { @id = "ddlCountry2", @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address2CountryId)
+                    @Html.TextBoxFor(model => model.Address2Country, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Address2Country)
                 </div>
                 <div class="col-md-3">
-                    @Html.DropDownListFor(model => model.Address2StateId, (List<SelectListItem>)ViewBag.State2, Model.IsMain ? (object)new { @id = "ddlState2", @class = "form-control" } : new { @id = "ddlState2", @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address2StateId)
+                    @Html.TextBoxFor(model => model.Address2State, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Address2State)
                 </div>
                 <div class="col-md-3">
-                    @Html.DropDownListFor(model => model.Address2CityId, (List<SelectListItem>)ViewBag.City2, Model.IsMain ? (object)new { @id = "ddlCity2", @class = "form-control" } : new { @id = "ddlCity2", @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address2CityId)
+                    @Html.TextBoxFor(model => model.Address2City, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Address2City)
                 </div>
             </div>
             <br /><br />

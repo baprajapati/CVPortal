@@ -18,6 +18,6 @@ namespace CVPortal.ViewModels
         public HttpPostedFileBase MOAFile { get; set; }
         public string MOAFileName { get; set; }
         public bool IsMain { get; set; }
-
+        public bool IsApprover { get; set; }
     }
 }

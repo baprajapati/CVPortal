@@ -25,7 +25,7 @@
 
                 if (file.size > 5242880) {
                     $("#CINFile").val("");
-                    alert("Maximum 5 MB size allowed, your uploaded CIN file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded CIN file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Vendor");
                 } else {
                     $("#CINFileName").val(file.name);
                 }
@@ -41,7 +41,7 @@
 
                 if (file.size > 5242880) {
                     $("#PANFile").val("");
-                    alert("Maximum 5 MB size allowed, your uploaded PAN file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded PAN file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Vendor");
                 } else {
                     $("#PANFileName").val(file.name);
                 }
@@ -57,7 +57,7 @@
 
                 if (file.size > 5242880) {
                     $("#GSTFile").val("");
-                    alert("Maximum 5 MB size allowed, your uploaded GST file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded GST file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Vendor");
                 } else {
                     $("#GSTFileName").val(file.name);
                 }
@@ -71,7 +71,7 @@
                     alert("Only PDF file allowed.");
                 } else if (file.size > 5242880) {
                     $("#MSMEFile").val("");
-                    alert("Maximum 5 MB size allowed, your uploaded MSME file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded MSME file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Vendor");
                 } else {
                     $("#MSMEFileName").val(file.name);
                 }
@@ -87,7 +87,7 @@
         @Html.HiddenFor(model => model.IsMain)
 
         <div>
-            <h3 class="form-signin-heading text-center" style="text-decoration:underline;">Domestic Vendor Registration Form</h3>
+            <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
             <label>General Instructions</label>
             <ol>
                 <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
@@ -123,7 +123,7 @@
                         <span>6.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Designation</span>
+                        <span>Designation</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -138,7 +138,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-offset-2 col-md-10">
-                        <span>Contact Name</span>
+                        <span>Contact Name</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -153,7 +153,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-offset-2 col-md-10">
-                        <span>Contact Phone No/Mobile No.</span>
+                        <span>Contact Phone No/Mobile No.</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -168,7 +168,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-offset-2 col-md-10">
-                        <span>Email Address**</span>
+                        <span>Email Address</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -201,6 +201,7 @@
                 <div class="col-md-5">
                     @Html.HiddenFor(model => model.CINFileName)
                     @Html.TextBoxFor(model => model.CINFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.CINFileName)
                     <a href="@Url.Action("Download", "Vendors", new { id = Model.Id, fileName = Model.CINFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.CINFileName) ? "hidden" : "")">
                         View File
                     </a>
@@ -218,7 +219,7 @@
                         <span>8.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>PAN No</span><br />
+                        <span>PAN No</span><span class="color-red"> * </span><br />
                         <span>(Please attach Copy)</span>
                     </div>
                 </div>
@@ -242,7 +243,7 @@
                         <span>9.</span>
                     </div>
                     <div class="col-md-10" style="padding-right:0;">
-                        <span>Type of Vendor Under GST</span><br />
+                        <span>Type of Vendor Under GST</span><span class="color-red"> * </span><br />
                         <span>(tick  as applicable)</span>
                     </div>
                 </div>
@@ -263,7 +264,7 @@
                         <span>10.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>GST Reg No</span>
+                        <span>GST Reg No</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -291,15 +292,15 @@
                         <span>11.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Item Discription</span>
+                        <span>Item Discription</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     @Html.TextBoxFor(model => model.Item_Desc, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Item_Desc)
                 </div>
-                <div class="col-md-2">
-                    <span>HSN Code /SAC Code</span>
+                <div class="col-md-2" style="padding-left:0;padding-right:0;">
+                    <span>HSN Code /SAC Code</span><span class="color-red"> * </span>
                 </div>
                 <div class="col-md-4">
                     @Html.TextBoxFor(model => model.HSN_SAC_code, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
@@ -318,7 +319,7 @@
                         <span>12.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>MSME No.</span>
+                        <span>MSME No.</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -346,7 +347,7 @@
                         <span>13.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Annual Turnover (Rs Crores)</span>
+                        <span>Annual Turnover (Rs Crores)</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -361,7 +362,7 @@
                         <span>14.</span>
                     </div>
                     <div class="col-md-10" style="padding-right:0;">
-                        <span>Nature of service/purchase</span><br />
+                        <span>Nature of service/purchase</span><span class="color-red"> * </span><br />
                         <span>(tick  as applicable)</span>
                     </div>
                 </div>
@@ -400,7 +401,7 @@
                         <span>15.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>ITR Filed Details</span>
+                        <span>ITR Filed Details</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-2">

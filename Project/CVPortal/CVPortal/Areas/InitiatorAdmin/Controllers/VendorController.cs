@@ -50,7 +50,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
 
                 return View(new VendorViewModel());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -65,7 +65,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
             {
                 return View();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -83,7 +83,9 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     {
                         Org_Sts = "1",
                         vend_name = vendor.vend_name,
-                        Email = vendor.Email
+                        Email = vendor.Email,
+                        CreatedById = WebSecurity.CurrentUserId,
+                        CreatedByDate = DateTime.Now
                     };
 
                     dataContext.Vend_reg_tbl.Add(data);
@@ -102,7 +104,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     return RedirectToAction("VendorIndex");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -135,7 +137,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     data = vendors
                 }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 

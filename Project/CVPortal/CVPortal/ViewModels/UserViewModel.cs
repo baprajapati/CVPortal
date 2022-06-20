@@ -20,8 +20,15 @@ namespace CVPortal.ViewModels
         [Required]
         public string RoleName { get; set; }
 
+        [Required]
+        public string HANAME { get; set; }
+
+        [Required]
         public string HAUSER { get; set; }
-        
+
+        [Required]
+        public string Dept_Code { get; set; }
+
         public string HANEXT { get; set; }
     }
 }

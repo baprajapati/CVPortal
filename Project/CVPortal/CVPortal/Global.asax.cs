@@ -1,4 +1,5 @@
-﻿using CVPortal.Models;
+﻿using CVPortal.App_Code;
+using CVPortal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace CVPortal
                     dataContext.SaveChanges();
 
                     var adminRole = dataContext.webpages_Roles.First(x => x.RoleName == "Admin");
-                    WebSecurity.CreateUserAndAccount("admin@gmail.com", "test#123", new
+                    WebSecurity.CreateUserAndAccount("admin@gmail.com", Utility.DefaultPassword, new
                     {
                         HAUSER = "1000",
                         HANAME = "test",

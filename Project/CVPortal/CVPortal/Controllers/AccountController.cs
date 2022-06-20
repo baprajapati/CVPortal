@@ -54,7 +54,7 @@ namespace CVPortal.Controllers
                     return Json(new { status = true });
                 }
 
-                var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == email);
+                var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == email || x.HAUSER == email);
                 if (objUser != null)
                 {
                     objUser.OTP = new Random().Next(111111, 999999).ToString();
@@ -89,23 +89,27 @@ namespace CVPortal.Controllers
                 var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == model.Email);
                 if (vendor != null && vendor.OTP == model.OTP)
                 {
+                    WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
+                    FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = model.Email;
 
                     var stepViewName = vendor.Step4 ?? false ? "FinalForm" : vendor.Step3 ?? false ? "VendorStep4" : vendor.Step2 ?? false ? "VendorStep3" : vendor.Step1 ?? false ? "VendorStep2" : "VendorStep1";
                     return Json(new { status = true, result = Utility.UserCode.Equals(vendor.Email) ? stepViewName : "VendorStep1" });
                 }
 
-                var user = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == model.Email);
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == model.Email || x.HAUSER == model.Email);
                 if (user != null && user.OTP == model.OTP)
                 {
+                    WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
+                    FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = model.Email;
+                    Utility.UserId = user.Id;
 
                     vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
                     if (vendor != null)
                     {
-                        var stepViewName = vendor.Step4 ?? false ? "FinalForm" : vendor.Step3 ?? false ? "VendorStep4" : vendor.Step2 ?? false ? "VendorStep3" : vendor.Step1 ?? false ? "VendorStep2" : "VendorStep1";
-                        return Json(new { status = true, result = Utility.UserCode.Equals(vendor.Email) ? stepViewName : "VendorStep1" });
+                        return Json(new { status = true, result = "VendorIndex" });
                     }
                 }
 
@@ -123,6 +127,12 @@ namespace CVPortal.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == model.Email);
+                if(user != null)
+                {
+                    model.Email = user.EmailAddress;
+                }
+
                 if (WebSecurity.Login(model.Email, model.Password, false))
                 {
                     Utility.UserCode = model.Email;

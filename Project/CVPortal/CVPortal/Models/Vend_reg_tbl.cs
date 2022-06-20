@@ -17,6 +17,7 @@ namespace CVPortal.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Vend_reg_tbl()
         {
+            this.VendorApprovals = new HashSet<VendorApproval>();
             this.VendorFiles = new HashSet<VendorFile>();
         }
     
@@ -28,13 +29,15 @@ namespace CVPortal.Models
         public string Contact_no { get; set; }
         public string Email { get; set; }
         public string Address1 { get; set; }
-        public Nullable<int> Address1CountryId { get; set; }
-        public Nullable<int> Address1StateId { get; set; }
-        public Nullable<int> Address1CityId { get; set; }
+        public string Address1Country { get; set; }
+        public string Address1State { get; set; }
+        public string Address1City { get; set; }
+        public string Address1Pincode { get; set; }
         public string Address2 { get; set; }
-        public Nullable<int> Address2CountryId { get; set; }
-        public Nullable<int> Address2StateId { get; set; }
-        public Nullable<int> Address2CityId { get; set; }
+        public string Address2Country { get; set; }
+        public string Address2State { get; set; }
+        public string Address2City { get; set; }
+        public string Address2Pincode { get; set; }
         public string AC_contact_Desig { get; set; }
         public string AC_contact_name { get; set; }
         public string AC_contact_Phno { get; set; }
@@ -74,13 +77,13 @@ namespace CVPortal.Models
         public Nullable<bool> Step2 { get; set; }
         public Nullable<bool> Step3 { get; set; }
         public Nullable<bool> Step4 { get; set; }
+        public bool IsFinalApproved { get; set; }
+        public int CreatedById { get; set; }
+        public System.DateTime CreatedByDate { get; set; }
     
-        public virtual City City { get; set; }
-        public virtual City City1 { get; set; }
-        public virtual Country Country { get; set; }
-        public virtual Country Country1 { get; set; }
-        public virtual State State { get; set; }
-        public virtual State State1 { get; set; }
+        public virtual tbl_Users tbl_Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<VendorApproval> VendorApprovals { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VendorFile> VendorFiles { get; set; }
     }

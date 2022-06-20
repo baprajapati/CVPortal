@@ -31,7 +31,7 @@
                     alert("Only PDF file allowed.");
                 } else if (file.size > 5242880) {
                     $("#AuditedFile").val("");
-                    alert("Maximum 5 MB size allowed, your uploaded Audited Balance sheet file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded Audited Balance sheet file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Vendor");
                 }
             });
 
@@ -43,8 +43,69 @@
                     alert("Only PDF file allowed.");
                 } else if (file.size > 5242880) {
                     $("#MOAFile").val("");
-                    alert("Maximum 5 MB size allowed, your uploaded AOA & MOA file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded AOA & MOA file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Vendor");
                 }
+            });
+
+            $("#btnApprove").click(function (e) {
+                e.preventDefault();
+
+                $(this).html("Loading...");
+                $(".btnClose").hide();
+
+                $.ajax({
+                    url: '@Url.Action("ApproveVendorDetails", new { area = "", controller = "Vendors" })',
+                    type: "POST",
+                    data: JSON.stringify({
+                        id: $("#Id").val()
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.status) {
+                            $('#approveModal').modal('hide');
+                            window.location.href = "../VendorIndex/" + $("#Id").val();
+                        } else {
+                            $("#btnApprove").html("Approve");
+                            $(".btnClose").show();
+                            toastr.error(response.result, "Vendor");
+                        }
+                    },
+                    error: function (response) {
+                        toastr.error(response.responseText, "Vendor");
+                    }
+                });
+            });
+
+            $("#btnReject").click(function (e) {
+                e.preventDefault();
+
+                $(this).html("Loading...");
+                $(".btnClose").hide();
+
+                $.ajax({
+                    url: '@Url.Action("RejectVendorDetails", new { area = "", controller = "Vendors" })',
+                    type: "POST",
+                    data: JSON.stringify({
+                        id: $("#Id").val(),
+                        remarks: $("#remarks").val()
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.status) {
+                            $('#rejectModal').modal('hide');
+                            window.location.href = "../VendorIndex/" + $("#Id").val();
+                        } else {
+                            $("#btnReject").html("Reject");
+                            $(".btnClose").show();
+                            alert(response.result);
+                        }
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
             });
         });
     </script>
@@ -57,7 +118,7 @@
         @Html.HiddenFor(model => model.IsMain)
 
         <div>
-            <h3 class="form-signin-heading text-center" style="text-decoration:underline;">Domestic Vendor Registration Form</h3>
+            <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
             <label>General Instructions</label>
             <ol>
                 <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
@@ -83,7 +144,7 @@
             <br /><br />
             <div class="row">
                 <div class="col-md-3">
-                    <label>Type of Vendor</label><br />
+                    <label>Type of Vendor<span class="color-red"> * </span></label><br />
                     <span>(put tick Mark)</span>
                 </div>
                 <div class="col-md-9">
@@ -125,11 +186,48 @@
             {
                 <input type="submit" value="Submit" class="btn btn-success pull-right" />
             }
-            else
+            else if (Model.IsApprover)
             {
-                <input type="submit" value="Reject" class="btn btn-danger pull-right" />
-                <input type="submit" value="Approve" class="btn btn-success pull-right" style="margin-right:20px;" />
+                <input type="button" value="Reject" class="btn btn-danger pull-right" data-toggle="modal" data-target="#rejectModal" />
+                <input type="button" value="Approve" class="btn btn-success pull-right" data-toggle="modal" data-target="#approveModal" style="margin-right:20px;" />
             }
         </div>
     }
+</div>
+
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="modal-title" id="exampleModalLabel">Approve Confirmation</label>
+            </div>
+            <div class="modal-body">
+                <span>Are you sure, you want to approve?</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnApprove">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="modal-title" id="exampleModalLabel">Reject Confirmation</label>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <span for="message-text" class="col-form-label">Remarks:</span>
+                    <textarea class="form-control" id="remarks"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnReject">Reject</button>
+            </div>
+        </div>
+    </div>
 </div>

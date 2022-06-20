@@ -32,26 +32,34 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "Please enter address (Registered / Corporate Office)")]
         public string Address1 { get; set; }
 
-        [Required(ErrorMessage = "Please select country")]
-        public int? Address1CountryId { get; set; }
+        [Required(ErrorMessage = "Country required")]
+        public string Address1Country { get; set; }
 
-        [Required(ErrorMessage = "Please select state")]
-        public int? Address1StateId { get; set; }
+        [Required(ErrorMessage = "State required")]
+        public string Address1State { get; set; }
 
-        [Required(ErrorMessage = "Please select city")]
-        public int? Address1CityId { get; set; }
+        [Required(ErrorMessage = "City required")]
+        public string Address1City { get; set; }
+
+        [Required(ErrorMessage = "Please enter pincode")]
+        public string Address1Pincode { get; set; }
 
         [Required(ErrorMessage = "Please enter address (PO/Supplies/Mfg/Trd.)")]
         public string Address2 { get; set; }
 
-        [Required(ErrorMessage = "Please select country")]
-        public int? Address2CountryId { get; set; }
+        [Required(ErrorMessage = "Country required")]
+        public string Address2Country { get; set; }
 
-        [Required(ErrorMessage = "Please select state")]
-        public int? Address2StateId { get; set; }
+        [Required(ErrorMessage = "State required")]
+        public string Address2State { get; set; }
 
-        [Required(ErrorMessage = "Please select city")]
-        public int? Address2CityId { get; set; }
+        [Required(ErrorMessage = "City required")]
+        public string Address2City { get; set; }
+
+        [Required(ErrorMessage = "Please enter pincode")]
+        public string Address2Pincode { get; set; }
+
         public bool IsMain { get; set; }
+        public string Status { get; set; }
     }
 }

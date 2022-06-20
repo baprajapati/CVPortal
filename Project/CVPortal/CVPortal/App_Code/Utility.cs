@@ -22,6 +22,26 @@ namespace CVPortal.App_Code
             }
         }
 
+        public static int UserId
+        {
+            get
+            {
+                return (HttpContext.Current.Session["UserId"] != null && !string.IsNullOrEmpty(HttpContext.Current.Session["UserId"].ToString())) ? Convert.ToInt32(HttpContext.Current.Session["UserId"].ToString()) : 0;
+            }
+            set
+            {
+                HttpContext.Current.Session["UserId"] = value;
+            }
+        }
+
+        public static string DefaultPassword
+        {
+            get
+            {
+                return "test#123";
+            }
+        }
+
         #region SendMail
 
         public static bool SendMail(string EmailTo, string CC, string BCC, string Subject, string Body, string DisplayName, string Attachments, bool IsBodyHtml)
@@ -68,13 +88,13 @@ namespace CVPortal.App_Code
                         {
                             smtpClient.Send(message);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result = false;
             }

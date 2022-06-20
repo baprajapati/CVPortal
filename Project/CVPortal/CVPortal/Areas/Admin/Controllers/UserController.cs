@@ -60,7 +60,7 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 list.Add(new SelectListItem()
                 {
-                    Text = item.EmailAddress,
+                    Text = $"{item.HAUSER} - {item.HANAME}",
                     Value = item.HAUSER,
                     Selected = selectedValue != null && selectedValue.Contains(item.EmailAddress)
                 });
@@ -80,9 +80,9 @@ namespace CVPortal.Areas.Admin.Controllers
                 ViewBag.RoleList = GetRoles(null);
                 ViewBag.UserList = GetUsers(null, null);
 
-                return View(new UserViewModel() { RoleName= "InitiatorAdmin" });
+                return View(new UserViewModel() { RoleName = "InitiatorAdmin" });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -113,6 +113,8 @@ namespace CVPortal.Areas.Admin.Controllers
                             Password = data.EmailAddress,
                             RoleName = roleName,
                             HAUSER = data.HAUSER,
+                            HANAME = data.HANAME,
+                            Dept_Code = data.Dept_Code,
                             HANEXT = data.HANEXT
                         };
                     }
@@ -125,7 +127,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     return RedirectToAction("AddUser", "User");
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -143,7 +145,7 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 return View();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -160,10 +162,17 @@ namespace CVPortal.Areas.Admin.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var data = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == user.Email);
-                    if (data != null)
+                    var dataEmail = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == user.Email);
+                    if (dataEmail != null)
                     {
                         ModelState.AddModelError(nameof(user.Email), "Email already exist.");
+                        return View(user);
+                    }
+
+                    var dataUserCode = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == user.HAUSER);
+                    if (dataUserCode != null)
+                    {
+                        ModelState.AddModelError(nameof(user.HAUSER), "User Code already exist.");
                         return View(user);
                     }
 
@@ -176,10 +185,10 @@ namespace CVPortal.Areas.Admin.Controllers
 
                     string token = WebSecurity.CreateUserAndAccount(user.Email, user.Password, new
                     {
-                        HAUSER = Convert.ToInt32(dataContext.tbl_Users.OrderByDescending(x => x.HAUSER).FirstOrDefault()?.HAUSER ?? "1000") + 1,
+                        HAUSER = user.HAUSER,
                         HANEXT = user.HANEXT,
-                        HANAME = "test",
-                        Dept_Code = "test"
+                        HANAME = user.HANAME,
+                        Dept_Code = user.Dept_Code
                     });
                     Roles.AddUserToRole(user.Email, user.RoleName);
 
@@ -196,7 +205,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     return RedirectToAction("UserIndex");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -219,6 +228,8 @@ namespace CVPortal.Areas.Admin.Controllers
                         Email = item.EmailAddress,
                         RoleName = Roles.GetRolesForUser(item.EmailAddress).First().ToString(),
                         HAUSER = item.HAUSER,
+                        HANAME = item.HANAME,
+                        Dept_Code = item.Dept_Code,
                         HANEXT = item.HANEXT
                     });
                 });
@@ -231,7 +242,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     data = users
                 }, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
@@ -242,20 +253,24 @@ namespace CVPortal.Areas.Admin.Controllers
         {
             try
             {
-
                 var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.Id == id);
                 if (objUser != null)
                 {
+                    if (dataContext.tbl_Users.FirstOrDefault(x => x.HANEXT == objUser.HAUSER) != null)
+                    {
+                        return Json(new { status = false, result = "User used as next user, so you can't delete this user" });
+                    }
+
                     ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(objUser.EmailAddress); // deletes record from webpages_Membership table
                     Roles.RemoveUserFromRole(objUser.EmailAddress, Roles.GetRolesForUser(objUser.EmailAddress).First().ToString());
                     ((SimpleMembershipProvider)Membership.Provider).DeleteUser(objUser.EmailAddress, true); // deletes record from UserProfile table
                 }
 
-                return Json(true);
+                return Json(new { status = true });
             }
             catch (Exception ex)
             {
-                return Json(false);
+                return Json(new { status = false, result = ex.GetBaseException().Message });
             }
         }
 
@@ -265,24 +280,34 @@ namespace CVPortal.Areas.Admin.Controllers
         {
             try
             {
+                ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, user.HAUSER);
+
                 if (ModelState.IsValid)
                 {
+                    var dataUserCode = dataContext.tbl_Users.FirstOrDefault(x => x.Id != user.Id && x.HAUSER == user.HAUSER);
+                    if (dataUserCode != null)
+                    {
+                        ModelState.AddModelError(nameof(user.HAUSER), "User Code already exist.");
+                        return View(user);
+                    }
+
                     var data = dataContext.tbl_Users.FirstOrDefault(x => x.Id == user.Id);
                     if (data != null)
                     {
                         data.EmailAddress = user.Email;
                         data.HANEXT = user.HANEXT;
+                        data.HAUSER = user.HAUSER;
+                        data.HANAME = user.HANAME;
+                        data.Dept_Code = user.Dept_Code;
                         dataContext.SaveChanges();
                     }
 
                     return RedirectToAction("UserIndex");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
-
-            ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, user.HAUSER);
 
             return View(user);
         }

@@ -27,10 +27,14 @@
                     alert("Only PDF file allowed.");
                 } else if (file.size > 5242880) {
                     $("#BankFile").val("");
-                    alert("Maximum 5 MB size allowed, your uploaded Bank related file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded Bank related file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Vendor");
                 } else {
                     $("#BankFileName").val(file.name);
                 }
+            });
+
+            $('#Date').datepicker({
+                format: 'yyyymmdd'
             });
         });
     </script>
@@ -43,7 +47,7 @@
         @Html.HiddenFor(model => model.IsMain)
 
         <div>
-            <h3 class="form-signin-heading text-center" style="text-decoration:underline;">Domestic Vendor Registration Form</h3>
+            <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
             <label>General Instructions</label>
             <ol>
                 <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
@@ -72,7 +76,7 @@
                         <span>16.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Benificiary Name</span><br />
+                        <span>Benificiary Name</span><span class="color-red"> * </span><br />
                         <span>(Vendor Name)</span>
                     </div>
                 </div>
@@ -88,7 +92,7 @@
                         <span>17.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Bank Name</span>
+                        <span>Bank Name</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -111,7 +115,7 @@
                         <span>18.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Branch Name/Address</span>
+                        <span>Branch Name/Address</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -126,7 +130,7 @@
                         <span>19.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>Account No</span>
+                        <span>Account No</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -141,7 +145,7 @@
                         <span>20.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>MICR Code</span>
+                        <span>MICR Code</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -156,7 +160,7 @@
                         <span>21.</span>
                     </div>
                     <div class="col-md-10">
-                        <span>IFSC / RTGS Code</span>
+                        <span>IFSC / RTGS Code</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -168,7 +172,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-offset-2 col-md-10">
-                        <span>Date</span>
+                        <span>Date</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-3">

@@ -6,12 +6,11 @@ using System.Web;
 
 namespace CVPortal.ViewModels
 {
-    public class LoginViewModel
+    public class VendorListModel
     {
-        [Required]
+        public int Id { get; set; }
+        public string vend_name { get; set; }
         public string Email { get; set; }
-
-        [Required]
-        public string Password { get; set; }
+        public string Status { get; set; }
     }
 }

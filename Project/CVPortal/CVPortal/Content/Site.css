@@ -15,3 +15,7 @@
 .dl-horizontal dt {
     white-space: normal;
 }
+
+.color-red {
+    color: red !important;
+}

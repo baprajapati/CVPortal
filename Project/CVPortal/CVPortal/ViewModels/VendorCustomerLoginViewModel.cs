@@ -11,7 +11,6 @@ namespace CVPortal.ViewModels
         public int? Id { get; set; }
 
         [Required]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; }
 
         [Required]

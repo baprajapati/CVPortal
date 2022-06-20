@@ -28,16 +28,16 @@
                         $(".js-otp-lable").html("Send OTP");
 
                         if (response.status) {
-                            alert("OTP sent successfully, please check your email inbox.");
+                            toastr.success("OTP sent successfully, please check your email inbox.", "Login");
                             $(".js-otp").removeClass("hide");
                             $(".js-send-otp").addClass("hide");
                             $("#txtEmail").attr("disabled", "disabled");
                         } else {
-                            alert(response.result);
+                            toastr.error(response.responseText, "Login");
                         }
                     },
                     error: function (response) {
-                        alert(response.responseText);
+                        toastr.error(response.responseText, "Login");
                     }
                 });
             });
@@ -70,7 +70,7 @@
                         }
                     },
                     error: function (response) {
-                        alert(response.responseText);
+                        toastr.error(response.responseText, "Login");
                     }
                 });
             });
@@ -95,7 +95,7 @@
                                 @Html.HiddenFor(model => model.Email)
 
                                 <div data-v-24b04a24="" class="signup-mobile-input su-input-group su-static-label" data-v-69ce196a="">
-                                    <label data-v-24b04a24="" class="su-input-label su-visible">Email</label>
+                                    <label data-v-24b04a24="" class="su-input-label su-visible">Email / UserId</label>
                                     @Html.TextBoxFor(m => m.Email, new { @id = "txtEmail", @class = "su-spinner", autocorrect = "off", placeholder = "", autofocus = "autofocus" })
                                     <div>
                                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "error" })
