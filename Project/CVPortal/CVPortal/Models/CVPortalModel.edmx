@@ -15,6 +15,17 @@
           <Property Name="Status" Type="bit" />
           <Property Name="Create_On" Type="datetime" />
         </EntityType>
+        <EntityType Name="DepartmentMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedById" Type="int" Nullable="false" />
+          <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="ExceptionLog">
           <Key>
             <PropertyRef Name="id" />
@@ -160,6 +171,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IsNewVendor" Type="bit" Nullable="false" />
           <Property Name="Org_Sts" Type="nvarchar" MaxLength="1" Nullable="false" />
           <Property Name="vend_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CEO_name" Type="nvarchar" MaxLength="50" />
@@ -209,8 +221,7 @@
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="nvarchar" MaxLength="1" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
-          <Property Name="NewVendorReason" Type="nvarchar" MaxLength="1000" />
-          <Property Name="NewVendorReasonDescription" Type="nvarchar(max)" />
+          <Property Name="VendorCode" Type="nvarchar" MaxLength="1000" />
           <Property Name="Step1" Type="bit" />
           <Property Name="Step2" Type="bit" />
           <Property Name="Step3" Type="bit" />
@@ -369,6 +380,7 @@
         </Association>
         <EntityContainer Name="CVPortalModelStoreContainer">
           <EntitySet Name="CurrencyCodeMaster" EntityType="Self.CurrencyCodeMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DepartmentMaster" EntityType="Self.DepartmentMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExceptionLog" EntityType="Self.ExceptionLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GSTType_Master" EntityType="Self.GSTType_Master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginLogs" EntityType="Self.LoginLogs" Schema="dbo" store:Type="Tables" />
@@ -430,24 +442,20 @@
           <EntitySet Name="PaymentTermsMasters" EntityType="CVPortalModel.PaymentTermsMaster" />
           <EntitySet Name="PayTypeMasters" EntityType="CVPortalModel.PayTypeMaster" />
           <EntitySet Name="tbl_Users" EntityType="CVPortalModel.tbl_Users" />
+          <EntitySet Name="Vend_reg_tbl" EntityType="CVPortalModel.Vend_reg_tbl" />
           <EntitySet Name="VendorApprovals" EntityType="CVPortalModel.VendorApproval" />
           <EntitySet Name="VendorFiles" EntityType="CVPortalModel.VendorFile" />
           <EntitySet Name="VendorTypeMasters" EntityType="CVPortalModel.VendorTypeMaster" />
           <EntitySet Name="webpages_Membership" EntityType="CVPortalModel.webpages_Membership" />
           <EntitySet Name="webpages_OAuthMembership" EntityType="CVPortalModel.webpages_OAuthMembership" />
           <EntitySet Name="webpages_Roles" EntityType="CVPortalModel.webpages_Roles" />
-          <AssociationSet Name="FK_VendorApproval_tbl_Users" Association="CVPortalModel.FK_VendorApproval_tbl_Users">
-            <End Role="tbl_Users" EntitySet="tbl_Users" />
-            <End Role="VendorApproval" EntitySet="VendorApprovals" />
-          </AssociationSet>
-          <AssociationSet Name="webpages_UsersInRoles" Association="CVPortalModel.webpages_UsersInRoles">
-            <End Role="webpages_Roles" EntitySet="webpages_Roles" />
-            <End Role="tbl_Users" EntitySet="tbl_Users" />
-          </AssociationSet>
-          <EntitySet Name="Vend_reg_tbl" EntityType="CVPortalModel.Vend_reg_tbl" />
           <AssociationSet Name="FK_Vend_reg_tbl_tbl_Users" Association="CVPortalModel.FK_Vend_reg_tbl_tbl_Users">
             <End Role="tbl_Users" EntitySet="tbl_Users" />
             <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_tbl_Users" Association="CVPortalModel.FK_VendorApproval_tbl_Users">
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+            <End Role="VendorApproval" EntitySet="VendorApprovals" />
           </AssociationSet>
           <AssociationSet Name="FK_VendorApproval_Vend_reg_tbl" Association="CVPortalModel.FK_VendorApproval_Vend_reg_tbl">
             <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
@@ -457,6 +465,11 @@
             <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
             <End Role="VendorFile" EntitySet="VendorFiles" />
           </AssociationSet>
+          <AssociationSet Name="webpages_UsersInRoles" Association="CVPortalModel.webpages_UsersInRoles">
+            <End Role="webpages_Roles" EntitySet="webpages_Roles" />
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+          </AssociationSet>
+          <EntitySet Name="DepartmentMasters" EntityType="CVPortalModel.DepartmentMaster" />
         </EntityContainer>
         <EntityType Name="CurrencyCodeMaster">
           <Key>
@@ -607,9 +620,76 @@
           <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Amount" Type="Decimal" Precision="15" Scale="5" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" FromRole="tbl_Users" ToRole="Vend_reg_tbl" />
           <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_tbl_Users" FromRole="tbl_Users" ToRole="VendorApproval" />
           <NavigationProperty Name="webpages_Roles" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="tbl_Users" ToRole="webpages_Roles" />
-          <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" FromRole="tbl_Users" ToRole="Vend_reg_tbl" />
+        </EntityType>
+        <EntityType Name="Vend_reg_tbl">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IsNewVendor" Type="Boolean" Nullable="false" />
+          <Property Name="Org_Sts" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="vend_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CEO_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Designation" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Contact_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Desig" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Phno" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_Desig" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_Phno" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Spy_contact_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CIN_No" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
+          <Property Name="PAN_No" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Type_vend_gst" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="GST_Reg_no" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Item_Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HSN_SAC_code" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="MSME_no" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Annu_TurnOver" Type="Decimal" Precision="15" Scale="0" />
+          <Property Name="Nature_of_service" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FinancialYear1" Type="Int32" />
+          <Property Name="FinancialYear2" Type="Int32" />
+          <Property Name="IsITRFiled1" Type="Boolean" />
+          <Property Name="IsITRFiled2" Type="Boolean" />
+          <Property Name="AcknowledgeNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AcknowledgeNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ITR_Field_dtl" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="Benificiary_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Bank_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Branch_name_Add" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Account_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="MICR_code" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="VendorCode" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Step1" Type="Boolean" />
+          <Property Name="Step2" Type="Boolean" />
+          <Property Name="Step3" Type="Boolean" />
+          <Property Name="Step4" Type="Boolean" />
+          <Property Name="IsFinalApproved" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedById" Type="Int32" Nullable="false" />
+          <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" FromRole="Vend_reg_tbl" ToRole="tbl_Users" />
+          <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorApproval" />
+          <NavigationProperty Name="VendorFiles" Relationship="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorFile" />
         </EntityType>
         <EntityType Name="VendorApproval">
           <Key>
@@ -683,89 +763,6 @@
           <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="tbl_Users" />
         </EntityType>
-        <Association Name="FK_VendorApproval_tbl_Users">
-          <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="1" />
-          <End Type="CVPortalModel.VendorApproval" Role="VendorApproval" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tbl_Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VendorApproval">
-              <PropertyRef Name="CreatedById" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="webpages_UsersInRoles">
-          <End Type="CVPortalModel.webpages_Roles" Role="webpages_Roles" Multiplicity="*" />
-          <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="*" />
-        </Association>
-        <EntityType Name="Vend_reg_tbl">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Org_Sts" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="vend_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CEO_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Designation" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Contact_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address1Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address1State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address1City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address1Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AC_contact_Desig" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="AC_contact_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AC_contact_Phno" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="AC_contact_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Spy_contact_Desig" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Spy_contact_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Spy_contact_Phno" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="Spy_contact_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="CIN_No" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
-          <Property Name="PAN_No" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Type_vend_gst" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="GST_Reg_no" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Item_Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HSN_SAC_code" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
-          <Property Name="MSME_no" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Annu_TurnOver" Type="Decimal" Precision="15" Scale="0" />
-          <Property Name="Nature_of_service" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="FinancialYear1" Type="Int32" />
-          <Property Name="FinancialYear2" Type="Int32" />
-          <Property Name="IsITRFiled1" Type="Boolean" />
-          <Property Name="IsITRFiled2" Type="Boolean" />
-          <Property Name="AcknowledgeNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AcknowledgeNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ITR_Field_dtl" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
-          <Property Name="Benificiary_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Bank_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Branch_name_Add" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="Account_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="MICR_code" Type="Decimal" Precision="9" Scale="0" />
-          <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
-          <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="NewVendorReason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="NewVendorReasonDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Step1" Type="Boolean" />
-          <Property Name="Step2" Type="Boolean" />
-          <Property Name="Step3" Type="Boolean" />
-          <Property Name="Step4" Type="Boolean" />
-          <Property Name="IsFinalApproved" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedById" Type="Int32" Nullable="false" />
-          <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" FromRole="Vend_reg_tbl" ToRole="tbl_Users" />
-          <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorApproval" />
-          <NavigationProperty Name="VendorFiles" Relationship="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorFile" />
-        </EntityType>
         <Association Name="FK_Vend_reg_tbl_tbl_Users">
           <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="1" />
           <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
@@ -774,6 +771,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Vend_reg_tbl">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorApproval_tbl_Users">
+          <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="1" />
+          <End Type="CVPortalModel.VendorApproval" Role="VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VendorApproval">
               <PropertyRef Name="CreatedById" />
             </Dependent>
           </ReferentialConstraint>
@@ -802,6 +811,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="webpages_UsersInRoles">
+          <End Type="CVPortalModel.webpages_Roles" Role="webpages_Roles" Multiplicity="*" />
+          <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="*" />
+        </Association>
+        <EntityType Name="DepartmentMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedById" Type="Int32" Nullable="false" />
+          <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -969,6 +993,71 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Vend_reg_tbl">
+            <EntityTypeMapping TypeName="CVPortalModel.Vend_reg_tbl">
+              <MappingFragment StoreEntitySet="Vend_reg_tbl">
+                <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="IsFinalApproved" ColumnName="IsFinalApproved" />
+                <ScalarProperty Name="Step4" ColumnName="Step4" />
+                <ScalarProperty Name="Step3" ColumnName="Step3" />
+                <ScalarProperty Name="Step2" ColumnName="Step2" />
+                <ScalarProperty Name="Step1" ColumnName="Step1" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="Type_of_Vend" ColumnName="Type_of_Vend" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="IFSC_RTGS_code" ColumnName="IFSC_RTGS_code" />
+                <ScalarProperty Name="MICR_code" ColumnName="MICR_code" />
+                <ScalarProperty Name="Account_no" ColumnName="Account_no" />
+                <ScalarProperty Name="Branch_name_Add" ColumnName="Branch_name_Add" />
+                <ScalarProperty Name="Bank_name" ColumnName="Bank_name" />
+                <ScalarProperty Name="Benificiary_name" ColumnName="Benificiary_name" />
+                <ScalarProperty Name="ITR_Field_dtl" ColumnName="ITR_Field_dtl" />
+                <ScalarProperty Name="AcknowledgeNo2" ColumnName="AcknowledgeNo2" />
+                <ScalarProperty Name="AcknowledgeNo1" ColumnName="AcknowledgeNo1" />
+                <ScalarProperty Name="IsITRFiled2" ColumnName="IsITRFiled2" />
+                <ScalarProperty Name="IsITRFiled1" ColumnName="IsITRFiled1" />
+                <ScalarProperty Name="FinancialYear2" ColumnName="FinancialYear2" />
+                <ScalarProperty Name="FinancialYear1" ColumnName="FinancialYear1" />
+                <ScalarProperty Name="Nature_of_service" ColumnName="Nature_of_service" />
+                <ScalarProperty Name="Annu_TurnOver" ColumnName="Annu_TurnOver" />
+                <ScalarProperty Name="MSME_no" ColumnName="MSME_no" />
+                <ScalarProperty Name="HSN_SAC_code" ColumnName="HSN_SAC_code" />
+                <ScalarProperty Name="Item_Desc" ColumnName="Item_Desc" />
+                <ScalarProperty Name="GST_Reg_no" ColumnName="GST_Reg_no" />
+                <ScalarProperty Name="Type_vend_gst" ColumnName="Type_vend_gst" />
+                <ScalarProperty Name="PAN_No" ColumnName="PAN_No" />
+                <ScalarProperty Name="CIN_No" ColumnName="CIN_No" />
+                <ScalarProperty Name="Spy_contact_Email" ColumnName="Spy_contact_Email" />
+                <ScalarProperty Name="Spy_contact_Phno" ColumnName="Spy_contact_Phno" />
+                <ScalarProperty Name="Spy_contact_name" ColumnName="Spy_contact_name" />
+                <ScalarProperty Name="Spy_contact_Desig" ColumnName="Spy_contact_Desig" />
+                <ScalarProperty Name="AC_contact_Email" ColumnName="AC_contact_Email" />
+                <ScalarProperty Name="AC_contact_Phno" ColumnName="AC_contact_Phno" />
+                <ScalarProperty Name="AC_contact_name" ColumnName="AC_contact_name" />
+                <ScalarProperty Name="AC_contact_Desig" ColumnName="AC_contact_Desig" />
+                <ScalarProperty Name="Address2Pincode" ColumnName="Address2Pincode" />
+                <ScalarProperty Name="Address2City" ColumnName="Address2City" />
+                <ScalarProperty Name="Address2State" ColumnName="Address2State" />
+                <ScalarProperty Name="Address2Country" ColumnName="Address2Country" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1Pincode" ColumnName="Address1Pincode" />
+                <ScalarProperty Name="Address1City" ColumnName="Address1City" />
+                <ScalarProperty Name="Address1State" ColumnName="Address1State" />
+                <ScalarProperty Name="Address1Country" ColumnName="Address1Country" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Contact_no" ColumnName="Contact_no" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="CEO_name" ColumnName="CEO_name" />
+                <ScalarProperty Name="vend_name" ColumnName="vend_name" />
+                <ScalarProperty Name="Org_Sts" ColumnName="Org_Sts" />
+                <ScalarProperty Name="IsNewVendor" ColumnName="IsNewVendor" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="VendorApprovals">
             <EntityTypeMapping TypeName="CVPortalModel.VendorApproval">
               <MappingFragment StoreEntitySet="VendorApproval">
@@ -1050,68 +1139,15 @@
               <ScalarProperty Name="RoleId" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Vend_reg_tbl">
-            <EntityTypeMapping TypeName="CVPortalModel.Vend_reg_tbl">
-              <MappingFragment StoreEntitySet="Vend_reg_tbl">
+          <EntitySetMapping Name="DepartmentMasters">
+            <EntityTypeMapping TypeName="CVPortalModel.DepartmentMaster">
+              <MappingFragment StoreEntitySet="DepartmentMaster">
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
-                <ScalarProperty Name="IsFinalApproved" ColumnName="IsFinalApproved" />
-                <ScalarProperty Name="Step4" ColumnName="Step4" />
-                <ScalarProperty Name="Step3" ColumnName="Step3" />
-                <ScalarProperty Name="Step2" ColumnName="Step2" />
-                <ScalarProperty Name="Step1" ColumnName="Step1" />
-                <ScalarProperty Name="NewVendorReasonDescription" ColumnName="NewVendorReasonDescription" />
-                <ScalarProperty Name="NewVendorReason" ColumnName="NewVendorReason" />
-                <ScalarProperty Name="OTP" ColumnName="OTP" />
-                <ScalarProperty Name="Type_of_Vend" ColumnName="Type_of_Vend" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="IFSC_RTGS_code" ColumnName="IFSC_RTGS_code" />
-                <ScalarProperty Name="MICR_code" ColumnName="MICR_code" />
-                <ScalarProperty Name="Account_no" ColumnName="Account_no" />
-                <ScalarProperty Name="Branch_name_Add" ColumnName="Branch_name_Add" />
-                <ScalarProperty Name="Bank_name" ColumnName="Bank_name" />
-                <ScalarProperty Name="Benificiary_name" ColumnName="Benificiary_name" />
-                <ScalarProperty Name="ITR_Field_dtl" ColumnName="ITR_Field_dtl" />
-                <ScalarProperty Name="AcknowledgeNo2" ColumnName="AcknowledgeNo2" />
-                <ScalarProperty Name="AcknowledgeNo1" ColumnName="AcknowledgeNo1" />
-                <ScalarProperty Name="IsITRFiled2" ColumnName="IsITRFiled2" />
-                <ScalarProperty Name="IsITRFiled1" ColumnName="IsITRFiled1" />
-                <ScalarProperty Name="FinancialYear2" ColumnName="FinancialYear2" />
-                <ScalarProperty Name="FinancialYear1" ColumnName="FinancialYear1" />
-                <ScalarProperty Name="Nature_of_service" ColumnName="Nature_of_service" />
-                <ScalarProperty Name="Annu_TurnOver" ColumnName="Annu_TurnOver" />
-                <ScalarProperty Name="MSME_no" ColumnName="MSME_no" />
-                <ScalarProperty Name="HSN_SAC_code" ColumnName="HSN_SAC_code" />
-                <ScalarProperty Name="Item_Desc" ColumnName="Item_Desc" />
-                <ScalarProperty Name="GST_Reg_no" ColumnName="GST_Reg_no" />
-                <ScalarProperty Name="Type_vend_gst" ColumnName="Type_vend_gst" />
-                <ScalarProperty Name="PAN_No" ColumnName="PAN_No" />
-                <ScalarProperty Name="CIN_No" ColumnName="CIN_No" />
-                <ScalarProperty Name="Spy_contact_Email" ColumnName="Spy_contact_Email" />
-                <ScalarProperty Name="Spy_contact_Phno" ColumnName="Spy_contact_Phno" />
-                <ScalarProperty Name="Spy_contact_name" ColumnName="Spy_contact_name" />
-                <ScalarProperty Name="Spy_contact_Desig" ColumnName="Spy_contact_Desig" />
-                <ScalarProperty Name="AC_contact_Email" ColumnName="AC_contact_Email" />
-                <ScalarProperty Name="AC_contact_Phno" ColumnName="AC_contact_Phno" />
-                <ScalarProperty Name="AC_contact_name" ColumnName="AC_contact_name" />
-                <ScalarProperty Name="AC_contact_Desig" ColumnName="AC_contact_Desig" />
-                <ScalarProperty Name="Address2Pincode" ColumnName="Address2Pincode" />
-                <ScalarProperty Name="Address2City" ColumnName="Address2City" />
-                <ScalarProperty Name="Address2State" ColumnName="Address2State" />
-                <ScalarProperty Name="Address2Country" ColumnName="Address2Country" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="Address1Pincode" ColumnName="Address1Pincode" />
-                <ScalarProperty Name="Address1City" ColumnName="Address1City" />
-                <ScalarProperty Name="Address1State" ColumnName="Address1State" />
-                <ScalarProperty Name="Address1Country" ColumnName="Address1Country" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Contact_no" ColumnName="Contact_no" />
-                <ScalarProperty Name="Designation" ColumnName="Designation" />
-                <ScalarProperty Name="CEO_name" ColumnName="CEO_name" />
-                <ScalarProperty Name="vend_name" ColumnName="vend_name" />
-                <ScalarProperty Name="Org_Sts" ColumnName="Org_Sts" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -22,6 +22,7 @@ namespace CVPortal.Models
         }
     
         public int ID { get; set; }
+        public bool IsNewVendor { get; set; }
         public string Org_Sts { get; set; }
         public string vend_name { get; set; }
         public string CEO_name { get; set; }
@@ -71,8 +72,7 @@ namespace CVPortal.Models
         public Nullable<decimal> Date { get; set; }
         public string Type_of_Vend { get; set; }
         public string OTP { get; set; }
-        public string NewVendorReason { get; set; }
-        public string NewVendorReasonDescription { get; set; }
+        public string VendorCode { get; set; }
         public Nullable<bool> Step1 { get; set; }
         public Nullable<bool> Step2 { get; set; }
         public Nullable<bool> Step3 { get; set; }

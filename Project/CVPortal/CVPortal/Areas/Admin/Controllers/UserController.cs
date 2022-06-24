@@ -38,6 +38,25 @@ namespace CVPortal.Areas.Admin.Controllers
             return new SelectList(list, "Value", "Text");
         }
 
+        public SelectList GetDepartments(string[] selectedValue)
+        {
+            var departments = dataContext.DepartmentMasters.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            departments.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.Code} - {item.Name}",
+                    Value = item.Code,
+                    Selected = selectedValue != null && selectedValue.Contains(item.Code)
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
         public SelectList GetUsers(string[] selectedValue, string currentUser)
         {
             var users = dataContext.tbl_Users.Where(x => x.EmailAddress != "admin@gmail.com").ToList();
@@ -78,6 +97,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     return RedirectToAction("../../Account/Login");
 
                 ViewBag.RoleList = GetRoles(null);
+                ViewBag.DepartmentList = GetDepartments(null);
                 ViewBag.UserList = GetUsers(null, null);
 
                 return View(new UserViewModel() { RoleName = "InitiatorAdmin" });
@@ -95,7 +115,6 @@ namespace CVPortal.Areas.Admin.Controllers
                 return RedirectToAction("../../Account/Login");
 
             var user = new UserViewModel();
-            string roleName = string.Empty;
 
             try
             {
@@ -104,9 +123,12 @@ namespace CVPortal.Areas.Admin.Controllers
                     var data = dataContext.tbl_Users.FirstOrDefault(x => x.Id == id);
                     if (data != null)
                     {
-                        ViewBag.UserList = GetUsers(new string[] { data.HANEXT }, data.HAUSER);
+                        var roleName = Roles.GetRolesForUser(data.EmailAddress).First().ToString();
 
-                        roleName = Roles.GetRolesForUser(data.EmailAddress).First().ToString();
+                        ViewBag.UserList = GetUsers(new string[] { data.HANEXT }, data.HAUSER);
+                        ViewBag.RoleList = GetRoles(new string[] { roleName });
+                        ViewBag.DepartmentList = GetDepartments(new string[] { data.Dept_Code });
+
                         user = new UserViewModel()
                         {
                             Email = data.EmailAddress,
@@ -130,8 +152,6 @@ namespace CVPortal.Areas.Admin.Controllers
             catch (Exception)
             {
             }
-
-            ViewBag.RoleList = GetRoles(new string[] { roleName });
 
             return View(user);
         }
@@ -159,6 +179,7 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 ViewBag.RoleList = GetRoles(new string[] { user.RoleName });
                 ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, null);
+                ViewBag.DepartmentList = GetDepartments(new string[] { user.Dept_Code });
 
                 if (ModelState.IsValid)
                 {
@@ -281,6 +302,8 @@ namespace CVPortal.Areas.Admin.Controllers
             try
             {
                 ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, user.HAUSER);
+                ViewBag.RoleList = GetRoles(new string[] { user.RoleName });
+                ViewBag.DepartmentList = GetDepartments(new string[] { user.Dept_Code });
 
                 if (ModelState.IsValid)
                 {

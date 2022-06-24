@@ -56,6 +56,12 @@
                                 <p>Users</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("DepartmentIndex","Department")" class="nav-link departmentindex">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>Departments</p>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -93,6 +99,8 @@
 
             if (window.location.href.includes("UserIndex") || window.location.href.includes("AddUser") || window.location.href.includes("EditUser")) {
                 $(".userindex").addClass("active");
+            } else if (window.location.href.includes("DepartmentIndex") || window.location.href.includes("AddDepartment") || window.location.href.includes("EditDepartment")) {
+                $(".departmentindex").addClass("active");
             }
         }
 

@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "Department";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+    <script>
+        var users;
+        var onClickSearch = false;
+
+        function getDepartments() {
+            users = $('#lstDepartments').DataTable
+                ({
+                    "language":
+                    {
+                        "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "lengthMenu": convertStringToArray('10,50,100,200,500', ','),
+                    "pageLength": '50',
+                    "ajax":
+                    {
+                        "url": '@Url.Action("GetDepartment", new { area = "Admin", controller = "Department" })',
+                        "type": "POST",
+                        "dataType": "JSON",
+                        "data": function (d) {
+                            return d;
+                        }
+                    },
+                    "bFilter": false,
+                    "scrollX": true,
+                    "autoWidth": false,
+                    "searching": true,
+                    "info": true,
+                    'aaSorting': [[0, 'desc']],
+                    "columns": [
+                        {
+                            "data": "Code", "name": "Code"
+                        },
+                        {
+                            "data": "Name", "name": "Name"
+                        },
+                        {
+                            "data": "Description", "name": "Description"
+                        },
+                        {
+                            "render": function (data, type, row, meta) {
+                                return "<a href='@Url.Action("EditDepartment", new { area = "Admin", controller = "Department" })/" + row.Id + "' class='icon-pencil' title='Edit'>Edit</a>"
+                            }, "targets": 'no-sort', "orderable": false
+                        },
+                        {
+                            "render": function (data, type, row, meta) {
+                                return "<a  href='javascript:void(0);' data-departmentid=" + row.Id + " title='Delete' class='icon-remove btn-cross-red deleteDepartment'>Delete</a>"
+                            }, "targets": 'no-sort', "orderable": false
+                        }
+                    ]
+                });
+        }
+
+        jQuery(document).ready(function () {
+            getDepartments();
+
+            $('#lstDepartments').on('click', '.deleteDepartment', function () {
+                var userID = $(this).data('departmentid');
+                bootbox.confirm("Are you sure want to delete ?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("DeleteDepartment", new { area = "Admin", controller = "Department" })',
+                            type: "POST",
+                            data: JSON.stringify({ id: userID }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.status) {
+                                    toastr.success("Department deleted successfully.", "Department");
+                                    users.draw();
+                                } else {
+                                    toastr.error(response.result, "Department");
+                                }
+                            },
+                            error: function (response) {
+                                toastr.error(response.responseText, "User");
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Departments</h1>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form_group text-right">
+                        @Html.ActionLink("Add New Department", "AddDepartment", new { controller = "Department" }, new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-hover" id="lstDepartments">
+                            <thead class="table_header">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

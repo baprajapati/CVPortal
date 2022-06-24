@@ -1,0 +1,60 @@
+﻿@model CVPortal.ViewModels.DepartmentViewModel
+@{
+    ViewBag.Title = "Edit Department";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Edit Department</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("DepartmentIndex","User")">Departments</a></li>
+                        <li class="breadcrumb-item active">Edit Department</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.Id)
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="Email">Code</label>
+                                    @Html.TextBoxFor(model => model.Code, new { id = "txtCode", @class = "form-control", placeholder = "Code" })
+                                    @Html.ValidationMessageFor(model => model.Code, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Name</label>
+                                    @Html.TextBoxFor(model => model.Name, new { id = "txtName", @class = "form-control", placeholder = "Name" })
+                                    @Html.ValidationMessageFor(model => model.Name, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Description</label>
+                                    @Html.TextBoxFor(model => model.Description, new { id = "txtDescription", @class = "form-control", placeholder = "Description" })
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <a href="@Url.Action("DepartmentIndex","Department")" class="btn btn-default">Cancel</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

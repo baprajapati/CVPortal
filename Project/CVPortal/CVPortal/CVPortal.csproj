@@ -151,6 +151,9 @@
     <Content Include="Areas\InitiatorAdmin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\InitiatorAdmin\Views\Vendor\AddVendor.cshtml" />
     <Content Include="Areas\InitiatorAdmin\Views\Vendor\VendorIndex.cshtml" />
+    <Content Include="Areas\Admin\Views\Department\AddDepartment.cshtml" />
+    <Content Include="Areas\Admin\Views\Department\EditDepartment.cshtml" />
+    <Content Include="Areas\Admin\Views\Department\DepartmentIndex.cshtml" />
     <None Include="Content\AdminLTE\jquery\jquery.validate-vsdoc.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.unobtrusive.js" />
@@ -195,6 +198,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
     <Compile Include="Areas\InitiatorAdmin\Controllers\VendorController.cs" />
     <Compile Include="Areas\InitiatorAdmin\InitiatorAdminAreaRegistration.cs" />
@@ -220,6 +224,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CVPortalModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DepartmentMaster.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ExceptionLog.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
@@ -279,6 +286,7 @@
     <Compile Include="ViewModels\CityViewModel.cs" />
     <Compile Include="ViewModels\StateViewModel.cs" />
     <Compile Include="ViewModels\CountryViewModel.cs" />
+    <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\VendorCustomerLoginViewModel.cs" />
     <Compile Include="ViewModels\VendorListModel.cs" />
     <Compile Include="ViewModels\VendorViewModel.cs" />

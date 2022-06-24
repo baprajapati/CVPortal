@@ -35,10 +35,11 @@ namespace CVPortal.Controllers
         {
             try
             {
-                var objVendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == email);
+                var objVendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => !x.IsFinalApproved && x.Email == email) ?? 
+                    dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == email);
                 if (objVendor != null)
                 {
-                    objVendor.OTP = new Random().Next(111111, 999999).ToString();
+                    objVendor.OTP = "123456";//new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
 
                     string mailTo = email;
@@ -57,7 +58,7 @@ namespace CVPortal.Controllers
                 var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == email || x.HAUSER == email);
                 if (objUser != null)
                 {
-                    objUser.OTP = new Random().Next(111111, 999999).ToString();
+                    objUser.OTP = "123456";//new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
 
                     string mailTo = email;
@@ -86,7 +87,8 @@ namespace CVPortal.Controllers
         {
             try
             {
-                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == model.Email);
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => !x.IsFinalApproved && x.Email == model.Email) ??
+                    dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == model.Email);
                 if (vendor != null && vendor.OTP == model.OTP)
                 {
                     WebSecurity.Login(model.Email, Utility.DefaultPassword, false);

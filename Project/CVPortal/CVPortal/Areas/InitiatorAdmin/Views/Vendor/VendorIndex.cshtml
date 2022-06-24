@@ -36,10 +36,19 @@
                     'aaSorting': [[0, 'desc']],
                     "columns": [
                         {
+                            "data": "NewExistingVendor", "name": "NewExistingVendor"
+                        },
+                        {
+                            "data": "VendorCode", "name": "VendorCode"
+                        },
+                        {
                             "data": "Email", "name": "Email"
                         },
                         {
                             "data": "vend_name", "name": "vend_name"
+                        },
+                        {
+                            "data": "Status", "name": "Status"
                         }
                     ]
                 });
@@ -73,8 +82,11 @@
                         <table class="table table-striped table-bordered table-hover" id="lstUsers">
                             <thead class="table_header">
                                 <tr>
+                                    <th>New / Existing</th>
+                                    <th>Code</th>
                                     <th>Email</th>
                                     <th>Vendor Name</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                         </table>

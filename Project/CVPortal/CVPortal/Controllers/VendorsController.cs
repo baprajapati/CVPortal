@@ -228,43 +228,33 @@ namespace CVPortal.Controllers
                             var roles = dataContext.webpages_Roles.ToList();
                             if (vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString())
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.HODDepartment.ToString())
                                     .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
                             }
                             else if (vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.HODDepartment.ToString())
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.LegalDepartment.ToString())
                                     .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
                             }
                             else if (vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.LegalDepartment.ToString())
+                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
                                     .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
                             }
                             else if (vendorApprover.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
-                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
-                            }
-                            else if (vendorApprover.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
-                            {
                                 model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.ITDepartment.ToString())
                                     .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                            }
+                            else
+                            {
+                                model.IsApprover = false;
                             }
                         }
                     }
                     else
                     {
-                        if (!string.IsNullOrEmpty(vendor.tbl_Users.HANEXT))
-                        {
-                            var user = dataContext.tbl_Users.First(x => x.HAUSER == vendor.tbl_Users.HANEXT);
-                            model.IsApprover = user.Id == Utility.UserId;
-                        }
-                        else
-                        {
-                            var role = dataContext.webpages_Roles.First(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString());
-                            model.IsApprover = role.tbl_Users.Any(x => x.Id == Utility.UserId);
-                        }
+                        model.IsApprover = vendor.CreatedById == Utility.UserId;
                     }
                 }
 
@@ -787,13 +777,14 @@ namespace CVPortal.Controllers
                     }
                     else
                     {
-                        data.ApproverRole = !string.IsNullOrEmpty(vendor.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                        data.ApproverRole = ApprovarRoleEnum.NextApprover.ToString();
                     }
 
                     vendor.VendorApprovals.Add(data);
 
                     if (data.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
                     {
+                        vendor.VendorCode = (1000 + vendor.ID).ToString();
                         vendor.IsFinalApproved = true;
                     }
 
@@ -850,7 +841,7 @@ namespace CVPortal.Controllers
                     }
                     else
                     {
-                        data.ApproverRole = !string.IsNullOrEmpty(vendor.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                        data.ApproverRole = ApprovarRoleEnum.NextApprover.ToString();
                     }
 
                     vendor.VendorApprovals.Add(data);
@@ -889,7 +880,9 @@ namespace CVPortal.Controllers
                         Id = item.ID,
                         Email = item.Email,
                         vend_name = item.vend_name,
-                        Status = vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending"
+                        NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
+                        VendorCode = item.VendorCode,
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending"
                     });
                 });
 
