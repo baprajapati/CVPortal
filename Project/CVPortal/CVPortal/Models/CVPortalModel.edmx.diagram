@@ -17,19 +17,19 @@
         <EntityTypeShape EntityType="CVPortalModel.PaymentTermsMaster" Width="1.5" PointX="11.75" PointY="6.75" />
         <EntityTypeShape EntityType="CVPortalModel.PayTypeMaster" Width="1.5" PointX="11.75" PointY="9.75" />
         <EntityTypeShape EntityType="CVPortalModel.tbl_Users" Width="1.5" PointX="3" PointY="6.125" />
-        <EntityTypeShape EntityType="CVPortalModel.Vend_reg_tbl" Width="1.5" PointX="5.25" PointY="1.5" />
         <EntityTypeShape EntityType="CVPortalModel.VendorApproval" Width="1.5" PointX="7.5" PointY="6.5" />
         <EntityTypeShape EntityType="CVPortalModel.VendorFile" Width="1.5" PointX="7.5" PointY="10.5" />
         <EntityTypeShape EntityType="CVPortalModel.VendorTypeMaster" Width="1.5" PointX="11.75" PointY="12.75" />
         <EntityTypeShape EntityType="CVPortalModel.webpages_Membership" Width="1.5" PointX="13.75" PointY="0.75" />
         <EntityTypeShape EntityType="CVPortalModel.webpages_OAuthMembership" Width="1.5" PointX="13.75" PointY="4.75" />
         <EntityTypeShape EntityType="CVPortalModel.webpages_Roles" Width="1.5" PointX="0.75" PointY="7.125" />
-        <AssociationConnector Association="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" />
         <AssociationConnector Association="CVPortalModel.FK_VendorApproval_tbl_Users" />
-        <AssociationConnector Association="CVPortalModel.FK_VendorApproval_Vend_reg_tbl" />
-        <AssociationConnector Association="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" />
         <AssociationConnector Association="CVPortalModel.webpages_UsersInRoles" />
         <EntityTypeShape EntityType="CVPortalModel.DepartmentMaster" Width="1.5" PointX="14.375" PointY="7.75" />
+        <EntityTypeShape EntityType="CVPortalModel.Vend_reg_tbl" Width="1.5" PointX="5.25" PointY="1.375" />
+        <AssociationConnector Association="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" />
+        <AssociationConnector Association="CVPortalModel.FK_VendorApproval_Vend_reg_tbl" />
+        <AssociationConnector Association="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

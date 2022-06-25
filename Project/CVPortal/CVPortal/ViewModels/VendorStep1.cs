@@ -60,6 +60,7 @@ namespace CVPortal.ViewModels
         public string Address2Pincode { get; set; }
 
         public bool IsMain { get; set; }
+        public bool IsExistingUpdate { get; set; }
         public string Status { get; set; }
     }
 }

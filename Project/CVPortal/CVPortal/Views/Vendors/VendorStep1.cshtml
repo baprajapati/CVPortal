@@ -59,6 +59,26 @@
                     }
                 })
             });
+
+            $("#orgStatus1").click(function () {
+                $("#Org_Sts").val("1");
+            });
+
+            $("#orgStatus2").click(function () {
+                $("#Org_Sts").val("2");
+            });
+
+            $("#orgStatus3").click(function () {
+                $("#Org_Sts").val("3");
+            });
+
+            $("#orgStatus4").click(function () {
+                $("#Org_Sts").val("4");
+            });
+
+            $("#orgStatus5").click(function () {
+                $("#Org_Sts").val("5");
+            });
         });
     </script>
 }
@@ -68,6 +88,7 @@
     {
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.IsMain)
+        @Html.HiddenFor(model => model.IsExistingUpdate)
 
         <div>
             <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
@@ -104,6 +125,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
+                    @Html.HiddenFor(model => model.Org_Sts)
                     @Html.RadioButtonFor(model => model.Org_Sts, "1", Model.IsMain ? (object)new { @id = "orgStatus1" } : new { @id = "orgStatus1", disabled = "disabled" })
                     <label for="orgStatus1" style="font-weight: 500;">Private Ltd</label>
                     <br />
@@ -132,7 +154,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.vend_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.vend_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.vend_name)
                 </div>
             </div><br />
@@ -146,14 +168,14 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.CEO_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.CEO_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.CEO_name)
                 </div>
                 <div class="col-md-1" style="padding-right:0;padding-left:0;">
                     <span>Designation</span><span class="color-red"> * </span>
                 </div>
                 <div class="col-md-5">
-                    @Html.TextBoxFor(model => model.Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Designation)
                 </div>
             </div>
@@ -164,7 +186,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Contact_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Contact_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Contact_no)
                 </div>
             </div>
@@ -176,7 +198,7 @@
                 </div>
                 <div class="col-md-3">
                     @Html.HiddenFor(model => model.Email)
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
             </div><br />
@@ -190,11 +212,11 @@
                     </div>
                 </div>
                 <div class="col-md-7">
-                    @Html.TextBoxFor(model => model.Address1, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Address1, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Address1)
                 </div>
                 <div class="col-md-2">
-                    @Html.TextBoxFor(model => model.Address1Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
+                    @Html.TextBoxFor(model => model.Address1Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
                     @Html.ValidationMessageFor(model => model.Address1Pincode)
                 </div>
             </div>
@@ -222,11 +244,11 @@
                     </div>
                 </div>
                 <div class="col-md-7">
-                    @Html.TextBoxFor(model => model.Address2, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Address2, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Address2)
                 </div>
                 <div class="col-md-2">
-                    @Html.TextBoxFor(model => model.Address2Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
+                    @Html.TextBoxFor(model => model.Address2Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
                     @Html.ValidationMessageFor(model => model.Address2Pincode)
                 </div>
             </div>

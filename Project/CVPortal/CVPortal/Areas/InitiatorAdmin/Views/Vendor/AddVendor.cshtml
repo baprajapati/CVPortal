@@ -36,6 +36,11 @@
                                     @Html.RadioButtonFor(model => model.IsNewVendor, false, new { @id = "isNewVendor2" })
                                     <label for="isNewVendor2" style="font-weight: 500;">No</label>
                                 </div>
+                                <div class="form-group existing-reason" style="display:none;">
+                                    <label for="Email">What need to change in existing vendor?</label>
+                                    @Html.DropDownListFor(model => model.ExistingReason, ViewBag.VendorExistingOptionsList as SelectList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ExistingReason, "")
+                                </div>
                                 <div class="form-group">
                                     <label for="VendorCode">Employee Code</label>
                                     @Html.TextBoxFor(model => model.VendorCode, new { id = "txtVendorCode", @class = "form-control", placeholder = "Vendor Code", @readonly = "readonly" })
@@ -67,17 +72,25 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
+        function SetNewExistingVendor(value) {
+            if (value == 'True') {
+                $("#txtVendorCode").attr("readonly", "readonly");
+                $("#txtEmail").removeAttr("readonly");
+                $("#txtVendorName").removeAttr("readonly");
+                $(".existing-reason").hide();
+            } else if (value == 'False') {
+                $("#txtVendorCode").removeAttr("readonly");
+                $("#txtEmail").attr("readonly", "readonly")
+                $("#txtVendorName").attr("readonly", "readonly")
+                $(".existing-reason").show();
+            }
+        }
+
         $(document).ready(function () {
+            SetNewExistingVendor($('input[type=radio][name=IsNewVendor]:checked').val());
+
             $('input[type=radio][name=IsNewVendor]').change(function () {
-                if (this.value == 'True') {
-                    $("#txtVendorCode").attr("readonly", "readonly");
-                    $("#txtEmail").removeAttr("readonly");
-                    $("#txtVendorName").removeAttr("readonly");
-                } else if (this.value == 'False') {
-                    $("#txtVendorCode").removeAttr("readonly");
-                    $("#txtEmail").attr("readonly", "readonly")
-                    $("#txtVendorName").attr("readonly", "readonly")
-                }
+                SetNewExistingVendor(this.value);
             });
 
             $("#txtVendorCode").change(function (e) {

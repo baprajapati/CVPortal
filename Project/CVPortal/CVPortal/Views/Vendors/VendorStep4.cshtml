@@ -116,6 +116,7 @@
     {
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.IsMain)
+        @Html.HiddenFor(model => model.IsExistingUpdate)
 
         <div>
             <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
@@ -182,7 +183,7 @@
             </div>
             <br /><br />
             <input type="button" value="Back" class="btn btn-primary pull-left back-button-3" />
-            @if (Model.IsMain)
+            @if (Model.IsMain || Model.IsExistingUpdate)
             {
                 <input type="submit" value="Submit" class="btn btn-success pull-right" />
             }

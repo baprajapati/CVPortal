@@ -10,4 +10,10 @@ namespace CVPortal.App_Code
         Approved = 1,
         Rejected = 2
     }
+
+    public enum VendorExistingOptionEnum
+    {
+        VendorBankDetails = 1,
+        VendorLocation = 2
+    }
 }

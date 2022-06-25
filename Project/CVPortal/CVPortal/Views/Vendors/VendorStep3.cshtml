@@ -45,6 +45,7 @@
     {
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.IsMain)
+        @Html.HiddenFor(model => model.IsExistingUpdate)
 
         <div>
             <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
@@ -81,7 +82,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.Benificiary_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Benificiary_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Benificiary_name)
                 </div>
             </div>
@@ -96,12 +97,12 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.Bank_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Bank_name, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Bank_name)
                 </div>
                 <div class="col-md-5">
                     @Html.HiddenFor(model => model.BankFileName)
-                    @Html.TextBoxFor(model => model.BankFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.BankFile, Model.IsMain || Model.IsExistingUpdate ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.BankFileName)
                     <a href="@Url.Action("Download", "Vendors", new { id = Model.Id, fileName = Model.BankFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.BankFileName) ? "hidden" : "")">
                         View File
@@ -119,7 +120,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.Branch_name_Add, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Branch_name_Add, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Branch_name_Add)
                 </div>
             </div>
@@ -134,7 +135,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.Account_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Account_no, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Account_no)
                 </div>
             </div>
@@ -149,7 +150,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.MICR_code, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.MICR_code, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", maxlength = "9" } : new { @class = "form-control", maxlength = "9", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.MICR_code)
                 </div>
             </div>
@@ -164,7 +165,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.IFSC_RTGS_code, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.IFSC_RTGS_code, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.IFSC_RTGS_code)
                 </div>
             </div>
@@ -176,7 +177,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Date, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Date, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Date)
                 </div>
             </div>

@@ -35,6 +35,6 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "Please enter date")]
         public decimal? Date { get; set; }
         public bool IsMain { get; set; }
-
+        public bool IsExistingUpdate { get; set; }
     }
 }

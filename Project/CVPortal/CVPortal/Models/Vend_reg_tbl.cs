@@ -23,6 +23,7 @@ namespace CVPortal.Models
     
         public int ID { get; set; }
         public bool IsNewVendor { get; set; }
+        public string ExistingReason { get; set; }
         public string Org_Sts { get; set; }
         public string vend_name { get; set; }
         public string CEO_name { get; set; }

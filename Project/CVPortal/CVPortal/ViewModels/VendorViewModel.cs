@@ -18,5 +18,7 @@ namespace CVPortal.ViewModels
         public string Email { get; set; }
 
         public string VendorCode { get; set; }
+
+        public string ExistingReason { get; set; }
     }
 }

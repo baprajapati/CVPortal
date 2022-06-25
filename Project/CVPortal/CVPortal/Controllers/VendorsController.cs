@@ -53,7 +53,8 @@ namespace CVPortal.Controllers
                 model.Address2State = vendor.Address2State;
                 model.Address2City = vendor.Address2City;
                 model.Address2Pincode = vendor.Address2Pincode;
-                model.IsMain = Utility.UserCode.Equals(vendor.Email);
+                model.IsMain = vendor.IsNewVendor && Utility.UserCode.Equals(vendor.Email);
+                model.IsExistingUpdate = !vendor.IsNewVendor && vendor.ExistingReason == VendorExistingOptionEnum.VendorLocation.ToString() && Utility.UserCode.Equals(vendor.Email);
             }
             else
             {
@@ -106,7 +107,7 @@ namespace CVPortal.Controllers
                 model.IsITRFiled2 = vendor.IsITRFiled2;
                 model.AcknowledgeNo1 = vendor.AcknowledgeNo1;
                 model.AcknowledgeNo2 = vendor.AcknowledgeNo2;
-                model.IsMain = Utility.UserCode.Equals(vendor.Email);
+                model.IsMain = vendor.IsNewVendor && Utility.UserCode.Equals(vendor.Email);
 
                 var cinFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.CIN.ToString());
                 if (cinFile != null)
@@ -166,7 +167,8 @@ namespace CVPortal.Controllers
                 model.MICR_code = vendor.MICR_code;
                 model.IFSC_RTGS_code = vendor.IFSC_RTGS_code;
                 model.Date = vendor.Date;
-                model.IsMain = Utility.UserCode.Equals(vendor.Email);
+                model.IsMain = vendor.IsNewVendor && Utility.UserCode.Equals(vendor.Email);
+                model.IsExistingUpdate = !vendor.IsNewVendor && vendor.ExistingReason == VendorExistingOptionEnum.VendorBankDetails.ToString() && Utility.UserCode.Equals(vendor.Email);
 
                 var bankFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Bank.ToString());
                 if (bankFile != null)
@@ -202,8 +204,9 @@ namespace CVPortal.Controllers
 
                 model.Id = vendor.ID;
                 model.Type_of_Vend = vendor.Type_of_Vend;
-                model.IsMain = Utility.UserCode.Equals(vendor.Email);
+                model.IsMain = vendor.IsNewVendor && Utility.UserCode.Equals(vendor.Email);
                 model.IsApprover = vendor.Step4 ?? false && !vendor.IsFinalApproved;
+                model.IsExistingUpdate = !vendor.IsNewVendor && !string.IsNullOrEmpty(vendor.ExistingReason) && Utility.UserCode.Equals(vendor.Email);
 
                 if (model.IsApprover)
                 {
@@ -310,18 +313,27 @@ namespace CVPortal.Controllers
             //var body = "https://localhost:44318/Vendor/Index/1";
 
             //Utility.SendMail("baprajapati2444@gmail.com", null, null, subject, body, "Vendor Form Submitted", null, true);
-            if (model.IsMain)
+            if (model.IsMain || model.IsExistingUpdate)
             {
                 if (ModelState.IsValid)
                 {
                     var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (vendor != null)
                     {
-                        vendor.Org_Sts = model.Org_Sts;
-                        vendor.vend_name = model.vend_name;
-                        vendor.CEO_name = model.CEO_name;
-                        vendor.Designation = model.Designation;
-                        vendor.Contact_no = model.Contact_no;
+                        if (!model.IsExistingUpdate)
+                        {
+                            vendor.Org_Sts = model.Org_Sts;
+                            vendor.vend_name = model.vend_name;
+                            vendor.CEO_name = model.CEO_name;
+                            vendor.Designation = model.Designation;
+                            vendor.Contact_no = model.Contact_no;
+                        }
+                        else
+                        {
+                            vendor.Step2 = true;
+                            vendor.Step3 = true;
+                        }
+
                         vendor.Address1 = model.Address1;
                         vendor.Address1Country = model.Address1Country;
                         vendor.Address1State = model.Address1State;
@@ -333,6 +345,7 @@ namespace CVPortal.Controllers
                         vendor.Address2City = model.Address2City;
                         vendor.Address2Pincode = model.Address2Pincode;
                         vendor.Step1 = true;
+
                         dataContext.SaveChanges();
                     }
 
@@ -567,7 +580,7 @@ namespace CVPortal.Controllers
         [HttpPost]
         public ActionResult VendorStep3(VendorStep3 model)
         {
-            if (model.IsMain)
+            if (model.IsMain || model.IsExistingUpdate)
             {
                 if (ModelState.IsValid)
                 {
@@ -615,7 +628,11 @@ namespace CVPortal.Controllers
                             }
                         }
 
-                        vendor.Benificiary_name = model.Benificiary_name;
+                        if (!model.IsExistingUpdate)
+                        {
+                            vendor.Benificiary_name = model.Benificiary_name;
+                        }
+
                         vendor.Bank_name = model.Bank_name;
                         vendor.Branch_name_Add = model.Branch_name_Add;
                         vendor.Account_no = model.Account_no;
@@ -640,94 +657,108 @@ namespace CVPortal.Controllers
         [HttpPost]
         public ActionResult VendorStep4(VendorStep4 model)
         {
-            if (ModelState.IsValid)
+            if (!model.IsExistingUpdate)
+            {
+                if (ModelState.IsValid)
+                {
+                    var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+                    if (vendor != null)
+                    {
+                        if (model.AuditedFile != null && model.AuditedFile.ContentLength > 0)
+                        {
+                            var fileName = $"{Path.GetFileNameWithoutExtension(model.AuditedFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.AuditedFile.FileName)}";
+                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                            Directory.CreateDirectory(path);
+
+                            path = Path.Combine(path, fileName);
+                            model.AuditedFile.SaveAs(path);
+
+                            string contentType = model.AuditedFile.ContentType;
+                            using (Stream fileStream = model.AuditedFile.InputStream)
+                            {
+                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                                {
+                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Audited.ToString());
+                                    if (vendorFile != null)
+                                    {
+                                        vendorFile.ContentType = contentType;
+                                        vendorFile.Data = bytes;
+                                        vendorFile.FileUploadType = FileUploadEnum.Audited.ToString();
+                                        vendorFile.Name = fileName;
+                                        vendorFile.VendorId = model.Id;
+                                    }
+                                    else
+                                    {
+                                        vendor.VendorFiles.Add(new VendorFile()
+                                        {
+                                            ContentType = contentType,
+                                            Data = bytes,
+                                            FileUploadType = FileUploadEnum.Audited.ToString(),
+                                            Name = fileName,
+                                            VendorId = model.Id
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        if (model.MOAFile != null && model.MOAFile.ContentLength > 0)
+                        {
+                            var fileName = $"{Path.GetFileNameWithoutExtension(model.MOAFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MOAFile.FileName)}";
+                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                            Directory.CreateDirectory(path);
+
+                            path = Path.Combine(path, fileName);
+                            model.MOAFile.SaveAs(path);
+
+                            string contentType = model.MOAFile.ContentType;
+                            using (Stream fileStream = model.MOAFile.InputStream)
+                            {
+                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                                {
+                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.MOA.ToString());
+                                    if (vendorFile != null)
+                                    {
+                                        vendorFile.ContentType = contentType;
+                                        vendorFile.Data = bytes;
+                                        vendorFile.FileUploadType = FileUploadEnum.MOA.ToString();
+                                        vendorFile.Name = fileName;
+                                        vendorFile.VendorId = model.Id;
+                                    }
+                                    else
+                                    {
+                                        vendor.VendorFiles.Add(new VendorFile()
+                                        {
+                                            ContentType = contentType,
+                                            Data = bytes,
+                                            FileUploadType = FileUploadEnum.MOA.ToString(),
+                                            Name = fileName,
+                                            VendorId = model.Id
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        vendor.Type_of_Vend = model.Type_of_Vend;
+                        vendor.Step4 = true;
+                        dataContext.SaveChanges();
+                    }
+
+                    return RedirectToAction("FinalForm", new { id = model.Id });
+                }
+            }
+            else
             {
                 var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                 if (vendor != null)
                 {
-                    if (model.AuditedFile != null && model.AuditedFile.ContentLength > 0)
-                    {
-                        var fileName = $"{Path.GetFileNameWithoutExtension(model.AuditedFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.AuditedFile.FileName)}";
-                        var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                        Directory.CreateDirectory(path);
-
-                        path = Path.Combine(path, fileName);
-                        model.AuditedFile.SaveAs(path);
-
-                        string contentType = model.AuditedFile.ContentType;
-                        using (Stream fileStream = model.AuditedFile.InputStream)
-                        {
-                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                            {
-                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Audited.ToString());
-                                if (vendorFile != null)
-                                {
-                                    vendorFile.ContentType = contentType;
-                                    vendorFile.Data = bytes;
-                                    vendorFile.FileUploadType = FileUploadEnum.Audited.ToString();
-                                    vendorFile.Name = fileName;
-                                    vendorFile.VendorId = model.Id;
-                                }
-                                else
-                                {
-                                    vendor.VendorFiles.Add(new VendorFile()
-                                    {
-                                        ContentType = contentType,
-                                        Data = bytes,
-                                        FileUploadType = FileUploadEnum.Audited.ToString(),
-                                        Name = fileName,
-                                        VendorId = model.Id
-                                    });
-                                }
-                            }
-                        }
-                    }
-
-                    if (model.MOAFile != null && model.MOAFile.ContentLength > 0)
-                    {
-                        var fileName = $"{Path.GetFileNameWithoutExtension(model.MOAFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MOAFile.FileName)}";
-                        var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                        Directory.CreateDirectory(path);
-
-                        path = Path.Combine(path, fileName);
-                        model.MOAFile.SaveAs(path);
-
-                        string contentType = model.MOAFile.ContentType;
-                        using (Stream fileStream = model.MOAFile.InputStream)
-                        {
-                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                            {
-                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.MOA.ToString());
-                                if (vendorFile != null)
-                                {
-                                    vendorFile.ContentType = contentType;
-                                    vendorFile.Data = bytes;
-                                    vendorFile.FileUploadType = FileUploadEnum.MOA.ToString();
-                                    vendorFile.Name = fileName;
-                                    vendorFile.VendorId = model.Id;
-                                }
-                                else
-                                {
-                                    vendor.VendorFiles.Add(new VendorFile()
-                                    {
-                                        ContentType = contentType,
-                                        Data = bytes,
-                                        FileUploadType = FileUploadEnum.MOA.ToString(),
-                                        Name = fileName,
-                                        VendorId = model.Id
-                                    });
-                                }
-                            }
-                        }
-                    }
-
-                    vendor.Type_of_Vend = model.Type_of_Vend;
                     vendor.Step4 = true;
                     dataContext.SaveChanges();
                 }
@@ -784,7 +815,7 @@ namespace CVPortal.Controllers
 
                     if (data.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
                     {
-                        vendor.VendorCode = (1000 + vendor.ID).ToString();
+                        vendor.VendorCode = vendor.IsNewVendor ? (1000 + vendor.ID).ToString() : vendor.VendorCode;
                         vendor.IsFinalApproved = true;
                     }
 
@@ -869,7 +900,7 @@ namespace CVPortal.Controllers
             var result = new JsonResult();
             try
             {
-                var data = dataContext.Vend_reg_tbl.ToList();
+                var data = dataContext.Vend_reg_tbl.Where(x => x.Email == Utility.UserCode).ToList();
                 var vendorApprovers = dataContext.VendorApprovals.Where(x => !x.IsDeleted).ToList();
                 var vendors = new List<VendorListModel>();
 
