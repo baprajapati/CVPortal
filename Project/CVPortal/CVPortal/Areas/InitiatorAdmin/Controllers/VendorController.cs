@@ -1,6 +1,7 @@
 ﻿using CVPortal.App_Code;
 using CVPortal.Models;
 using CVPortal.ViewModels;
+using NReco.PdfGenerator;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -313,6 +314,35 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
             catch (Exception)
             {
                 return Json(new { status = false, result = "Some error occured, please try again." });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult VendorPrint(int id)
+        {
+            try
+            {
+                var htmlToPdf = new HtmlToPdfConverter();
+                htmlToPdf.Margins.Top = 15;
+                htmlToPdf.Margins.Bottom = 15;
+                htmlToPdf.Margins.Left = 8;
+                htmlToPdf.Margins.Right = 8;
+
+                var pageNumberHtml = $@"<div style='width:100%;text-align:center;padding-top:15px;'>Page <span class=""page""></span> of <span class=""topage""></span></div>";
+                htmlToPdf.PageFooterHtml = pageNumberHtml;
+
+                var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\Documents\\Vendor.html"));
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
+                if (vendor != null)
+                {
+                    htmlContent = htmlContent.Replace("[VendorName]", vendor.vend_name);
+                }
+
+                return Json(htmlToPdf.GeneratePdf(htmlContent, null), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

@@ -181,11 +181,16 @@
     <Content Include="Content\Documents\suzuki-logo.PNG" />
     <Content Include="Content\EmailTemplate\ForgotPassword.html" />
     <Content Include="Content\EmailTemplate\GeneratePassword.html" />
+    <Content Include="Content\img\admin.png" />
     <Content Include="Content\img\AdminLTELogo.png" />
+    <Content Include="Content\img\left-logo.jpg" />
     <Content Include="Content\img\left-logo.png" />
     <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\img\main-logo.jpg" />
     <Content Include="Content\img\main-logo.png" />
     <Content Include="Content\img\right-logo.png" />
+    <Content Include="Content\img\Suzuki-Logo.jpg" />
+    <Content Include="Content\img\user.jpg" />
     <Content Include="Content\img\user2-160x160.jpg" />
     <Content Include="Content\js\additional-methods.min.js" />
     <Content Include="Content\js\adminlte.min.js" />
@@ -301,6 +306,8 @@
     <Compile Include="ViewModels\VendorStep1.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Content Include="Content\Login\suzuki-bike.png" />
+    <Content Include="Content\Login\Suzuki-Logo.jpg" />
     <Content Include="Views\Account\VendorCustomerLogin.cshtml" />
     <Content Include="Views\Vendors\VendorStep2.cshtml" />
     <Content Include="Views\Vendors\VendorStep3.cshtml" />

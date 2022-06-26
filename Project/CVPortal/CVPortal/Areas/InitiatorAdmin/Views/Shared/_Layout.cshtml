@@ -13,6 +13,12 @@
     <link href="~/Content/AdminLTE/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/Content/css/toastr.css" rel="stylesheet" />
     <link href="~/Content/css/custom.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .sidebar-dark-primary {
+            background-color: #003690 !important;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -24,22 +30,24 @@
             </ul>
             <ul class="navbar-nav ml-auto top-menu">
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="@Url.Action("Logout", new { area = "", controller = "Account" })" class="nav-link">Logout</a>
+                    <a href="@Url.Action("Logout", new { area = "", controller = "Account" })" class="nav-link" style="box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px; border-radius: 50px; background-color: red; color: white;">
+                        <i class="fa fa-sign-out-alt"></i>
+                    </a>
                 </li>
             </ul>
         </nav>
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="javascript:void(0);" class="brand-link" style="line-height:1.2;">
-                <img src="~/Content/img/left-logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light"><img src="~/Content/img/right-logo.png" style="height:25px;" alt="AdminLTE Logo"></span>
+                <img src="~/Content/img/left-logo.jpg" alt="AdminLTE Logo" style="height: 72px;position: relative; left: 4px;">
+                <img src="~/Content/img/right-logo.png" style="height:72px;" alt="AdminLTE Logo">
             </a>
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="~/Content/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        <img src="~/Content/img/user.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="javascript:void(0);" class="d-block">Initiator Admin</a>
+                        <a href="javascript:void(0);" class="d-block">@HttpContext.Current.Session["UserFullName"]</a>
                     </div>
                 </div>
                 <nav class="mt-2">

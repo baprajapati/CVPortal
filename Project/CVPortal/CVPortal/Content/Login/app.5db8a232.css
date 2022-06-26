@@ -764,7 +764,6 @@ img {
     }
 
 .section.body-container {
-    padding-top: 20vh;
     padding-bottom: 20vh
 }
 
@@ -916,7 +915,11 @@ button {
     max-width: 950px
 }
 
-    .container .landing-page-container .left img {
+    .container .landing-page-container .left .top-img {
+        width: 60%;
+    }
+
+    .container .landing-page-container .left .left-img {
         width: 90%;
         height: 280px
     }

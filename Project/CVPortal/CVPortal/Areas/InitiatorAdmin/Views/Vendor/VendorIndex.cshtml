@@ -53,6 +53,12 @@
                         },
                         {
                             "data": "Status", "name": "Status"
+                        },
+                        {
+                            "class": "text-center",
+                            "render": function (data, type, row, meta) {
+                                return "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printVendor'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>";
+                            }, "targets": 'no-sort', "orderable": false
                         }
                     ]
                 });
@@ -64,7 +70,54 @@
             $(".search-button").click(function () {
                 users.draw();
             });
+
+            $('#lstUsers').on('click', '.printVendor', function () {
+                if (!$(".printVendor").hasClass("disabled")) {
+                    var id = $(this).data('id');
+
+                    $(".printVendor").addClass("disabled");
+                    $("#" + id).hide();
+                    $("." + id).show();
+
+                    printVendor(id);
+                }
+            });
         });
+
+        function printVendor(id) {
+            $.ajax({
+                url: '@Url.Action("VendorPrint", new { area = "Admin", controller = "Vendor" })',
+                type: "POST",
+                data: JSON.stringify({ id: id }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    users.clear().draw();
+
+                    var bytes = new Uint8Array(response);
+
+                    var blob = new Blob([bytes], { type: "application/pdf" });
+                    let objFra = document.createElement('iframe');
+                    objFra.style.display = 'none';
+                    objFra.src = window.URL.createObjectURL(blob);
+
+                    document.body.appendChild(objFra);
+
+                    $(".printVendor").removeClass("disabled");
+                    $("#" + id).show();
+                    $("." + id).hide();
+
+                    objFra.contentWindow.focus();
+                    objFra.contentWindow.print();
+                },
+                error: function (response) {
+                    $(".printVendor").removeClass("disabled");
+                    $("." + id).hide();
+                    $("#" + id).show();
+                    toastr.error(response.responseText, "Vendor");
+                }
+            });
+        }
     </script>
 }
 <div class="content-wrapper">
@@ -76,7 +129,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form_group text-right">
-                        @Html.ActionLink("Add New Vendor", "AddVendor", new { controller = "Vendor" }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Add New Vendor", "AddVendor", new { controller = "Vendor" }, new { @class = "btn btn-primary" })
                     </div>
                 </div>
             </div>
@@ -115,7 +168,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 text-right">
-                                <input type="button" value="Search" class="btn btn-primary search-button"/>
+                                <input type="button" value="Search" class="btn btn-outline-primary search-button" />
                             </div>
                         </div>
                     </div>
@@ -134,6 +187,7 @@
                                     <th>Email</th>
                                     <th>Vendor Name</th>
                                     <th>Status</th>
+                                    <th>Print</th>
                                 </tr>
                             </thead>
                         </table>

@@ -135,6 +135,7 @@ namespace CVPortal.Controllers
                 if (user != null && WebSecurity.Login(model.Email, model.Password, false))
                 {
                     Utility.UserCode = model.Email;
+                    Session["UserFullName"] = user.HANAME;
                     FormsAuthentication.SetAuthCookie(model.Email, false);
 
                     string[] userRoles = Roles.GetRolesForUser(model.Email);
