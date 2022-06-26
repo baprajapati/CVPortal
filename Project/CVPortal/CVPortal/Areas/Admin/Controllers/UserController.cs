@@ -3,6 +3,7 @@ using CVPortal.Models;
 using CVPortal.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -218,7 +219,11 @@ namespace CVPortal.Areas.Admin.Controllers
                     string CC = string.Empty;
                     string BCC = string.Empty;
                     string subject = "Your Login details";
-                    string body = "Your initiator admin account created.";
+
+                    var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\SendPassword.html"));
+                    string body = htmlContent.Replace("[Password]", !string.IsNullOrEmpty(user.Password) ? $"Password :<b>{user.Password}</b>" : string.Empty);
+                    body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                    body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;

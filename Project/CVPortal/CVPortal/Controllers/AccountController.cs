@@ -3,6 +3,7 @@ using CVPortal.Models;
 using CVPortal.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -46,7 +47,11 @@ namespace CVPortal.Controllers
                     string CC = string.Empty;
                     string BCC = string.Empty;
                     string subject = "Your OTP details";
-                    string body = "OTP: " + objVendor.OTP;
+
+                    var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\SendOTP.html"));
+                    string body = htmlContent.Replace("[OTP]", objVendor.OTP);
+                    body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                    body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
@@ -65,7 +70,11 @@ namespace CVPortal.Controllers
                     string CC = string.Empty;
                     string BCC = string.Empty;
                     string subject = "Your OTP details";
-                    string body = "OTP: " + objUser.OTP;
+
+                    var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\SendOTP.html"));
+                    string body = htmlContent.Replace("[OTP]", objVendor.OTP);
+                    body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                    body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;

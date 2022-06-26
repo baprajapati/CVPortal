@@ -757,6 +757,20 @@ namespace CVPortal.Controllers
                         vendor.Type_of_Vend = model.Type_of_Vend;
                         vendor.Step4 = true;
                         dataContext.SaveChanges();
+
+                        string mailTo = vendor.tbl_Users.EmailAddress;
+                        string CC = string.Empty;
+                        string BCC = string.Empty;
+                        string subject = "Your OTP details";
+
+                        var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
+                        string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.Id}");
+                        body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                        body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                        string displayName = string.Empty;
+                        string attachments = string.Empty;
+                        Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
                     }
 
                     return RedirectToAction("FinalForm", new { id = model.Id });
@@ -770,6 +784,20 @@ namespace CVPortal.Controllers
                     vendor.Step4 = true;
                     dataContext.SaveChanges();
                 }
+
+                string mailTo = vendor.tbl_Users.EmailAddress;
+                string CC = string.Empty;
+                string BCC = string.Empty;
+                string subject = "Your OTP details";
+
+                var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
+                string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.Id}");
+                body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                string displayName = string.Empty;
+                string attachments = string.Empty;
+                Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
 
                 return RedirectToAction("FinalForm", new { id = model.Id });
             }
@@ -828,6 +856,88 @@ namespace CVPortal.Controllers
                     }
 
                     dataContext.SaveChanges();
+
+                    if (data.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
+                    {
+                        var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
+                        if (!string.IsNullOrEmpty(user.HANEXT))
+                        {
+                            user = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == user.HANEXT);
+                            string mailTo = user.EmailAddress;
+                            string CC = string.Empty;
+                            string BCC = string.Empty;
+                            string subject = "Vendor approval details";
+
+                            var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                            body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                            body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                            string displayName = string.Empty;
+                            string attachments = string.Empty;
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                        }
+                        else
+                        {
+                            var roles = dataContext.webpages_Roles.FirstOrDefault(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString());
+                            var emails = roles.tbl_Users.Select(x => x.EmailAddress).ToList();
+
+                            string mailTo = string.Join(",", emails);
+                            string CC = string.Empty;
+                            string BCC = string.Empty;
+                            string subject = "Vendor approval details";
+
+                            var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                            body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                            body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                            string displayName = string.Empty;
+                            string attachments = string.Empty;
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                        }
+                    }
+                    else
+                    {
+                        var nextApproverRole = data.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
+                                : data.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? ApprovarRoleEnum.LegalDepartment.ToString()
+                                : data.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
+                                : data.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString() ? ApprovarRoleEnum.ITDepartment.ToString() : string.Empty;
+
+                        if (!string.IsNullOrEmpty(nextApproverRole))
+                        {
+                            var roles = dataContext.webpages_Roles.FirstOrDefault(x => x.RoleName == nextApproverRole);
+                            var emails = roles.tbl_Users.Select(x => x.EmailAddress).ToList();
+
+                            string mailTo = string.Join(",", emails);
+                            string CC = string.Empty;
+                            string BCC = string.Empty;
+                            string subject = "Vendor approval details";
+
+                            var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                            body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                            body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                            string displayName = string.Empty;
+                            string attachments = string.Empty;
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                        }
+                    }
+
+                    string mailTo1 = $"{vendor.tbl_Users.EmailAddress},{vendor.Email}";
+                    string CC1 = string.Empty;
+                    string BCC1 = string.Empty;
+                    string subject1 = "Vendor approval details";
+
+                    var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproved.html"));
+                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                    body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                    body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                    string displayName1 = string.Empty;
+                    string attachments1 = string.Empty;
+                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true);
 
                     return Json(new { status = true });
                 }
@@ -891,6 +1001,20 @@ namespace CVPortal.Controllers
                     vendor.Step4 = false;
 
                     dataContext.SaveChanges();
+
+                    string mailTo1 = $"{vendor.tbl_Users.EmailAddress},{vendor.Email}";
+                    string CC1 = string.Empty;
+                    string BCC1 = string.Empty;
+                    string subject1 = "Vendor approval details";
+
+                    var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorRejected.html"));
+                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                    body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                    body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                    string displayName1 = string.Empty;
+                    string attachments1 = string.Empty;
+                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true);
 
                     return Json(new { status = true });
                 }

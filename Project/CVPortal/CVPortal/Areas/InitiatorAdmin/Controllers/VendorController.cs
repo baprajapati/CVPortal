@@ -4,6 +4,7 @@ using CVPortal.ViewModels;
 using NReco.PdfGenerator;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -184,7 +185,11 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     string CC = string.Empty;
                     string BCC = string.Empty;
                     string subject = "Your vendor form details";
-                    string body = "Your vendor form created.";
+
+                    var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorRequest.html"));
+                    string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{newVendorId}");
+                    body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                    body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;

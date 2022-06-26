@@ -179,8 +179,12 @@
     <Content Include="Content\Documents\suzuki-green-logo.PNG" />
     <Content Include="Content\Documents\suzuki-green-logo1.PNG" />
     <Content Include="Content\Documents\suzuki-logo.PNG" />
-    <Content Include="Content\EmailTemplate\ForgotPassword.html" />
-    <Content Include="Content\EmailTemplate\GeneratePassword.html" />
+    <Content Include="Content\EmailTemplate\VendorRejected.html" />
+    <Content Include="Content\EmailTemplate\VendorApproved.html" />
+    <Content Include="Content\EmailTemplate\VendorApproval.html" />
+    <Content Include="Content\EmailTemplate\VendorRequest.html" />
+    <Content Include="Content\EmailTemplate\SendOTP.html" />
+    <Content Include="Content\EmailTemplate\SendPassword.html" />
     <Content Include="Content\img\admin.png" />
     <Content Include="Content\img\AdminLTELogo.png" />
     <Content Include="Content\img\left-logo.jpg" />

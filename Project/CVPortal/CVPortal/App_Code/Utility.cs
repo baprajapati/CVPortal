@@ -61,6 +61,7 @@ namespace CVPortal.App_Code
                     smtpClient.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
                     smtpClient.Host = strSmtpHost;
                     smtpClient.Port = intSmtpPort;
+                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = new NetworkCredential(strUserName, strPassword);
 
@@ -72,7 +73,12 @@ namespace CVPortal.App_Code
                         //Set IsBodyHtml to true means you can send HTML email.
                         message.IsBodyHtml = IsBodyHtml;
                         message.Body = Body;
-                        message.To.Add(EmailTo);
+
+                        foreach(var item in EmailTo.Split(','))
+                        {
+                            message.To.Add(item);
+                        }
+
                         if (!string.IsNullOrEmpty(CC))
                             foreach (string cc in CC.Split(new char[] { ',' }))
                                 message.CC.Add(cc);
@@ -88,7 +94,7 @@ namespace CVPortal.App_Code
                         {
                             smtpClient.Send(message);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                         }
                     }
