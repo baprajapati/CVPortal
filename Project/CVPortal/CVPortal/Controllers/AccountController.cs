@@ -35,7 +35,7 @@ namespace CVPortal.Controllers
         {
             try
             {
-                var objVendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => !x.IsFinalApproved && x.Email == email) ?? 
+                var objVendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => !x.IsFinalApproved && x.Email == email) ??
                     dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == email);
                 if (objVendor != null)
                 {
@@ -55,7 +55,7 @@ namespace CVPortal.Controllers
                     return Json(new { status = true });
                 }
 
-                var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == email || x.HAUSER == email);
+                var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == email || x.HAUSER == email));
                 if (objUser != null)
                 {
                     objUser.OTP = "123456";//new Random().Next(111111, 999999).ToString();
@@ -74,7 +74,7 @@ namespace CVPortal.Controllers
                     return Json(new { status = true });
                 }
 
-                return Json(new { status = false, result = "Email not exists in system." });
+                return Json(new { status = false, result = "Email inactivated or not exists in system." });
             }
             catch (Exception)
             {
@@ -129,13 +129,10 @@ namespace CVPortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == model.Email);
-                if(user != null)
-                {
-                    model.Email = user.EmailAddress;
-                }
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == model.Email || x.HAUSER == model.Email));
+                model.Email = user?.EmailAddress;
 
-                if (WebSecurity.Login(model.Email, model.Password, false))
+                if (user != null && WebSecurity.Login(model.Email, model.Password, false))
                 {
                     Utility.UserCode = model.Email;
                     FormsAuthentication.SetAuthCookie(model.Email, false);
@@ -152,6 +149,7 @@ namespace CVPortal.Controllers
                     }
                     else
                     {
+                        ModelState.AddModelError(string.Empty, "Incorrect user name or password.");
                     }
                 }
                 else
@@ -160,7 +158,7 @@ namespace CVPortal.Controllers
                 }
             }
 
-            return View();
+            return View(model);
         }
 
         [Authorize]

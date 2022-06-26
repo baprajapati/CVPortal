@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "Vendor";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+    <script>
+        var users;
+        var onClickSearch = false;
+
+        function getVendors() {
+            users = $('#lstUsers').DataTable
+                ({
+                    "language":
+                    {
+                        "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "lengthMenu": convertStringToArray('10,50,100,200,500', ','),
+                    "pageLength": '50',
+                    "ajax":
+                    {
+                        "url": '@Url.Action("GetVendor", new { area = "Admin", controller = "Vendor" })',
+                        "type": "POST",
+                        "dataType": "JSON",
+                        "data": function (d) {
+                            d.VendorCode = $("#VendorCode").val();
+                            d.Email = $("#Email").val();
+                            d.vend_name = $("#VendorName").val();
+                            d.Status = $("#Status").val();
+                            return d;
+                        }
+                    },
+                    "bFilter": false,
+                    "scrollX": true,
+                    "autoWidth": false,
+                    "searching": false,
+                    "info": true,
+                    'aaSorting': [[0, 'desc']],
+                    "columns": [
+                        {
+                            "data": "NewExistingVendor", "name": "NewExistingVendor"
+                        },
+                        {
+                            "data": "VendorCode", "name": "VendorCode"
+                        },
+                        {
+                            "data": "Email", "name": "Email"
+                        },
+                        {
+                            "data": "vend_name", "name": "vend_name"
+                        },
+                        {
+                            "data": "Status", "name": "Status"
+                        },
+                        {
+                            "class": "text-center",
+                            "render": function (data, type, row, meta) {
+                                return "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printVendor'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>";
+                            }, "targets": 'no-sort', "orderable": false
+                        }
+                    ]
+                });
+        }
+
+        jQuery(document).ready(function () {
+            getVendors();
+
+            $(".search-button").click(function () {
+                users.draw();
+            });
+
+            $('#lstUsers').on('click', '.printVendor', function () {
+                if (!$(".printVendor").hasClass("disabled")) {
+                    var id = $(this).data('id');
+
+                    $(".printVendor").addClass("disabled");
+                    $("#" + id).hide();
+                    $("." + id).show();
+
+                    printVendor(id);
+                }
+            });
+        });
+
+        function printVendor(id) {
+            $.ajax({
+                url: '@Url.Action("VendorPrint", new { area = "Admin", controller = "Vendor" })',
+                type: "POST",
+                data: JSON.stringify({ id: id }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    users.clear().draw();
+
+                    var bytes = new Uint8Array(response);
+
+                    var blob = new Blob([bytes], { type: "application/pdf" });
+                    let objFra = document.createElement('iframe');
+                    objFra.style.display = 'none';
+                    objFra.src = window.URL.createObjectURL(blob);
+
+                    document.body.appendChild(objFra);
+
+                    $(".printVendor").removeClass("disabled");
+                    $("#" + id).show();
+                    $("." + id).hide();
+
+                    objFra.contentWindow.focus();
+                    objFra.contentWindow.print();
+                },
+                error: function (response) {
+                    $(".printVendor").removeClass("disabled");
+                    $("." + id).hide();
+                    $("#" + id).show();
+                    toastr.error(response.responseText, "Vendor");
+                }
+            });
+        }
+    </script>
+}
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Vendors</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="VendorCode">Code</label>
+                                    @Html.TextBox("VendorCode", "", new { @class = "form-control", placeholder = "Code" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="Email">Email</label>
+                                    @Html.TextBox("Email", "", new { @class = "form-control", placeholder = "Email" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="VendorName">Vendor Name</label>
+                                    @Html.TextBox("VendorName", "", new { @class = "form-control", placeholder = "Vendor Name" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="VendorCode">Status</label>
+                                    @Html.TextBox("Status", "", new { @class = "form-control", placeholder = "Status" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <input type="button" value="Search" class="btn btn-primary search-button" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-hover" id="lstUsers">
+                            <thead class="table_header">
+                                <tr>
+                                    <th>New / Existing</th>
+                                    <th>Code</th>
+                                    <th>Email</th>
+                                    <th>Vendor Name</th>
+                                    <th>Status</th>
+                                    <th>Print</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

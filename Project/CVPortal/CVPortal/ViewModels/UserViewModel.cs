@@ -30,5 +30,7 @@ namespace CVPortal.ViewModels
         public string Dept_Code { get; set; }
 
         public string HANEXT { get; set; }
+
+        public string Status { get; set; }
     }
 }

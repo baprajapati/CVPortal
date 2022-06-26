@@ -62,6 +62,12 @@
                                 <p>Departments</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("VendorIndex","Vendor")" class="nav-link vendorindex">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>Vendors</p>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -101,6 +107,8 @@
                 $(".userindex").addClass("active");
             } else if (window.location.href.includes("DepartmentIndex") || window.location.href.includes("AddDepartment") || window.location.href.includes("EditDepartment")) {
                 $(".departmentindex").addClass("active");
+            } else if (window.location.href.includes("VendorIndex")) {
+                $(".vendorindex").addClass("active");
             }
         }
 

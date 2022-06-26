@@ -52,6 +52,9 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NReco.PdfGenerator, Version=1.2.0.0, Culture=neutral, PublicKeyToken=231663d50a41b451, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.PdfGenerator.1.2.0\lib\net45\NReco.PdfGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -154,6 +157,7 @@
     <Content Include="Areas\Admin\Views\Department\AddDepartment.cshtml" />
     <Content Include="Areas\Admin\Views\Department\EditDepartment.cshtml" />
     <Content Include="Areas\Admin\Views\Department\DepartmentIndex.cshtml" />
+    <Content Include="Areas\Admin\Views\Vendor\VendorIndex.cshtml" />
     <None Include="Content\AdminLTE\jquery\jquery.validate-vsdoc.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.unobtrusive.js" />
@@ -165,7 +169,7 @@
     <Content Include="Content\css\custom.css" />
     <Content Include="Content\css\dataTables.bootstrap.min.css" />
     <Content Include="Content\css\toastr.css" />
-    <Content Include="Content\Documents\EwayBill.html" />
+    <Content Include="Content\Documents\Vendor.html" />
     <Content Include="Content\Documents\GSTEngineData.html" />
     <Content Include="Content\Documents\GSTHeaderInvoice.html" />
     <Content Include="Content\Documents\GSTItemInvoice.html" />
@@ -200,6 +204,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
+    <Compile Include="Areas\Admin\Controllers\VendorController.cs" />
     <Compile Include="Areas\InitiatorAdmin\Controllers\VendorController.cs" />
     <Compile Include="Areas\InitiatorAdmin\InitiatorAdminAreaRegistration.cs" />
     <Compile Include="Controllers\VendorsController.cs" />

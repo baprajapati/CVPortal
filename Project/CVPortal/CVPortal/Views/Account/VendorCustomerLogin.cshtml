@@ -33,7 +33,7 @@
                             $(".js-send-otp").addClass("hide");
                             $("#txtEmail").attr("disabled", "disabled");
                         } else {
-                            toastr.error(response.responseText, "Login");
+                            toastr.error(response.result, "Login");
                         }
                     },
                     error: function (response) {

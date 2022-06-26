@@ -236,8 +236,16 @@ namespace CVPortal.Controllers
                             }
                             else if (vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.LegalDepartment.ToString())
-                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                                if (string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor)
+                                {
+                                    model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
+                                      .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                                }
+                                else
+                                {
+                                    model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.LegalDepartment.ToString())
+                                       .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                                }
                             }
                             else if (vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                             {

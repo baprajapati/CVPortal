@@ -45,13 +45,13 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="@Url.Action("VendorIndex","Vendor")" class="nav-link userindex">
+                            <a href="@Url.Action("VendorIndex","Vendor")" class="nav-link vendorindex">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>Vendors</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("VendorIndex","Vendor")" class="nav-link userindex">
+                            <a href="@Url.Action("VendorIndex","Vendor")" class="nav-link customerindex">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>Customers</p>
                             </a>
@@ -91,8 +91,8 @@
             $(".nav-item a").removeClass("active");
             $(".topmenu li").removeClass("active");
 
-            if (window.location.href.includes("UserIndex") || window.location.href.includes("AddUser") || window.location.href.includes("EditUser")) {
-                $(".userindex").addClass("active");
+            if (window.location.href.includes("VendorIndex") || window.location.href.includes("AddVendor")) {
+                $(".vendorindex").addClass("active");
             }
         }
 

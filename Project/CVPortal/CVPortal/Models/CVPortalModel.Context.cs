@@ -26,6 +26,7 @@ namespace CVPortal.Models
         }
     
         public virtual DbSet<CurrencyCodeMaster> CurrencyCodeMasters { get; set; }
+        public virtual DbSet<DepartmentMaster> DepartmentMasters { get; set; }
         public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; }
         public virtual DbSet<GSTType_Master> GSTType_Master { get; set; }
         public virtual DbSet<LoginLog> LoginLogs { get; set; }
@@ -37,13 +38,12 @@ namespace CVPortal.Models
         public virtual DbSet<PaymentTermsMaster> PaymentTermsMasters { get; set; }
         public virtual DbSet<PayTypeMaster> PayTypeMasters { get; set; }
         public virtual DbSet<tbl_Users> tbl_Users { get; set; }
+        public virtual DbSet<Vend_reg_tbl> Vend_reg_tbl { get; set; }
         public virtual DbSet<VendorApproval> VendorApprovals { get; set; }
         public virtual DbSet<VendorFile> VendorFiles { get; set; }
         public virtual DbSet<VendorTypeMaster> VendorTypeMasters { get; set; }
         public virtual DbSet<webpages_Membership> webpages_Membership { get; set; }
         public virtual DbSet<webpages_OAuthMembership> webpages_OAuthMembership { get; set; }
         public virtual DbSet<webpages_Roles> webpages_Roles { get; set; }
-        public virtual DbSet<DepartmentMaster> DepartmentMasters { get; set; }
-        public virtual DbSet<Vend_reg_tbl> Vend_reg_tbl { get; set; }
     }
 }

@@ -25,13 +25,17 @@
                         "type": "POST",
                         "dataType": "JSON",
                         "data": function (d) {
+                            d.VendorCode = $("#VendorCode").val();
+                            d.Email = $("#Email").val();
+                            d.vend_name = $("#VendorName").val();
+                            d.Status = $("#Status").val();
                             return d;
                         }
                     },
                     "bFilter": false,
                     "scrollX": true,
                     "autoWidth": false,
-                    "searching": true,
+                    "searching": false,
                     "info": true,
                     'aaSorting': [[0, 'desc']],
                     "columns": [
@@ -56,6 +60,10 @@
 
         jQuery(document).ready(function () {
             getVendors();
+
+            $(".search-button").click(function () {
+                users.draw();
+            });
         });
     </script>
 }
@@ -75,6 +83,45 @@
         </div>
     </section>
     <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="VendorCode">Code</label>
+                                    @Html.TextBox("VendorCode", "", new { @class = "form-control", placeholder = "Code" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="Email">Email</label>
+                                    @Html.TextBox("Email", "", new { @class = "form-control", placeholder = "Email" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="VendorName">Vendor Name</label>
+                                    @Html.TextBox("VendorName", "", new { @class = "form-control", placeholder = "Vendor Name" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="VendorCode">Status</label>
+                                    @Html.TextBox("Status", "", new { @class = "form-control", placeholder = "Status" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <input type="button" value="Search" class="btn btn-primary search-button"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <div class="card">

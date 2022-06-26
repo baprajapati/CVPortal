@@ -155,7 +155,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     var vendorFiles = dataContext.VendorFiles.Where(x => x.VendorId == oldVendorId).ToList();
 
                     var newVendorId = 0;
-                    using(CVPortalEntities portalEntities = new CVPortalEntities())
+                    using (CVPortalEntities portalEntities = new CVPortalEntities())
                     {
                         var vendorList = portalEntities.Vend_reg_tbl.Where(x => x.VendorCode == vendor.VendorCode).OrderByDescending(x => x.CreatedByDate).ToList();
                         newVendorId = vendorList.FirstOrDefault().ID;
@@ -200,12 +200,72 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
             return View(vendor);
         }
 
-        public ActionResult GetVendor()
+        public ActionResult GetVendor(VendorListModel model)
         {
             var result = new JsonResult();
             try
             {
-                var data = dataContext.Vend_reg_tbl.ToList();
+                var data = new List<Vend_reg_tbl>();
+
+                if (!string.IsNullOrEmpty(model.VendorCode))
+                {
+                    data = dataContext.Vend_reg_tbl.Where(x => x.VendorCode != null && x.VendorCode.ToLower().Contains(model.VendorCode.ToLower())).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    data = (!string.IsNullOrEmpty(model.VendorCode))
+                        ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList()
+                        : dataContext.Vend_reg_tbl.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.vend_name))
+                {
+                    data = (!string.IsNullOrEmpty(model.VendorCode)) || (!string.IsNullOrEmpty(model.Email))
+                        ? data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList()
+                        : dataContext.Vend_reg_tbl.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.Status))
+                {
+                    if ((!string.IsNullOrEmpty(model.VendorCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.vend_name)))
+                    {
+                        if ("Approved".Contains(model.Status))
+                        {
+                            data = data.Where(x => x.IsFinalApproved).ToList();
+                        }
+                        else if ("Pending".Contains(model.Status))
+                        {
+                            data = data.Where(x => !x.IsFinalApproved).ToList();
+                        }
+                        else
+                        {
+                            data = new List<Vend_reg_tbl>();
+                        }
+                    }
+                    else
+                    {
+                        if ("Approved".Contains(model.Status))
+                        {
+                            data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved).ToList();
+                        }
+                        else if ("Pending".Contains(model.Status))
+                        {
+                            data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                        }
+                        else
+                        {
+                            data = new List<Vend_reg_tbl>();
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(model.VendorCode) && string.IsNullOrEmpty(model.Email)
+                    && string.IsNullOrEmpty(model.vend_name) && string.IsNullOrEmpty(model.Status))
+                {
+                    data = dataContext.Vend_reg_tbl.ToList();
+                }
+
                 var vendors = new List<VendorListModel>();
 
                 data.ForEach(item =>

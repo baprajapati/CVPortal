@@ -132,7 +132,7 @@ namespace CVPortal.Areas.Admin.Controllers
                         user = new UserViewModel()
                         {
                             Email = data.EmailAddress,
-                            Password = data.EmailAddress,
+                            Password = data.Password,
                             RoleName = roleName,
                             HAUSER = data.HAUSER,
                             HANAME = data.HANAME,
@@ -209,6 +209,7 @@ namespace CVPortal.Areas.Admin.Controllers
                         HAUSER = user.HAUSER,
                         HANEXT = user.HANEXT,
                         HANAME = user.HANAME,
+                        Password = user.Password,
                         Dept_Code = user.Dept_Code
                     });
                     Roles.AddUserToRole(user.Email, user.RoleName);
@@ -233,12 +234,81 @@ namespace CVPortal.Areas.Admin.Controllers
             return View(user);
         }
 
-        public ActionResult GetUser()
+        public ActionResult GetUser(UserViewModel model)
         {
             var result = new JsonResult();
             try
             {
-                var data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId).ToList();
+                var data = new List<tbl_Users>();
+
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    data = dataContext.tbl_Users.Where(x => x.EmailAddress != null && x.EmailAddress.ToLower().Contains(model.Email.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.HANAME))
+                {
+                    data = (!string.IsNullOrEmpty(model.Email))
+                        ? data.Where(x => x.HANAME != null && x.HANAME.ToLower().Contains(model.HANAME.ToLower())).ToList()
+                        : dataContext.tbl_Users.Where(x => x.HANAME != null && x.HANAME.ToLower().Contains(model.HANAME.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.HAUSER))
+                {
+                    data = (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.HANAME))
+                        ? data.Where(x => x.HAUSER != null && x.HAUSER.ToLower().Contains(model.HAUSER.ToLower())).ToList()
+                        : dataContext.tbl_Users.Where(x => x.HAUSER != null && x.HAUSER.ToLower().Contains(model.HAUSER.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.Dept_Code))
+                {
+                    data = (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.HANAME)) || (!string.IsNullOrEmpty(model.HAUSER))
+                        ? data.Where(x => x.Dept_Code != null && x.Dept_Code.ToLower().Contains(model.Dept_Code.ToLower())).ToList()
+                        : dataContext.tbl_Users.Where(x => x.Dept_Code != null && x.Dept_Code.ToLower().Contains(model.Dept_Code.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.Status))
+                {
+                    if ((!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.HANAME))
+                        || (!string.IsNullOrEmpty(model.HAUSER)) || (!string.IsNullOrEmpty(model.Dept_Code)))
+                    {
+                        if ("Active".Contains(model.Status))
+                        {
+                            data = data.Where(x => x.IsActive).ToList();
+                        }
+                        else if ("Inactive".Contains(model.Status))
+                        {
+                            data = data.Where(x => !x.IsActive).ToList();
+                        }
+                        else
+                        {
+                            data = new List<tbl_Users>();
+                        }
+                    }
+                    else
+                    {
+                        if ("Active".Contains(model.Status))
+                        {
+                            data = dataContext.tbl_Users.Where(x => x.IsActive).ToList();
+                        }
+                        else if ("Inactive".Contains(model.Status))
+                        {
+                            data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId && !x.IsActive).ToList();
+                        }
+                        else
+                        {
+                            data = new List<tbl_Users>();
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(model.Email) && string.IsNullOrEmpty(model.HANAME)
+                    && string.IsNullOrEmpty(model.HAUSER) && string.IsNullOrEmpty(model.RoleName)
+                     && string.IsNullOrEmpty(model.Dept_Code) && string.IsNullOrEmpty(model.Status))
+                {
+                    data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId).ToList();
+                }
+
                 var users = new List<UserViewModel>();
 
                 data.ForEach(item =>
@@ -251,9 +321,15 @@ namespace CVPortal.Areas.Admin.Controllers
                         HAUSER = item.HAUSER,
                         HANAME = item.HANAME,
                         Dept_Code = item.Dept_Code,
-                        HANEXT = item.HANEXT
+                        HANEXT = item.HANEXT,
+                        Status = item.IsActive ? "Active" : "Inactive"
                     });
                 });
+
+                if (!string.IsNullOrEmpty(model.RoleName))
+                {
+                    users = users.Where(x => x.RoleName != null && x.RoleName.ToLower().Contains(model.RoleName.ToLower())).ToList();
+                }
 
                 result = this.Json(new
                 {
@@ -292,6 +368,26 @@ namespace CVPortal.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 return Json(new { status = false, result = ex.GetBaseException().Message });
+            }
+        }
+
+        [HttpGet]
+        public JsonResult ActiveDeactiveUser(int id, bool status)
+        {
+            try
+            {
+                var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.Id == id);
+                if (objUser != null)
+                {
+                    objUser.IsActive = status;
+                    dataContext.SaveChanges();
+                }
+
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, result = ex.GetBaseException().Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
