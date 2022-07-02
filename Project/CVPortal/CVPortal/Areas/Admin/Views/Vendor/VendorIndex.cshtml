@@ -52,7 +52,49 @@
                             "data": "vend_name", "name": "vend_name"
                         },
                         {
-                            "data": "Status", "name": "Status"
+                            "data": "Owner", "name": "Owner"
+                        },
+                        {
+                            "data": "NextApprover", "name": "NextApprover",
+                            "render": function (data, type, row, meta) {
+                                return row.NextApprover != " ()" ? row.NextApprover : "";
+                            }
+                        },
+                        {
+                            "data": "InitiatorDepartment", "name": "InitiatorDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.InitiatorDepartment != " ()" ? row.InitiatorDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "HODDepartment", "name": "HODDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.HODDepartment != " ()" ? row.HODDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "LegalDepartment", "name": "LegalDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.LegalDepartment != " ()" ? row.LegalDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "FinanceDepartment", "name": "FinanceDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.FinanceDepartment != " ()" ? row.FinanceDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "ITDepartment", "name": "ITDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.ITDepartment != " ()" ? row.ITDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "Status", "name": "Status",
+                            "render": function (data, type, row, meta) {
+                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : "<span class='color-yellow'>Pending</span>";
+                            }
                         },
                         {
                             "class": "text-center",
@@ -181,6 +223,13 @@
                                     <th>Code</th>
                                     <th>Email</th>
                                     <th>Vendor Name</th>
+                                    <th>Owner</th>
+                                    <th>Next Approver</th>
+                                    <th>Initiator Department</th>
+                                    <th>HOD</th>
+                                    <th>Legal</th>
+                                    <th>Finance</th>
+                                    <th>IT</th>
                                     <th>Status</th>
                                     <th>Print</th>
                                 </tr>

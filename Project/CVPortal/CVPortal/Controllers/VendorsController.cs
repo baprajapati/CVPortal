@@ -287,7 +287,110 @@ namespace CVPortal.Controllers
             }
 
             ViewBag.Id = id;
+            ViewBag.TermsCodeList = GetTermsCode(null);
+            ViewBag.BankCodeList = GetBankCodes(null);
+            ViewBag.PaymentTypeList = GetPaymentTypes(null);
+            ViewBag.TaxCodeList = GetTaxCodes(null);
+            ViewBag.VendorTypeList = GetVendorTypes(null);
+
             return View(model);
+        }
+
+        public SelectList GetTermsCode(string[] selectedValue)
+        {
+            var termsCodes = dataContext.PaymentTermsMasters.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.PTerms_Code} - {item.PTerms_CodeDesc}",
+                    Value = item.PTerms_ID.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.PTerms_ID.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetBankCodes(string[] selectedValue)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            list.Add(new SelectListItem()
+            {
+                Text = "ICICI",
+                Value = "ICICI",
+                Selected = selectedValue != null && selectedValue.Contains("ICICI")
+            });
+
+            list.Add(new SelectListItem()
+            {
+                Text = "BTM",
+                Value = "BTM",
+                Selected = selectedValue != null && selectedValue.Contains("ICICI")
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetPaymentTypes(string[] selectedValue)
+        {
+            var termsCodes = dataContext.PayTypeMasters.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.PayType_Code} - {item.PayType_Desc}",
+                    Value = item.PayType_ID.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.PayType_ID.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetTaxCodes(string[] selectedValue)
+        {
+            var termsCodes = dataContext.LX_TaxCode.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.ItemTaxCDE} - {item.TaxDSC}",
+                    Value = item.Id.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.Id.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetVendorTypes(string[] selectedValue)
+        {
+            var termsCodes = dataContext.VendorTypeMasters.Where(x => x.Currency == "INR").ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.VendorType} - {item.Description}",
+                    Value = item.VT_ID.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.VT_ID.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
         }
 
         public ActionResult FinalForm(int? id)
@@ -802,6 +905,12 @@ namespace CVPortal.Controllers
                 return RedirectToAction("FinalForm", new { id = model.Id });
             }
 
+            ViewBag.TermsCodeList = GetTermsCode(null);
+            ViewBag.BankCodeList = GetBankCodes(null);
+            ViewBag.PaymentTypeList = GetPaymentTypes(null);
+            ViewBag.TaxCodeList = GetTaxCodes(null);
+            ViewBag.VendorTypeList = GetVendorTypes(null);
+
             return View(model);
         }
 
@@ -811,45 +920,41 @@ namespace CVPortal.Controllers
             return File(Server.MapPath($"~/Content/FileUpload/Vendor/{id}/{fileName}"), "application/pdf");
         }
 
-        public JsonResult ApproveVendorDetails(int id)
+        public JsonResult ApproveVendorDetails(VendorApproval model)
         {
             try
             {
-                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.VendorId);
                 if (vendor != null)
                 {
-                    var vendorApprover = vendor.VendorApprovals.Where(x => !x.IsDeleted && x.VendorId == id).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
+                    var vendorApprover = vendor.VendorApprovals.Where(x => !x.IsDeleted && x.VendorId == model.VendorId).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
 
-                    var data = new VendorApproval()
-                    {
-                        VendorId = id,
-                        Status = VendorApprovalEnum.Approved.ToString(),
-                        CreatedById = Utility.UserId,
-                        CreatedByDate = DateTime.Now
-                    };
+                    model.Status = VendorApprovalEnum.Approved.ToString();
+                    model.CreatedById = Utility.UserId;
+                    model.CreatedByDate = DateTime.Now;
 
                     if (vendorApprover != null)
                     {
                         if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            data.ApproverRole = !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                            model.ApproverRole = !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
                         }
                         else
                         {
-                            data.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
-                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? ApprovarRoleEnum.LegalDepartment.ToString()
+                            model.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
+                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString()
                                 : vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
                                 : ApprovarRoleEnum.ITDepartment.ToString();
                         }
                     }
                     else
                     {
-                        data.ApproverRole = ApprovarRoleEnum.NextApprover.ToString();
+                        model.ApproverRole = ApprovarRoleEnum.NextApprover.ToString();
                     }
 
-                    vendor.VendorApprovals.Add(data);
+                    vendor.VendorApprovals.Add(model);
 
-                    if (data.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
+                    if (model.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
                     {
                         vendor.VendorCode = vendor.IsNewVendor ? (1000 + vendor.ID).ToString() : vendor.VendorCode;
                         vendor.IsFinalApproved = true;
@@ -857,7 +962,7 @@ namespace CVPortal.Controllers
 
                     dataContext.SaveChanges();
 
-                    if (data.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
+                    if (model.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                     {
                         var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
                         if (!string.IsNullOrEmpty(user.HANEXT))
@@ -869,7 +974,7 @@ namespace CVPortal.Controllers
                             string subject = "Vendor approval details";
 
                             var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
                             body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                             body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -888,7 +993,7 @@ namespace CVPortal.Controllers
                             string subject = "Vendor approval details";
 
                             var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
                             body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                             body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -899,10 +1004,10 @@ namespace CVPortal.Controllers
                     }
                     else
                     {
-                        var nextApproverRole = data.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
-                                : data.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? ApprovarRoleEnum.LegalDepartment.ToString()
-                                : data.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
-                                : data.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString() ? ApprovarRoleEnum.ITDepartment.ToString() : string.Empty;
+                        var nextApproverRole = model.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
+                                : model.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString()
+                                : model.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
+                                : ApprovarRoleEnum.ITDepartment.ToString();
 
                         if (!string.IsNullOrEmpty(nextApproverRole))
                         {
@@ -915,7 +1020,7 @@ namespace CVPortal.Controllers
                             string subject = "Vendor approval details";
 
                             var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
                             body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                             body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -931,7 +1036,7 @@ namespace CVPortal.Controllers
                     string subject1 = "Vendor approval details";
 
                     var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproved.html"));
-                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
                     body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                     body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -983,7 +1088,7 @@ namespace CVPortal.Controllers
                         else
                         {
                             data.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
-                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? ApprovarRoleEnum.LegalDepartment.ToString()
+                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString()
                                 : vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
                                 : ApprovarRoleEnum.ITDepartment.ToString();
                         }
@@ -1032,7 +1137,7 @@ namespace CVPortal.Controllers
             var result = new JsonResult();
             try
             {
-                var data = dataContext.Vend_reg_tbl.Where(x => x.Email == Utility.UserCode).ToList();
+                var data = dataContext.Vend_reg_tbl.ToList();
                 var vendorApprovers = dataContext.VendorApprovals.Where(x => !x.IsDeleted).ToList();
                 var vendors = new List<VendorListModel>();
 
@@ -1045,7 +1150,14 @@ namespace CVPortal.Controllers
                         vend_name = item.vend_name,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
                         VendorCode = item.VendorCode,
-                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending"
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
+                        Owner = item.tbl_Users.HANAME,
+                        NextApprover = $"{vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        InitiatorDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        HODDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        LegalDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        FinanceDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        ITDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})"
                     });
                 });
 

@@ -239,9 +239,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CVPortalModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\DepartmentMaster.cs">
-      <DependentUpon>CVPortalModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ExceptionLog.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
@@ -255,6 +252,9 @@
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Lx_CustomerMaster.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Lx_GSV.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LX_TaxCode.cs">

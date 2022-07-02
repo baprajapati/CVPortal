@@ -72,7 +72,7 @@ namespace CVPortal.Controllers
                     string subject = "Your OTP details";
 
                     var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\SendOTP.html"));
-                    string body = htmlContent.Replace("[OTP]", objVendor.OTP);
+                    string body = htmlContent.Replace("[OTP]", objUser.OTP);
                     body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                     body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -102,7 +102,8 @@ namespace CVPortal.Controllers
                 {
                     WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
                     FormsAuthentication.SetAuthCookie(model.Email, false);
-                    Utility.UserCode = model.Email;
+                    Utility.UserCode = vendor.Email;
+                    Session["Role"] = string.Empty;
 
                     var stepViewName = vendor.Step4 ?? false ? "FinalForm" : vendor.Step3 ?? false ? "VendorStep4" : vendor.Step2 ?? false ? "VendorStep3" : vendor.Step1 ?? false ? "VendorStep2" : "VendorStep1";
                     return Json(new { status = true, result = Utility.UserCode.Equals(vendor.Email) ? stepViewName : "VendorStep1" });
@@ -113,8 +114,9 @@ namespace CVPortal.Controllers
                 {
                     WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
                     FormsAuthentication.SetAuthCookie(model.Email, false);
-                    Utility.UserCode = model.Email;
+                    Utility.UserCode = user.EmailAddress;
                     Utility.UserId = user.Id;
+                    Session["Role"] = Roles.GetRolesForUser(user.EmailAddress).First().ToString();
 
                     vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
@@ -143,7 +145,7 @@ namespace CVPortal.Controllers
 
                 if (user != null && WebSecurity.Login(model.Email, model.Password, false))
                 {
-                    Utility.UserCode = model.Email;
+                    Utility.UserCode = user.EmailAddress;
                     Session["UserFullName"] = user.HANAME;
                     FormsAuthentication.SetAuthCookie(model.Email, false);
 

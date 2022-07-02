@@ -57,7 +57,15 @@
                     url: '@Url.Action("ApproveVendorDetails", new { area = "", controller = "Vendors" })',
                     type: "POST",
                     data: JSON.stringify({
-                        id: $("#Id").val()
+                        vendorId: $("#Id").val(),
+                        termsCode: $("#TermsCode").val(),
+                        bankCode: $("#BankCode").val(),
+                        bankBranch: $("#BankBranch").val(),
+                        paymentType: $("#PaymentType").val(),
+                        taxCode: $("#TaxCode").val(),
+                        company: $("#Company").val(),
+                        vendorType: $("#VendorType").val(),
+                        documentPfx: $("#DocumentPfx").val()
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -202,9 +210,58 @@
             <div class="modal-header">
                 <label class="modal-title" id="exampleModalLabel">Approve Confirmation</label>
             </div>
-            <div class="modal-body">
-                <span>Are you sure, you want to approve?</span>
-            </div>
+            @if (HttpContext.Current.Session["Role"].ToString() == string.Empty 
+                || (HttpContext.Current.Session["Role"].ToString() != "FinanceDepartment"
+                && HttpContext.Current.Session["Role"].ToString() != "ITDepartment"))
+            {
+                <div class="modal-body">
+                    <span>Are you sure, you want to approve?</span>
+                </div>
+            }
+
+            @if (HttpContext.Current.Session["Role"].ToString() == "FinanceDepartment")
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TermsCode">Terms Code</label>
+                        @Html.DropDownList("TermsCode", ViewBag.TermsCodeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankCode">Bank Code</label>
+                        @Html.DropDownList("BankCode", ViewBag.BankCodeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankBranch">Bank Branch</label>
+                        @Html.TextBox("BankBranch", "001", new { @class = "form-control", placeholder = "Bank Branch", @readonly= "readonly" })
+                    </div>
+                    <div class="form-group">
+                        <label for="PaymentType">Payment Type</label>
+                        @Html.DropDownList("PaymentType", ViewBag.PaymentTypeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="TaxCode">Tax Code</label>
+                        @Html.DropDownList("TaxCode", ViewBag.TaxCodeList as SelectList, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+
+            @if (HttpContext.Current.Session["Role"].ToString() == "ITDepartment")
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TermsCode">Company</label>
+                        @Html.TextBox("Company", "10", new { @class = "form-control", placeholder = "Company", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankCode">Vendor Type</label>
+                        @Html.DropDownList("VendorType", ViewBag.VendorTypeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankBranch">Document Pfx</label>
+                        @Html.TextBox("DocumentPfx", "MU", new { @class = "form-control", placeholder = "Document Pfx", @readonly = "readonly" })
+                    </div>
+                </div>
+            }
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="btnApprove">Approve</button>

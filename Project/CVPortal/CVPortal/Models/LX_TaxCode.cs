@@ -14,8 +14,17 @@ namespace CVPortal.Models
     
     public partial class LX_TaxCode
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public LX_TaxCode()
+        {
+            this.VendorApprovals = new HashSet<VendorApproval>();
+        }
+    
         public int Id { get; set; }
         public string ItemTaxCDE { get; set; }
         public string TaxDSC { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<VendorApproval> VendorApprovals { get; set; }
     }
 }

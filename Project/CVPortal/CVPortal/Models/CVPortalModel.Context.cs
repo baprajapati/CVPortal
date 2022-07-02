@@ -26,12 +26,12 @@ namespace CVPortal.Models
         }
     
         public virtual DbSet<CurrencyCodeMaster> CurrencyCodeMasters { get; set; }
-        public virtual DbSet<DepartmentMaster> DepartmentMasters { get; set; }
         public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; }
         public virtual DbSet<GSTType_Master> GSTType_Master { get; set; }
         public virtual DbSet<LoginLog> LoginLogs { get; set; }
         public virtual DbSet<Lx_AVM> Lx_AVM { get; set; }
         public virtual DbSet<Lx_CustomerMaster> Lx_CustomerMaster { get; set; }
+        public virtual DbSet<Lx_GSV> Lx_GSV { get; set; }
         public virtual DbSet<LX_TaxCode> LX_TaxCode { get; set; }
         public virtual DbSet<Orginzation_StatusMaster> Orginzation_StatusMaster { get; set; }
         public virtual DbSet<ParameterConfiguration> ParameterConfigurations { get; set; }

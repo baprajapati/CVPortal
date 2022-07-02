@@ -16,6 +16,14 @@ namespace CVPortal.Models
     {
         public int Id { get; set; }
         public int VendorId { get; set; }
+        public Nullable<int> TermsCodeId { get; set; }
+        public string BankCode { get; set; }
+        public string BankBranch { get; set; }
+        public Nullable<int> PaymentTypeId { get; set; }
+        public Nullable<int> TaxCodeId { get; set; }
+        public string Company { get; set; }
+        public Nullable<int> VendorTypeId { get; set; }
+        public string DocumentPfx { get; set; }
         public string ApproverRole { get; set; }
         public string Status { get; set; }
         public string Remarks { get; set; }
@@ -23,7 +31,11 @@ namespace CVPortal.Models
         public int CreatedById { get; set; }
         public System.DateTime CreatedByDate { get; set; }
     
+        public virtual LX_TaxCode LX_TaxCode { get; set; }
+        public virtual PaymentTermsMaster PaymentTermsMaster { get; set; }
+        public virtual PayTypeMaster PayTypeMaster { get; set; }
         public virtual tbl_Users tbl_Users { get; set; }
         public virtual Vend_reg_tbl Vend_reg_tbl { get; set; }
+        public virtual VendorTypeMaster VendorTypeMaster { get; set; }
     }
 }

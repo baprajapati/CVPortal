@@ -36,22 +36,22 @@
                     'aaSorting': [[0, 'desc']],
                     "columns": [
                         {
-                            "data": "Code", "name": "Code"
+                            "data": "Seg_ID", "name": "Seg_ID"
                         },
                         {
-                            "data": "Name", "name": "Name"
+                            "data": "Dept_Code", "name": "Dept_Code"
                         },
                         {
-                            "data": "Description", "name": "Description"
+                            "data": "Dept_Desc", "name": "Dept_Desc"
                         },
                         {
                             "render": function (data, type, row, meta) {
-                                return "<a href='@Url.Action("EditDepartment", new { area = "Admin", controller = "Department" })/" + row.Id + "' class='icon-pencil' title='Edit'>Edit</a>"
+                                return "<a href='@Url.Action("EditDepartment", new { area = "Admin", controller = "Department" })/" + row.GSV_ID + "' class='icon-pencil' title='Edit'>Edit</a>"
                             }, "targets": 'no-sort', "orderable": false
                         },
                         {
                             "render": function (data, type, row, meta) {
-                                return "<a  href='javascript:void(0);' data-departmentid=" + row.Id + " title='Delete' class='icon-remove btn-cross-red deleteDepartment'>Delete</a>"
+                                return "<a  href='javascript:void(0);' data-departmentid=" + row.GSV_ID + " title='Delete' class='icon-remove btn-cross-red deleteDepartment'>Delete</a>"
                             }, "targets": 'no-sort', "orderable": false
                         }
                     ]
@@ -112,8 +112,8 @@
                         <table class="table table-striped table-bordered table-hover" id="lstDepartments">
                             <thead class="table_header">
                                 <tr>
-                                    <th>Code</th>
-                                    <th>Name</th>
+                                    <th>Seg Code</th>
+                                    <th>Dept Code</th>
                                     <th>Description</th>
                                     <th>Edit</th>
                                     <th>Delete</th>

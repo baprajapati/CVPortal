@@ -209,3 +209,15 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody td.select
 #lstInvoices_paginate, #lstB2cInvoices_paginate {
     float: right !important;
 }
+
+.color-red {
+    color: red !important;
+}
+
+.color-green {
+    color: green !important;
+}
+
+.color-yellow {
+    color: yellow !important;
+}

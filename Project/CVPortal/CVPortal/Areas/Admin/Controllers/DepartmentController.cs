@@ -47,14 +47,14 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 if (id != null)
                 {
-                    var data = dataContext.DepartmentMasters.FirstOrDefault(x => x.Id == id);
+                    var data = dataContext.Lx_GSV.FirstOrDefault(x => x.GSV_ID == id);
                     if (data != null)
                     {
                         department = new DepartmentViewModel()
                         {
-                            Name = data.Name,
-                            Code = data.Code,
-                            Description = data.Description
+                            Seg_ID = data.Seg_ID,
+                            Dept_Code = data.Dept_Code,
+                            Dept_Desc = data.Dept_Desc
                         };
                     }
                     else
@@ -95,29 +95,29 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var dataName = dataContext.DepartmentMasters.FirstOrDefault(x => x.Name == departmentViewModel.Name);
+                    var dataName = dataContext.Lx_GSV.FirstOrDefault(x => x.Dept_Desc == departmentViewModel.Dept_Desc);
                     if (dataName != null)
                     {
-                        ModelState.AddModelError(nameof(departmentViewModel.Name), "Name already exist.");
+                        ModelState.AddModelError(nameof(departmentViewModel.Dept_Desc), "Description already exist.");
                         return View(departmentViewModel);
                     }
 
-                    var dataCode = dataContext.DepartmentMasters.FirstOrDefault(x => x.Code == departmentViewModel.Code);
+                    var dataCode = dataContext.Lx_GSV.FirstOrDefault(x => x.Dept_Code == departmentViewModel.Dept_Code);
                     if (dataCode != null)
                     {
-                        ModelState.AddModelError(nameof(departmentViewModel.Code), "Code already exist.");
+                        ModelState.AddModelError(nameof(departmentViewModel.Dept_Code), "Code already exist.");
                         return View(departmentViewModel);
                     }
 
-                    var department = new DepartmentMaster()
+                    var department = new Lx_GSV()
                     {
-                        Name = departmentViewModel.Name,
-                        Code = departmentViewModel.Code,
-                        Description = departmentViewModel.Description,
+                        Seg_ID = departmentViewModel.Seg_ID,
+                        Dept_Code = departmentViewModel.Dept_Code,
+                        Dept_Desc = departmentViewModel.Dept_Desc,
                         CreatedById = WebSecurity.CurrentUserId,
                         CreatedByDate = DateTime.Now
                     };
-                    dataContext.DepartmentMasters.Add(department);
+                    dataContext.Lx_GSV.Add(department);
                     dataContext.SaveChanges();
 
                     return RedirectToAction("DepartmentIndex");
@@ -135,7 +135,7 @@ namespace CVPortal.Areas.Admin.Controllers
             var result = new JsonResult();
             try
             {
-                var data = dataContext.DepartmentMasters.ToList();
+                var data = dataContext.Lx_GSV.ToList();
 
                 result = this.Json(new
                 {
@@ -156,16 +156,16 @@ namespace CVPortal.Areas.Admin.Controllers
         {
             try
             {
-                var objDepartment = dataContext.DepartmentMasters.FirstOrDefault(x => x.Id == id);
+                var objDepartment = dataContext.Lx_GSV.FirstOrDefault(x => x.GSV_ID == id);
                 if (objDepartment != null)
                 {
-                    var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.Dept_Code == objDepartment.Code);
+                    var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.Dept_Code == objDepartment.Dept_Code);
                     if(objUser != null)
                     {
                         return Json(new { status = false, result = "Department used in user, so you can't delete this department" });
                     }
 
-                    dataContext.DepartmentMasters.Remove(objDepartment);
+                    dataContext.Lx_GSV.Remove(objDepartment);
                     dataContext.SaveChanges();
                 }
 
@@ -185,26 +185,26 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var dataCode = dataContext.DepartmentMasters.FirstOrDefault(x => x.Id != departmentViewModel.Id && x.Code == departmentViewModel.Code);
+                    var dataCode = dataContext.Lx_GSV.FirstOrDefault(x => x.GSV_ID != departmentViewModel.Id && x.Dept_Code == departmentViewModel.Dept_Code);
                     if (dataCode != null)
                     {
-                        ModelState.AddModelError(nameof(departmentViewModel.Code), "Code already exist.");
+                        ModelState.AddModelError(nameof(departmentViewModel.Dept_Code), "Code already exist.");
                         return View(departmentViewModel);
                     }
 
-                    var dataName = dataContext.DepartmentMasters.FirstOrDefault(x => x.Id != departmentViewModel.Id && x.Name == departmentViewModel.Name);
+                    var dataName = dataContext.Lx_GSV.FirstOrDefault(x => x.GSV_ID != departmentViewModel.Id && x.Dept_Desc == departmentViewModel.Dept_Desc);
                     if (dataName != null)
                     {
-                        ModelState.AddModelError(nameof(departmentViewModel.Name), "Name already exist.");
+                        ModelState.AddModelError(nameof(departmentViewModel.Dept_Desc), "Description already exist.");
                         return View(departmentViewModel);
                     }
 
-                    var data = dataContext.DepartmentMasters.FirstOrDefault(x => x.Id == departmentViewModel.Id);
+                    var data = dataContext.Lx_GSV.FirstOrDefault(x => x.GSV_ID == departmentViewModel.Id);
                     if (data != null)
                     {
-                        data.Code = departmentViewModel.Code;
-                        data.Name = departmentViewModel.Name;
-                        data.Description = departmentViewModel.Description;
+                        data.Seg_ID = departmentViewModel.Seg_ID;
+                        data.Dept_Code = departmentViewModel.Dept_Code;
+                        data.Dept_Desc = departmentViewModel.Dept_Desc;
                         dataContext.SaveChanges();
                     }
 

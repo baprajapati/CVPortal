@@ -41,7 +41,7 @@ namespace CVPortal.Areas.Admin.Controllers
 
         public SelectList GetDepartments(string[] selectedValue)
         {
-            var departments = dataContext.DepartmentMasters.ToList();
+            var departments = dataContext.Lx_GSV.ToList();
 
             List<SelectListItem> list = new List<SelectListItem>();
 
@@ -49,9 +49,9 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 list.Add(new SelectListItem()
                 {
-                    Text = $"{item.Code} - {item.Name}",
-                    Value = item.Code,
-                    Selected = selectedValue != null && selectedValue.Contains(item.Code)
+                    Text = $"{item.Dept_Code} - {item.Dept_Desc}",
+                    Value = item.Dept_Code,
+                    Selected = selectedValue != null && selectedValue.Contains(item.Dept_Code)
                 });
             });
 

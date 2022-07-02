@@ -15,17 +15,6 @@
           <Property Name="Status" Type="bit" />
           <Property Name="Create_On" Type="datetime" />
         </EntityType>
-        <EntityType Name="DepartmentMaster">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="CreatedById" Type="int" Nullable="false" />
-          <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
-        </EntityType>
         <EntityType Name="ExceptionLog">
           <Key>
             <PropertyRef Name="id" />
@@ -102,6 +91,17 @@
           <Property Name="CreatedOnDate" Type="nvarchar" MaxLength="25" />
           <Property Name="RecDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="Lx_GSV">
+          <Key>
+            <PropertyRef Name="GSV_ID" />
+          </Key>
+          <Property Name="GSV_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Seg_ID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Dept_Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Dept_Desc" Type="nvarchar(max)" />
+          <Property Name="CreatedById" Type="int" />
+          <Property Name="CreatedByDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="LX_TaxCode">
           <Key>
             <PropertyRef Name="Id" />
@@ -133,7 +133,7 @@
         </EntityType>
         <EntityType Name="PaymentTermsMaster">
           <Key>
-            <PropertyRef Name="PTerms_Code" />
+            <PropertyRef Name="PTerms_ID" />
           </Key>
           <Property Name="PTerms_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PTerms_Code" Type="char" MaxLength="2" Nullable="false" />
@@ -143,7 +143,7 @@
         </EntityType>
         <EntityType Name="PayTypeMaster">
           <Key>
-            <PropertyRef Name="PayType_Code" />
+            <PropertyRef Name="PayType_ID" />
           </Key>
           <Property Name="PayType_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PayType_Code" Type="char" MaxLength="1" Nullable="false" />
@@ -239,6 +239,14 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="VendorId" Type="int" Nullable="false" />
+          <Property Name="TermsCodeId" Type="int" />
+          <Property Name="BankCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankBranch" Type="nvarchar" MaxLength="50" />
+          <Property Name="PaymentTypeId" Type="int" />
+          <Property Name="TaxCodeId" Type="int" />
+          <Property Name="Company" Type="nvarchar" MaxLength="50" />
+          <Property Name="VendorTypeId" Type="int" />
+          <Property Name="DocumentPfx" Type="nvarchar" MaxLength="50" />
           <Property Name="ApproverRole" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Remarks" Type="nvarchar(max)" />
@@ -345,6 +353,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_VendorApproval_LX_TaxCode">
+          <End Role="LX_TaxCode" Type="Self.LX_TaxCode" Multiplicity="0..1" />
+          <End Role="VendorApproval" Type="Self.VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LX_TaxCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="TaxCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorApproval_PaymentTermsMaster">
+          <End Role="PaymentTermsMaster" Type="Self.PaymentTermsMaster" Multiplicity="0..1" />
+          <End Role="VendorApproval" Type="Self.VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentTermsMaster">
+              <PropertyRef Name="PTerms_ID" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="TermsCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorApproval_PayTypeMaster">
+          <End Role="PayTypeMaster" Type="Self.PayTypeMaster" Multiplicity="0..1" />
+          <End Role="VendorApproval" Type="Self.VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PayTypeMaster">
+              <PropertyRef Name="PayType_ID" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_VendorApproval_tbl_Users">
           <End Role="tbl_Users" Type="Self.tbl_Users" Multiplicity="1" />
           <End Role="VendorApproval" Type="Self.VendorApproval" Multiplicity="*" />
@@ -369,6 +413,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_VendorApproval_VendorTypeMaster">
+          <End Role="VendorTypeMaster" Type="Self.VendorTypeMaster" Multiplicity="0..1" />
+          <End Role="VendorApproval" Type="Self.VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VendorTypeMaster">
+              <PropertyRef Name="VT_ID" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="VendorTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_VendorFiles_Vend_reg_tbl">
           <End Role="Vend_reg_tbl" Type="Self.Vend_reg_tbl" Multiplicity="1" />
           <End Role="VendorFiles" Type="Self.VendorFiles" Multiplicity="*" />
@@ -383,12 +439,12 @@
         </Association>
         <EntityContainer Name="CVPortalModelStoreContainer">
           <EntitySet Name="CurrencyCodeMaster" EntityType="Self.CurrencyCodeMaster" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DepartmentMaster" EntityType="Self.DepartmentMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExceptionLog" EntityType="Self.ExceptionLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GSTType_Master" EntityType="Self.GSTType_Master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginLogs" EntityType="Self.LoginLogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lx_AVM" EntityType="Self.Lx_AVM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lx_CustomerMaster" EntityType="Self.Lx_CustomerMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lx_GSV" EntityType="Self.Lx_GSV" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LX_TaxCode" EntityType="Self.LX_TaxCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orginzation_StatusMaster" EntityType="Self.Orginzation_StatusMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ParameterConfiguration" EntityType="Self.ParameterConfiguration" Schema="dbo" store:Type="Tables" />
@@ -415,12 +471,28 @@
             <End Role="tbl_Users" EntitySet="tbl_Users" />
             <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
           </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_LX_TaxCode" Association="Self.FK_VendorApproval_LX_TaxCode">
+            <End Role="LX_TaxCode" EntitySet="LX_TaxCode" />
+            <End Role="VendorApproval" EntitySet="VendorApproval" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_PaymentTermsMaster" Association="Self.FK_VendorApproval_PaymentTermsMaster">
+            <End Role="PaymentTermsMaster" EntitySet="PaymentTermsMaster" />
+            <End Role="VendorApproval" EntitySet="VendorApproval" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_PayTypeMaster" Association="Self.FK_VendorApproval_PayTypeMaster">
+            <End Role="PayTypeMaster" EntitySet="PayTypeMaster" />
+            <End Role="VendorApproval" EntitySet="VendorApproval" />
+          </AssociationSet>
           <AssociationSet Name="FK_VendorApproval_tbl_Users" Association="Self.FK_VendorApproval_tbl_Users">
             <End Role="tbl_Users" EntitySet="tbl_Users" />
             <End Role="VendorApproval" EntitySet="VendorApproval" />
           </AssociationSet>
           <AssociationSet Name="FK_VendorApproval_Vend_reg_tbl" Association="Self.FK_VendorApproval_Vend_reg_tbl">
             <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
+            <End Role="VendorApproval" EntitySet="VendorApproval" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_VendorTypeMaster" Association="Self.FK_VendorApproval_VendorTypeMaster">
+            <End Role="VendorTypeMaster" EntitySet="VendorTypeMaster" />
             <End Role="VendorApproval" EntitySet="VendorApproval" />
           </AssociationSet>
           <AssociationSet Name="FK_VendorFiles_Vend_reg_tbl" Association="Self.FK_VendorFiles_Vend_reg_tbl">
@@ -434,12 +506,12 @@
       <Schema Namespace="CVPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="CVPortalEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CurrencyCodeMasters" EntityType="CVPortalModel.CurrencyCodeMaster" />
-          <EntitySet Name="DepartmentMasters" EntityType="CVPortalModel.DepartmentMaster" />
           <EntitySet Name="ExceptionLogs" EntityType="CVPortalModel.ExceptionLog" />
           <EntitySet Name="GSTType_Master" EntityType="CVPortalModel.GSTType_Master" />
           <EntitySet Name="LoginLogs" EntityType="CVPortalModel.LoginLog" />
           <EntitySet Name="Lx_AVM" EntityType="CVPortalModel.Lx_AVM" />
           <EntitySet Name="Lx_CustomerMaster" EntityType="CVPortalModel.Lx_CustomerMaster" />
+          <EntitySet Name="Lx_GSV" EntityType="CVPortalModel.Lx_GSV" />
           <EntitySet Name="LX_TaxCode" EntityType="CVPortalModel.LX_TaxCode" />
           <EntitySet Name="Orginzation_StatusMaster" EntityType="CVPortalModel.Orginzation_StatusMaster" />
           <EntitySet Name="ParameterConfigurations" EntityType="CVPortalModel.ParameterConfiguration" />
@@ -453,6 +525,18 @@
           <EntitySet Name="webpages_Membership" EntityType="CVPortalModel.webpages_Membership" />
           <EntitySet Name="webpages_OAuthMembership" EntityType="CVPortalModel.webpages_OAuthMembership" />
           <EntitySet Name="webpages_Roles" EntityType="CVPortalModel.webpages_Roles" />
+          <AssociationSet Name="FK_VendorApproval_LX_TaxCode" Association="CVPortalModel.FK_VendorApproval_LX_TaxCode">
+            <End Role="LX_TaxCode" EntitySet="LX_TaxCode" />
+            <End Role="VendorApproval" EntitySet="VendorApprovals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_PaymentTermsMaster" Association="CVPortalModel.FK_VendorApproval_PaymentTermsMaster">
+            <End Role="PaymentTermsMaster" EntitySet="PaymentTermsMasters" />
+            <End Role="VendorApproval" EntitySet="VendorApprovals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_PayTypeMaster" Association="CVPortalModel.FK_VendorApproval_PayTypeMaster">
+            <End Role="PayTypeMaster" EntitySet="PayTypeMasters" />
+            <End Role="VendorApproval" EntitySet="VendorApprovals" />
+          </AssociationSet>
           <AssociationSet Name="FK_Vend_reg_tbl_tbl_Users" Association="CVPortalModel.FK_Vend_reg_tbl_tbl_Users">
             <End Role="tbl_Users" EntitySet="tbl_Users" />
             <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
@@ -469,6 +553,10 @@
             <End Role="Vend_reg_tbl" EntitySet="Vend_reg_tbl" />
             <End Role="VendorFile" EntitySet="VendorFiles" />
           </AssociationSet>
+          <AssociationSet Name="FK_VendorApproval_VendorTypeMaster" Association="CVPortalModel.FK_VendorApproval_VendorTypeMaster">
+            <End Role="VendorTypeMaster" EntitySet="VendorTypeMasters" />
+            <End Role="VendorApproval" EntitySet="VendorApprovals" />
+          </AssociationSet>
           <AssociationSet Name="webpages_UsersInRoles" Association="CVPortalModel.webpages_UsersInRoles">
             <End Role="webpages_Roles" EntitySet="webpages_Roles" />
             <End Role="tbl_Users" EntitySet="tbl_Users" />
@@ -483,17 +571,6 @@
           <Property Name="Crncy_Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="Create_On" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="DepartmentMaster">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedById" Type="Int32" Nullable="false" />
-          <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="ExceptionLog">
           <Key>
@@ -571,6 +648,17 @@
           <Property Name="CreatedOnDate" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="RecDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="Lx_GSV">
+          <Key>
+            <PropertyRef Name="GSV_ID" />
+          </Key>
+          <Property Name="GSV_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Seg_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dept_Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dept_Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedById" Type="Int32" />
+          <Property Name="CreatedByDate" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="LX_TaxCode">
           <Key>
             <PropertyRef Name="Id" />
@@ -578,6 +666,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ItemTaxCDE" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
           <Property Name="TaxDSC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_LX_TaxCode" FromRole="LX_TaxCode" ToRole="VendorApproval" />
         </EntityType>
         <EntityType Name="Orginzation_StatusMaster">
           <Key>
@@ -602,23 +691,25 @@
         </EntityType>
         <EntityType Name="PaymentTermsMaster">
           <Key>
-            <PropertyRef Name="PTerms_Code" />
+            <PropertyRef Name="PTerms_ID" />
           </Key>
           <Property Name="PTerms_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PTerms_Code" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="PTerms_CodeDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PTerms_Status" Type="Boolean" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_PaymentTermsMaster" FromRole="PaymentTermsMaster" ToRole="VendorApproval" />
         </EntityType>
         <EntityType Name="PayTypeMaster">
           <Key>
-            <PropertyRef Name="PayType_Code" />
+            <PropertyRef Name="PayType_ID" />
           </Key>
           <Property Name="PayType_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PayType_Code" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="PayType_Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="Create_On" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_PayTypeMaster" FromRole="PayTypeMaster" ToRole="VendorApproval" />
         </EntityType>
         <EntityType Name="tbl_Users">
           <Key>
@@ -714,14 +805,26 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="VendorId" Type="Int32" Nullable="false" />
+          <Property Name="TermsCodeId" Type="Int32" />
+          <Property Name="BankCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankBranch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentTypeId" Type="Int32" />
+          <Property Name="TaxCodeId" Type="Int32" />
+          <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VendorTypeId" Type="Int32" />
+          <Property Name="DocumentPfx" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ApproverRole" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="LX_TaxCode" Relationship="CVPortalModel.FK_VendorApproval_LX_TaxCode" FromRole="VendorApproval" ToRole="LX_TaxCode" />
+          <NavigationProperty Name="PaymentTermsMaster" Relationship="CVPortalModel.FK_VendorApproval_PaymentTermsMaster" FromRole="VendorApproval" ToRole="PaymentTermsMaster" />
+          <NavigationProperty Name="PayTypeMaster" Relationship="CVPortalModel.FK_VendorApproval_PayTypeMaster" FromRole="VendorApproval" ToRole="PayTypeMaster" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_VendorApproval_tbl_Users" FromRole="VendorApproval" ToRole="tbl_Users" />
           <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_VendorApproval_Vend_reg_tbl" FromRole="VendorApproval" ToRole="Vend_reg_tbl" />
+          <NavigationProperty Name="VendorTypeMaster" Relationship="CVPortalModel.FK_VendorApproval_VendorTypeMaster" FromRole="VendorApproval" ToRole="VendorTypeMaster" />
         </EntityType>
         <EntityType Name="VendorFile">
           <Key>
@@ -746,6 +849,7 @@
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_VendorTypeMaster" FromRole="VendorTypeMaster" ToRole="VendorApproval" />
         </EntityType>
         <EntityType Name="webpages_Membership">
           <Key>
@@ -780,6 +884,42 @@
           <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="tbl_Users" />
         </EntityType>
+        <Association Name="FK_VendorApproval_LX_TaxCode">
+          <End Type="CVPortalModel.LX_TaxCode" Role="LX_TaxCode" Multiplicity="0..1" />
+          <End Type="CVPortalModel.VendorApproval" Role="VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LX_TaxCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="TaxCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorApproval_PaymentTermsMaster">
+          <End Type="CVPortalModel.PaymentTermsMaster" Role="PaymentTermsMaster" Multiplicity="0..1" />
+          <End Type="CVPortalModel.VendorApproval" Role="VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentTermsMaster">
+              <PropertyRef Name="PTerms_ID" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="TermsCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorApproval_PayTypeMaster">
+          <End Type="CVPortalModel.PayTypeMaster" Role="PayTypeMaster" Multiplicity="0..1" />
+          <End Type="CVPortalModel.VendorApproval" Role="VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PayTypeMaster">
+              <PropertyRef Name="PayType_ID" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Vend_reg_tbl_tbl_Users">
           <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="1" />
           <End Type="CVPortalModel.Vend_reg_tbl" Role="Vend_reg_tbl" Multiplicity="*" />
@@ -828,6 +968,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_VendorApproval_VendorTypeMaster">
+          <End Type="CVPortalModel.VendorTypeMaster" Role="VendorTypeMaster" Multiplicity="0..1" />
+          <End Type="CVPortalModel.VendorApproval" Role="VendorApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VendorTypeMaster">
+              <PropertyRef Name="VT_ID" />
+            </Principal>
+            <Dependent Role="VendorApproval">
+              <PropertyRef Name="VendorTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="webpages_UsersInRoles">
           <End Type="CVPortalModel.webpages_Roles" Role="webpages_Roles" Multiplicity="*" />
           <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="*" />
@@ -846,18 +998,6 @@
                 <ScalarProperty Name="Crncy_Description" ColumnName="Crncy_Description" />
                 <ScalarProperty Name="Crncy_Code" ColumnName="Crncy_Code" />
                 <ScalarProperty Name="Crncy_ID" ColumnName="Crncy_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DepartmentMasters">
-            <EntityTypeMapping TypeName="CVPortalModel.DepartmentMaster">
-              <MappingFragment StoreEntitySet="DepartmentMaster">
-                <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
-                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -938,6 +1078,18 @@
                 <ScalarProperty Name="CustCode" ColumnName="CustCode" />
                 <ScalarProperty Name="RecID" ColumnName="RecID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lx_GSV">
+            <EntityTypeMapping TypeName="CVPortalModel.Lx_GSV">
+              <MappingFragment StoreEntitySet="Lx_GSV">
+                <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="Dept_Desc" ColumnName="Dept_Desc" />
+                <ScalarProperty Name="Dept_Code" ColumnName="Dept_Code" />
+                <ScalarProperty Name="Seg_ID" ColumnName="Seg_ID" />
+                <ScalarProperty Name="GSV_ID" ColumnName="GSV_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1088,6 +1240,14 @@
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ApproverRole" ColumnName="ApproverRole" />
+                <ScalarProperty Name="DocumentPfx" ColumnName="DocumentPfx" />
+                <ScalarProperty Name="VendorTypeId" ColumnName="VendorTypeId" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="TaxCodeId" ColumnName="TaxCodeId" />
+                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+                <ScalarProperty Name="BankBranch" ColumnName="BankBranch" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+                <ScalarProperty Name="TermsCodeId" ColumnName="TermsCodeId" />
                 <ScalarProperty Name="VendorId" ColumnName="VendorId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

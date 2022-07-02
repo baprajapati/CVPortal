@@ -14,6 +14,12 @@ namespace CVPortal.Models
     
     public partial class VendorTypeMaster
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public VendorTypeMaster()
+        {
+            this.VendorApprovals = new HashSet<VendorApproval>();
+        }
+    
         public int VT_ID { get; set; }
         public string Company { get; set; }
         public string VendorType { get; set; }
@@ -21,5 +27,8 @@ namespace CVPortal.Models
         public string Description { get; set; }
         public Nullable<bool> Status { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<VendorApproval> VendorApprovals { get; set; }
     }
 }

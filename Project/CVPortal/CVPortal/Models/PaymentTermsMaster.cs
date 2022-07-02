@@ -14,10 +14,19 @@ namespace CVPortal.Models
     
     public partial class PaymentTermsMaster
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PaymentTermsMaster()
+        {
+            this.VendorApprovals = new HashSet<VendorApproval>();
+        }
+    
         public int PTerms_ID { get; set; }
         public string PTerms_Code { get; set; }
         public string PTerms_CodeDesc { get; set; }
         public Nullable<bool> PTerms_Status { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<VendorApproval> VendorApprovals { get; set; }
     }
 }

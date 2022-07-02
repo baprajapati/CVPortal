@@ -11,11 +11,12 @@ namespace CVPortal.ViewModels
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Seg_ID { get; set; }
 
         [Required]
-        public string Code { get; set; }
+        public string Dept_Code { get; set; }
 
-        public string Description { get; set; }
+        [Required]
+        public string Dept_Desc { get; set; }
     }
 }
