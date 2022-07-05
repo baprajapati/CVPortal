@@ -185,7 +185,7 @@
     <Content Include="Content\Documents\suzuki-logo.PNG" />
     <Content Include="Content\EmailTemplate\CustomerApproval.html" />
     <Content Include="Content\EmailTemplate\CustomerApproved.html" />
-    <Content Include="Content\EmailTemplate\CustomerVendorRejected.html" />
+    <Content Include="Content\EmailTemplate\CustomerRejected.html" />
     <Content Include="Content\EmailTemplate\VendorRejected.html" />
     <Content Include="Content\EmailTemplate\VendorApproved.html" />
     <Content Include="Content\EmailTemplate\VendorApproval.html" />

@@ -713,7 +713,7 @@ namespace CVPortal.Controllers
                         }
                     }
 
-                    string mailTo1 = $"{customer.tbl_Users.EmailAddress},{customer.Email}";
+                    string mailTo1 = $"{Utility.UserCode},{customer.Email},{customer.tbl_Users.EmailAddress}";
                     string CC1 = string.Empty;
                     string BCC1 = string.Empty;
                     string subject1 = "Customer approval details";
@@ -790,7 +790,7 @@ namespace CVPortal.Controllers
 
                     dataContext.SaveChanges();
 
-                    string mailTo1 = $"{customer.tbl_Users.EmailAddress},{customer.Email}";
+                    string mailTo1 = $"{Utility.UserCode},{customer.Email},{customer.tbl_Users.EmailAddress}";
                     string CC1 = string.Empty;
                     string BCC1 = string.Empty;
                     string subject1 = "Customer approval details";
