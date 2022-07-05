@@ -158,6 +158,9 @@
     <Content Include="Areas\Admin\Views\Department\EditDepartment.cshtml" />
     <Content Include="Areas\Admin\Views\Department\DepartmentIndex.cshtml" />
     <Content Include="Areas\Admin\Views\Vendor\VendorIndex.cshtml" />
+    <Content Include="Areas\InitiatorAdmin\Views\Customer\AddCustomer.cshtml" />
+    <Content Include="Areas\InitiatorAdmin\Views\Customer\CustomerIndex.cshtml" />
+    <Content Include="Areas\Admin\Views\Customer\CustomerIndex.cshtml" />
     <None Include="Content\AdminLTE\jquery\jquery.validate-vsdoc.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.unobtrusive.js" />
@@ -169,6 +172,7 @@
     <Content Include="Content\css\custom.css" />
     <Content Include="Content\css\dataTables.bootstrap.min.css" />
     <Content Include="Content\css\toastr.css" />
+    <Content Include="Content\Documents\Customer.html" />
     <Content Include="Content\Documents\Vendor.html" />
     <Content Include="Content\Documents\GSTEngineData.html" />
     <Content Include="Content\Documents\GSTHeaderInvoice.html" />
@@ -179,9 +183,13 @@
     <Content Include="Content\Documents\suzuki-green-logo.PNG" />
     <Content Include="Content\Documents\suzuki-green-logo1.PNG" />
     <Content Include="Content\Documents\suzuki-logo.PNG" />
+    <Content Include="Content\EmailTemplate\CustomerApproval.html" />
+    <Content Include="Content\EmailTemplate\CustomerApproved.html" />
+    <Content Include="Content\EmailTemplate\CustomerVendorRejected.html" />
     <Content Include="Content\EmailTemplate\VendorRejected.html" />
     <Content Include="Content\EmailTemplate\VendorApproved.html" />
     <Content Include="Content\EmailTemplate\VendorApproval.html" />
+    <Content Include="Content\EmailTemplate\CustomerRequest.html" />
     <Content Include="Content\EmailTemplate\VendorRequest.html" />
     <Content Include="Content\EmailTemplate\SendOTP.html" />
     <Content Include="Content\EmailTemplate\SendPassword.html" />
@@ -213,15 +221,27 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\DepartmentController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
     <Compile Include="Areas\Admin\Controllers\VendorController.cs" />
+    <Compile Include="Areas\InitiatorAdmin\Controllers\CustomerController.cs" />
     <Compile Include="Areas\InitiatorAdmin\Controllers\VendorController.cs" />
     <Compile Include="Areas\InitiatorAdmin\InitiatorAdminAreaRegistration.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\VendorsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CurrencyCodeMaster.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerApproval.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerFile.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cust_reg_tbl.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CVPortalModel.Context.cs">
@@ -302,7 +322,13 @@
     <Compile Include="ViewModels\CountryViewModel.cs" />
     <Compile Include="ViewModels\DepartmentViewModel.cs" />
     <Compile Include="ViewModels\VendorCustomerLoginViewModel.cs" />
+    <Compile Include="ViewModels\CustomerListModel.cs" />
     <Compile Include="ViewModels\VendorListModel.cs" />
+    <Compile Include="ViewModels\CustomerStep1.cs" />
+    <Compile Include="ViewModels\CustomerStep2.cs" />
+    <Compile Include="ViewModels\CustomerStep3.cs" />
+    <Compile Include="ViewModels\CustomerStep4.cs" />
+    <Compile Include="ViewModels\CustomerViewModel.cs" />
     <Compile Include="ViewModels\VendorViewModel.cs" />
     <Compile Include="ViewModels\VendorStep4.cs" />
     <Compile Include="ViewModels\VendorStep3.cs" />
@@ -312,12 +338,19 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Content Include="Content\Login\suzuki-bike.png" />
     <Content Include="Content\Login\Suzuki-Logo.jpg" />
-    <Content Include="Views\Account\VendorCustomerLogin.cshtml" />
+    <Content Include="Views\Account\VendorLogin.cshtml" />
     <Content Include="Views\Vendors\VendorStep2.cshtml" />
     <Content Include="Views\Vendors\VendorStep3.cshtml" />
     <Content Include="Views\Vendors\VendorStep4.cshtml" />
     <Content Include="Views\Vendors\FinalForm.cshtml" />
     <Content Include="Views\Vendors\VendorIndex.cshtml" />
+    <Content Include="Views\Customers\FinalForm.cshtml" />
+    <Content Include="Views\Customers\CustomerIndex.cshtml" />
+    <Content Include="Views\Customers\CustomerStep1.cshtml" />
+    <Content Include="Views\Customers\CustomerStep2.cshtml" />
+    <Content Include="Views\Customers\CustomerStep3.cshtml" />
+    <Content Include="Views\Customers\CustomerStep4.cshtml" />
+    <Content Include="Views\Account\CustomerLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Login\app.5db8a232.css" />

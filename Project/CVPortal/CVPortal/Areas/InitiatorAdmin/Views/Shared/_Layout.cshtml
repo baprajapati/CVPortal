@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("VendorIndex","Vendor")" class="nav-link customerindex">
+                            <a href="@Url.Action("CustomerIndex","Customer")" class="nav-link customerindex">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>Customers</p>
                             </a>
@@ -101,6 +101,8 @@
 
             if (window.location.href.includes("VendorIndex") || window.location.href.includes("AddVendor")) {
                 $(".vendorindex").addClass("active");
+            } else if (window.location.href.includes("CustomerIndex") || window.location.href.includes("AddCustomer")) {
+                $(".customerindex").addClass("active");
             }
         }
 

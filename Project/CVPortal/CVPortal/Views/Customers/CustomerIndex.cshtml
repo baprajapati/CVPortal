@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Customer List";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        var users;
+        var onClickSearch = false;
+
+        function getCustomers() {
+            users = $('#lstUsers').DataTable
+                ({
+                    "language":
+                    {
+                        "processing": "<div class='overlay custom-loader-background'><i class='fa fa-cog fa-spin custom-loader-color'></i></div>"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "lengthMenu": convertStringToArray('10,50,100,200,500', ','),
+                    "pageLength": '50',
+                    "ajax":
+                    {
+                        "url": '@Url.Action("GetCustomer", new { area = "", controller = "Customers" })',
+                        "type": "POST",
+                        "dataType": "JSON",
+                        "data": function (d) {
+                            return d;
+                        }
+                    },
+                    "bFilter": false,
+                    "scrollX": true,
+                    "autoWidth": false,
+                    "searching": true,
+                    "info": true,
+                    'aaSorting': [[0, 'desc']],
+                    "columns": [
+                        {
+                            "data": "CustomerCode", "name": "CustomerCode"
+                        },
+                        {
+                            "data": "Email", "name": "Email"
+                        },
+                        {
+                            "data": "Cust_name", "name": "Cust_name"
+                        },
+                        {
+                            "data": "Owner", "name": "Owner"
+                        },
+                        {
+                            "data": "NextApprover", "name": "NextApprover",
+                            "render": function (data, type, row, meta) {
+                                return row.NextApprover != " ()" ? row.NextApprover : "";
+                            }
+                        },
+                        {
+                            "data": "InitiatorDepartment", "name": "InitiatorDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.InitiatorDepartment != " ()" ? row.InitiatorDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "HODDepartment", "name": "HODDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.HODDepartment != " ()" ? row.HODDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "LegalDepartment", "name": "LegalDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.LegalDepartment != " ()" ? row.LegalDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "FinanceDepartment", "name": "FinanceDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.FinanceDepartment != " ()" ? row.FinanceDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "ITDepartment", "name": "ITDepartment",
+                            "render": function (data, type, row, meta) {
+                                return row.ITDepartment != " ()" ? row.ITDepartment : "";
+                            }
+                        },
+                        {
+                            "data": "Status", "name": "Status",
+                            "render": function (data, type, row, meta) {
+                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : "<span class='color-yellow'>Pending</span>";
+                            }
+                        },
+                        {
+                            "render": function (data, type, row, meta) {
+                                return "<a href='@Url.Action("CustomerStep1", new { area = "", controller = "Customers" })/" + row.Id + "' class='icon-eye' title='View'>View</a>"
+                            }, "targets": 'no-sort', "orderable": false
+                        },
+                    ]
+                });
+        }
+
+        jQuery(document).ready(function () {
+            getCustomers();
+        });
+    </script>
+}
+
+<div class="jumbotron" style="padding-top:30px !important;padding-bottom:30px !important;">
+    <input type="hidden" value="@ViewBag.Id" />
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered table-hover" id="lstUsers">
+                            <thead class="table_header">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Email</th>
+                                    <th>Customer Name</th>
+                                    <th>Owner</th>
+                                    <th>Next Approver</th>
+                                    <th>Initiator Department</th>
+                                    <th>HOD</th>
+                                    <th>Legal</th>
+                                    <th>Finance</th>
+                                    <th>IT</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

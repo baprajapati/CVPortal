@@ -69,12 +69,13 @@
                 <img src="~/Content/Documents/suzuki-green-logo.PNG" style="height:43px;padding-top:7px;" />
             </div>
             <div class="navbar-collapse collapse">
+                <input type="hidden" id="hdnId" value="@ViewBag.Id" />
                 <ul class="nav navbar-nav pull-right">
-                    <li><a href="../VendorIndex/@ViewBag.Id">Vendors</a></li>
-                    <li><a href="/Account/VendorCustomerLogout/@ViewBag.Id">Logout</a></li>
+                    <li><a id="a-vendors" href="../VendorIndex/@ViewBag.Id">Vendors</a></li>
+                    <li><a id="a-customers" href="../CustomerIndex/@ViewBag.Id">Customers</a></li>
+                    <li><a id="a-logout" data href="/Account/VendorLogout/@ViewBag.Id">Logout</a></li>
                 </ul>
             </div>
-            @*@Html.ActionLink("Logout", "VendorCustomerLogout", "Account", new { id = ViewBag.Id }, new { @class = "navbar-brand", @style = "float: right;padding-right: 0;" })*@
         </div>
     </div>
     <div class="container body-content">
@@ -97,6 +98,20 @@
                 lstArr.push(strArr[i]);
             return lstArr;
         }
+
+        function setMenuValue() {
+            if (window.location.href.includes("Vendors")) {
+                $("#a-logout").attr("href", "/Account/VendorLogout/" + $("#hdnId").val());
+                $("#a-customers").hide();
+            } else {
+                $("#a-logout").attr("href", "/Account/CustomerLogout/" + $("#hdnId").val());
+                $("#a-vendors").hide();
+            }
+        }
+
+        $(function () {
+            setMenuValue();
+        });
     </script>
     <script src="~/Content/AdminLTE/datatables/jquery.dataTables.min.js"></script>
     <script src="~/Content/AdminLTE/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

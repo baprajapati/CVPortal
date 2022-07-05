@@ -1,0 +1,266 @@
+﻿@model CVPortal.ViewModels.CustomerStep2
+
+@{
+    ViewBag.Title = "Customer Form";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".back-button-1").click(function () {
+                window.location.href = "/Customers/CustomerStep1/" + $("#Id").val();
+            });
+
+            $(".back-button-2").click(function () {
+                window.location.href = "/Customers/CustomerStep2/" + $("#Id").val();
+            });
+
+            $('#CINFile').change(function (e) {
+                var file = e.target.files[0];
+
+                if (file.type != "application/pdf") {
+                    $("#CINFile").val("");
+                    alert("Only PDF file allowed.");
+                }
+
+                if (file.size > 5242880) {
+                    $("#CINFile").val("");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded CIN file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
+                } else {
+                    $("#CINFileName").val(file.name);
+                }
+            });
+
+            $('#PANFile').change(function (e) {
+                var file = e.target.files[0];
+
+                if (file.type != "application/pdf") {
+                    $("#PANFile").val("");
+                    alert("Only PDF file allowed.");
+                }
+
+                if (file.size > 5242880) {
+                    $("#PANFile").val("");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded PAN file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
+                } else {
+                    $("#PANFileName").val(file.name);
+                }
+            });
+
+            $('#GSTFile').change(function (e) {
+                var file = e.target.files[0];
+
+                if (file.type != "application/pdf") {
+                    $("#GSTFile").val("");
+                    alert("Only PDF file allowed.");
+                }
+
+                if (file.size > 5242880) {
+                    $("#GSTFile").val("");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded GST file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
+                } else {
+                    $("#GSTFileName").val(file.name);
+                }
+            });
+        });
+    </script>
+}
+
+<div class="jumbotron" style="padding-top:10px !important;">
+    @using (Html.BeginForm("CustomerStep2", "Customers", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.IsMain)
+
+    <div>
+        <h3 class="form-signin-heading text-center">Domestic Customer Registration Form</h3>
+        <label>General Instructions</label>
+        <ol>
+            <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
+            <li>All fields are mandatory. Tick in appropriate box.</li>
+        </ol>
+        <br />
+        <div class="row row-margin text-center main-step-bg-color">
+            <div class="col-md-3 steps steps-active back-button-1">
+                <label>Step 1</label>
+            </div>
+            <div class="col-md-3 steps steps-active back-button-2">
+                <label>Step 2</label>
+            </div>
+            <div class="col-md-3 steps">
+                <label>Step 3</label>
+            </div>
+            <div class="col-md-3 steps">
+                <label>Step 4</label>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-offset-3 col-md-4 text-center">
+                <label>Accounts Contact</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>7.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>Designation</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.AC_contact_Desig, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.AC_contact_Desig)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-offset-2 col-md-10">
+                    <span>Contact Name</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.AC_contact_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.AC_contact_name)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-offset-2 col-md-10">
+                    <span>Contact Phone No</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.AC_contact_Phno, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.AC_contact_Phno)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-offset-2 col-md-10">
+                    <span>Contact Mobile No</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.AC_contact_Mob, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.AC_contact_Mob)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-offset-2 col-md-10">
+                    <span>Email Address</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.AC_contact_Email, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.AC_contact_Email)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>8.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>CIN No/LLP No</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.CINNo_LLPNo, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+            </div>
+            <div class="col-md-5">
+                @Html.HiddenFor(model => model.CINFileName)
+                @Html.TextBoxFor(model => model.CINFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.CINFileName)
+                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.CINFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.CINFileName) ? "hidden" : "")">
+                    View File
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-1 col-md-11" style="padding-left: 0; margin-left: 6.5%;">
+                <span>(If Applicable, Please attach Copy)</span>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>9.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>PAN No</span><span class="color-red"> * </span><br />
+                    <span>(Please attach Copy)</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.PAN_No, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.PAN_No)
+            </div>
+            <div class="col-md-5">
+                @Html.HiddenFor(model => model.PANFileName)
+                @Html.TextBoxFor(model => model.PANFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.PANFileName)
+                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.PANFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.PANFileName) ? "hidden" : "")">
+                    View File
+                </a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>10.</span>
+                </div>
+                <div class="col-md-10" style="padding-right:0;">
+                    <span>Type of Customer Under GST</span><span class="color-red"> * </span><br />
+                    <span>(tick  as applicable)</span>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @Html.RadioButtonFor(model => model.Type_Cust_gst, "1", Model.IsMain ? (object)new { @id = "customerType1" } : new { @id = "customerType1", disabled = "disabled" })
+                <label for="customerType1" style="font-weight: 500; margin-right: 30px;">Registered</label>
+                @Html.RadioButtonFor(model => model.Type_Cust_gst, "2", Model.IsMain ? (object)new { @id = "customerType2" } : new { @id = "customerType2", disabled = "disabled" })
+                <label for="customerType2" style="font-weight: 500; margin-right: 30px;">Unregistered</label>
+                @Html.RadioButtonFor(model => model.Type_Cust_gst, "3", Model.IsMain ? (object)new { @id = "customerType3" } : new { @id = "customerType3", disabled = "disabled" })
+                <label for="customerType3" style="font-weight: 500;">Composite</label><br />
+                @Html.ValidationMessageFor(model => model.Type_Cust_gst)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>11.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>GST Reg No</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.GST_Reg_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.GST_Reg_no)
+            </div>
+            <div class="col-md-5">
+                @Html.HiddenFor(model => model.GSTFileName)
+                @Html.TextBoxFor(model => model.GSTFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.GSTFileName)
+                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.GSTFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.GSTFileName) ? "hidden" : "")">
+                    View File
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-1 col-md-11" style="padding-left: 0; margin-left: 6.5%;">
+                <span>(If Applicable)-(Please attach Copy)</span>
+            </div>
+        </div>
+        <br /><br />
+        <input type="button" value="Back" class="btn btn-primary pull-left back-button-1" />
+        <input type="submit" value="Next" class="btn btn-success pull-right" />
+    </div>
+    }
+</div>

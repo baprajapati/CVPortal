@@ -1,0 +1,134 @@
+﻿@model CVPortal.ViewModels.VendorCustomerLoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutOuter.cshtml";
+}
+
+@section scripts{
+    <script>
+        jQuery(document).ready(function () {
+            $(".js-send-otp-form").submit(function (e) {
+                e.preventDefault();
+
+                if (!$(".js-send-otp-form").valid())
+                    return;
+
+                $(".js-otp-lable").html("Loading...");
+
+                $.ajax({
+                    url: '@Url.Action("SendOTPCustomer", new { area = "", controller = "Account" })',
+                    type: "POST",
+                    data: JSON.stringify({
+                        id: $("#Id").val(),
+                        email: $("#txtEmail").val()
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        $(".js-otp-lable").html("Send OTP");
+
+                        if (response.status) {
+                            toastr.success("OTP sent successfully, please check your email inbox.", "Login");
+                            $(".js-otp").removeClass("hide");
+                            $(".js-send-otp").addClass("hide");
+                            $("#txtEmail").attr("disabled", "disabled");
+                        } else {
+                            toastr.error(response.result, "Login");
+                        }
+                    },
+                    error: function (response) {
+                        toastr.error(response.responseText, "Login");
+                    }
+                });
+            });
+
+            $(".js-submit-otp-form").submit(function (e) {
+                e.preventDefault();
+
+                if (!$(".js-submit-otp-form").valid())
+                    return;
+
+                $(".js-submit-otp").html("Loading...");
+
+                $.ajax({
+                    url: '@Url.Action("CustomerLogin", new { area = "", controller = "Account" })',
+                    type: "POST",
+                    data: JSON.stringify({
+                        id: $("#Id").val(),
+                        email: $("#txtEmail").val(),
+                        otp: $("#OTP").val()
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        $(".js-submit-otp").html("Submit");
+
+                        if (response.status) {
+                            window.location.href = "../../Customers/" + response.result + "/" + $("#Id").val();
+                        } else {
+                            $(".js-otp-error").removeClass("hide");
+                        }
+                    },
+                    error: function (response) {
+                        toastr.error(response.responseText, "Login");
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<div id="app">
+    <main>
+        <div class="section body-container landing-page-container">
+            <div class="">
+                <div class="row v-middle">
+                    <div class="twelve columns left text-center">
+                        <img src="~/Content/Login/Suzuki-Logo.jpg" alt="Suzuki&#39;s signup landing page" class="top-img">
+                        <h3 style="position: relative; top: -30px; margin: 0; font-weight: bold;">Vendor & Customer Portal</h3>
+                    </div>
+                </div>
+                <div class="row v-middle">
+                    <div class="eight columns left" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+                        <img src="~/Content/Login/suzuki-bike.png" alt="Suzuki&#39;s signup landing page" class="left-img">
+                    </div>
+                    <div class="four columns right" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;margin:1%;">
+                        <div class="phone-no-container" style="margin: 14%;">
+                            <h1 class="text-black landing-head"> Signin now </h1>
+                            <form class="md js-send-otp-form" style="margin:0;">
+                                @Html.ValidationSummary(true, null, new { @class = "error" })
+                                @Html.HiddenFor(model => model.Id)
+                                @Html.HiddenFor(model => model.Email)
+
+                                <div data-v-24b04a24="" class="signup-mobile-input su-input-group su-static-label" data-v-69ce196a="">
+                                    <label data-v-24b04a24="" class="su-input-label su-visible">Email / UserId</label>
+                                    @Html.TextBoxFor(m => m.Email, new { @id = "txtEmail", @class = "su-spinner", autocorrect = "off", placeholder = "", autofocus = "autofocus" })
+                                    <div>
+                                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "error" })
+                                    </div>
+                                </div>
+                                <button data-v-26dfdbb3="" type="submit" class="button button-blue js-send-otp" data-v-69ce196a="">
+                                    <span class="js-otp-lable">Send OTP</span>
+                                </button>
+                            </form>
+                            <form class="md js-submit-otp-form">
+                                <div data-v-24b04a24="" class="signup-mobile-input su-input-group su-static-label js-otp hide" data-v-69ce196a="">
+                                    <label data-v-24b04a24="" class="su-input-label su-visible">OTP</label>
+                                    @Html.TextBoxFor(m => m.OTP, new { @class = "su-spinner", autocorrect = "off", placeholder = "" })
+                                    <div>
+                                        @Html.ValidationMessageFor(m => m.OTP, "", new { @class = "error" })
+                                        <span class="js-otp-error error hide">Incorrect OTP</span>
+                                    </div>
+                                </div>
+                                <button data-v-26dfdbb3="" type="submit" class="button button-blue signup-mobile-submit js-submit-otp js-otp hide" data-v-69ce196a="">
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!---->
+</div>

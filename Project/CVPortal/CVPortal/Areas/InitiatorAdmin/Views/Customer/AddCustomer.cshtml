@@ -1,0 +1,56 @@
+﻿@model CVPortal.ViewModels.CustomerViewModel
+@{
+    ViewBag.Title = "Add Customer";
+    Layout = "~/Areas/InitiatorAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Add Customer</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("CustomerIndex","Customer")">Customers</a></li>
+                        <li class="breadcrumb-item active">Add Customer</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="Email">Email</label>
+                                    @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control", placeholder = "Email" })
+                                    @Html.ValidationMessageFor(model => model.Email, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="CustomerName">Customer Name</label>
+                                    @Html.TextBoxFor(model => model.Cust_name, new { id = "txtCustomerName", @class = "form-control", placeholder = "Customer Name" })
+                                    @Html.ValidationMessageFor(model => model.Cust_name, "")
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <a href="@Url.Action("CustomerIndex","Customer")" class="btn btn-default">Cancel</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

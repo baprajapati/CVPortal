@@ -25,7 +25,7 @@ namespace CVPortal.Controllers
                 return RedirectToAction("../Account/Login/");
 
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
 
             var model = new VendorStep1();
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
@@ -58,7 +58,7 @@ namespace CVPortal.Controllers
             }
             else
             {
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
             }
 
             ViewBag.Id = id;
@@ -71,7 +71,7 @@ namespace CVPortal.Controllers
                 return RedirectToAction("../Account/Login/");
 
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
 
             var model = new VendorStep2();
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
@@ -135,7 +135,7 @@ namespace CVPortal.Controllers
             }
             else
             {
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
             }
 
             ViewBag.Id = id;
@@ -148,7 +148,7 @@ namespace CVPortal.Controllers
                 return RedirectToAction("../Account/Login/");
 
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
 
             var model = new VendorStep3();
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
@@ -178,7 +178,7 @@ namespace CVPortal.Controllers
             }
             else
             {
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
             }
 
             ViewBag.Id = id;
@@ -191,7 +191,7 @@ namespace CVPortal.Controllers
                 return RedirectToAction("../Account/Login/");
 
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
 
             var model = new VendorStep4();
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
@@ -283,7 +283,7 @@ namespace CVPortal.Controllers
             }
             else
             {
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
             }
 
             ViewBag.Id = id;
@@ -399,7 +399,7 @@ namespace CVPortal.Controllers
                 return RedirectToAction("../Account/Login/");
 
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
 
             ViewBag.Id = id;
             return View();
@@ -411,7 +411,7 @@ namespace CVPortal.Controllers
                 return RedirectToAction("../Account/Login/");
 
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
-                return RedirectToAction("../Account/VendorCustomerLogin/" + id);
+                return RedirectToAction("../Account/VendorLogin/" + id);
 
             ViewBag.Id = id;
             return View();
@@ -867,7 +867,7 @@ namespace CVPortal.Controllers
                         string subject = "Your OTP details";
 
                         var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                        string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.Id}");
+                        string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.Id}");
                         body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                         body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -894,7 +894,7 @@ namespace CVPortal.Controllers
                 string subject = "Your OTP details";
 
                 var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.Id}");
+                string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.Id}");
                 body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                 body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -974,7 +974,7 @@ namespace CVPortal.Controllers
                             string subject = "Vendor approval details";
 
                             var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.VendorId}");
                             body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                             body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -993,7 +993,7 @@ namespace CVPortal.Controllers
                             string subject = "Vendor approval details";
 
                             var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.VendorId}");
                             body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                             body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -1020,7 +1020,7 @@ namespace CVPortal.Controllers
                             string subject = "Vendor approval details";
 
                             var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
-                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
+                            string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.VendorId}");
                             body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                             body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -1036,7 +1036,7 @@ namespace CVPortal.Controllers
                     string subject1 = "Vendor approval details";
 
                     var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproved.html"));
-                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{model.VendorId}");
+                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.VendorId}");
                     body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                     body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
@@ -1113,7 +1113,7 @@ namespace CVPortal.Controllers
                     string subject1 = "Vendor approval details";
 
                     var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorRejected.html"));
-                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{id}");
+                    string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{id}");
                     body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                     body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 

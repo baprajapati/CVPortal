@@ -15,6 +15,87 @@
           <Property Name="Status" Type="bit" />
           <Property Name="Create_On" Type="datetime" />
         </EntityType>
+        <EntityType Name="Cust_reg_tbl">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cust_CodeVehicles" Type="numeric" Precision="8" Scale="0" />
+          <Property Name="Cust_CodeSpares" Type="numeric" Precision="8" Scale="0" />
+          <Property Name="Cust_CodeSecurity" Type="numeric" Precision="8" Scale="0" />
+          <Property Name="Org_Sts" Type="nvarchar" MaxLength="1" Nullable="false" />
+          <Property Name="Cust_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CEO_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="CEO_Designation" Type="nvarchar" MaxLength="30" />
+          <Property Name="CEO_Contact_no" Type="nvarchar" MaxLength="25" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dlr_Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dlr_Add_Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dlr_Add_State" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dlr_Add_City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dlr_Add_Pincode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Supp_Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Supp_Add_Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Supp_Add_State" Type="nvarchar" MaxLength="50" />
+          <Property Name="Supp_Add_City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Supp_Add_Pincode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Contact_no" Type="nvarchar" MaxLength="25" />
+          <Property Name="AC_contact_Desig" Type="nvarchar" MaxLength="30" />
+          <Property Name="AC_contact_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="AC_contact_Phno" Type="nvarchar" MaxLength="15" />
+          <Property Name="AC_contact_Mob" Type="nvarchar" MaxLength="15" />
+          <Property Name="AC_contact_Email" Type="nvarchar" MaxLength="30" />
+          <Property Name="CINNo_LLPNo" Type="nvarchar" MaxLength="21" />
+          <Property Name="PAN_No" Type="nvarchar" MaxLength="30" />
+          <Property Name="Type_Cust_gst" Type="nvarchar" MaxLength="1" />
+          <Property Name="GST_Reg_no" Type="nvarchar" MaxLength="30" />
+          <Property Name="Seucirty_Deposit" Type="numeric" Precision="15" Scale="0" />
+          <Property Name="DDNo_UTRNo" Type="nvarchar" MaxLength="16" />
+          <Property Name="Benificiary_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Bank_name" Type="nvarchar" MaxLength="30" />
+          <Property Name="Branch_name_Add" Type="nvarchar" MaxLength="25" />
+          <Property Name="Account_no" Type="nvarchar" MaxLength="25" />
+          <Property Name="MICR_code" Type="numeric" Precision="9" Scale="0" />
+          <Property Name="IFSC_RTGS_code" Type="nvarchar" MaxLength="11" />
+          <Property Name="Swift_Code" Type="nvarchar" MaxLength="11" />
+          <Property Name="ITR_ReturnSts" Type="nvarchar" MaxLength="10" />
+          <Property Name="ITR_ReturnStsTurnover" Type="bit" />
+          <Property Name="ITR_ReturnTDSDeduct" Type="bit" />
+          <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
+          <Property Name="OTP" Type="nvarchar" MaxLength="20" />
+          <Property Name="CustomerCode" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Step1" Type="bit" />
+          <Property Name="Step2" Type="bit" />
+          <Property Name="Step3" Type="bit" />
+          <Property Name="Step4" Type="bit" />
+          <Property Name="IsFinalApproved" Type="bit" Nullable="false" />
+          <Property Name="CreatedById" Type="int" Nullable="false" />
+          <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerApproval">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="ApproverRole" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar(max)" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="CreatedById" Type="int" Nullable="false" />
+          <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="FileUploadType" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ContentType" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Data" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="ExceptionLog">
           <Key>
             <PropertyRef Name="id" />
@@ -317,6 +398,54 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="RoleId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Cust_reg_tbl_tbl_Users">
+          <End Role="tbl_Users" Type="Self.tbl_Users" Multiplicity="1" />
+          <End Role="Cust_reg_tbl" Type="Self.Cust_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cust_reg_tbl">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerApproval_Cust_reg_tbl">
+          <End Role="Cust_reg_tbl" Type="Self.Cust_reg_tbl" Multiplicity="1" />
+          <End Role="CustomerApproval" Type="Self.CustomerApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cust_reg_tbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerApproval">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerApproval_tbl_Users">
+          <End Role="tbl_Users" Type="Self.tbl_Users" Multiplicity="1" />
+          <End Role="CustomerApproval" Type="Self.CustomerApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CustomerApproval">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerFiles_Cust_reg_tbl">
+          <End Role="Cust_reg_tbl" Type="Self.Cust_reg_tbl" Multiplicity="1" />
+          <End Role="CustomerFiles" Type="Self.CustomerFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cust_reg_tbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerFiles">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_RoleId">
           <End Role="webpages_Roles" Type="Self.webpages_Roles" Multiplicity="1" />
           <End Role="webpages_UsersInRoles" Type="Self.webpages_UsersInRoles" Multiplicity="*" />
@@ -439,6 +568,9 @@
         </Association>
         <EntityContainer Name="CVPortalModelStoreContainer">
           <EntitySet Name="CurrencyCodeMaster" EntityType="Self.CurrencyCodeMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cust_reg_tbl" EntityType="Self.Cust_reg_tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerApproval" EntityType="Self.CustomerApproval" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerFiles" EntityType="Self.CustomerFiles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExceptionLog" EntityType="Self.ExceptionLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GSTType_Master" EntityType="Self.GSTType_Master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginLogs" EntityType="Self.LoginLogs" Schema="dbo" store:Type="Tables" />
@@ -459,6 +591,22 @@
           <EntitySet Name="webpages_OAuthMembership" EntityType="Self.webpages_OAuthMembership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_UsersInRoles" EntityType="Self.webpages_UsersInRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cust_reg_tbl_tbl_Users" Association="Self.FK_Cust_reg_tbl_tbl_Users">
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+            <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerApproval_Cust_reg_tbl" Association="Self.FK_CustomerApproval_Cust_reg_tbl">
+            <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
+            <End Role="CustomerApproval" EntitySet="CustomerApproval" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerApproval_tbl_Users" Association="Self.FK_CustomerApproval_tbl_Users">
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+            <End Role="CustomerApproval" EntitySet="CustomerApproval" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerFiles_Cust_reg_tbl" Association="Self.FK_CustomerFiles_Cust_reg_tbl">
+            <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
+            <End Role="CustomerFiles" EntitySet="CustomerFiles" />
+          </AssociationSet>
           <AssociationSet Name="fk_RoleId" Association="Self.fk_RoleId">
             <End Role="webpages_Roles" EntitySet="webpages_Roles" />
             <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
@@ -506,6 +654,9 @@
       <Schema Namespace="CVPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="CVPortalEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CurrencyCodeMasters" EntityType="CVPortalModel.CurrencyCodeMaster" />
+          <EntitySet Name="Cust_reg_tbl" EntityType="CVPortalModel.Cust_reg_tbl" />
+          <EntitySet Name="CustomerApprovals" EntityType="CVPortalModel.CustomerApproval" />
+          <EntitySet Name="CustomerFiles" EntityType="CVPortalModel.CustomerFile" />
           <EntitySet Name="ExceptionLogs" EntityType="CVPortalModel.ExceptionLog" />
           <EntitySet Name="GSTType_Master" EntityType="CVPortalModel.GSTType_Master" />
           <EntitySet Name="LoginLogs" EntityType="CVPortalModel.LoginLog" />
@@ -525,6 +676,22 @@
           <EntitySet Name="webpages_Membership" EntityType="CVPortalModel.webpages_Membership" />
           <EntitySet Name="webpages_OAuthMembership" EntityType="CVPortalModel.webpages_OAuthMembership" />
           <EntitySet Name="webpages_Roles" EntityType="CVPortalModel.webpages_Roles" />
+          <AssociationSet Name="FK_Cust_reg_tbl_tbl_Users" Association="CVPortalModel.FK_Cust_reg_tbl_tbl_Users">
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+            <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerApproval_Cust_reg_tbl" Association="CVPortalModel.FK_CustomerApproval_Cust_reg_tbl">
+            <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
+            <End Role="CustomerApproval" EntitySet="CustomerApprovals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerFiles_Cust_reg_tbl" Association="CVPortalModel.FK_CustomerFiles_Cust_reg_tbl">
+            <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
+            <End Role="CustomerFile" EntitySet="CustomerFiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerApproval_tbl_Users" Association="CVPortalModel.FK_CustomerApproval_tbl_Users">
+            <End Role="tbl_Users" EntitySet="tbl_Users" />
+            <End Role="CustomerApproval" EntitySet="CustomerApprovals" />
+          </AssociationSet>
           <AssociationSet Name="FK_VendorApproval_LX_TaxCode" Association="CVPortalModel.FK_VendorApproval_LX_TaxCode">
             <End Role="LX_TaxCode" EntitySet="LX_TaxCode" />
             <End Role="VendorApproval" EntitySet="VendorApprovals" />
@@ -571,6 +738,93 @@
           <Property Name="Crncy_Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="Create_On" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Cust_reg_tbl">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cust_CodeVehicles" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="Cust_CodeSpares" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="Cust_CodeSecurity" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="Org_Sts" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Cust_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CEO_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CEO_Designation" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CEO_Contact_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dlr_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dlr_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dlr_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dlr_Add_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dlr_Add_Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Supp_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Supp_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Supp_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Supp_Add_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Supp_Add_Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Contact_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Desig" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Phno" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Mob" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="AC_contact_Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CINNo_LLPNo" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
+          <Property Name="PAN_No" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Type_Cust_gst" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="GST_Reg_no" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Seucirty_Deposit" Type="Decimal" Precision="15" Scale="0" />
+          <Property Name="DDNo_UTRNo" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Benificiary_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Bank_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Branch_name_Add" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Account_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="MICR_code" Type="Decimal" Precision="9" Scale="0" />
+          <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="Swift_Code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="ITR_ReturnSts" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ITR_ReturnStsTurnover" Type="Boolean" />
+          <Property Name="ITR_ReturnTDSDeduct" Type="Boolean" />
+          <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCode" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Step1" Type="Boolean" />
+          <Property Name="Step2" Type="Boolean" />
+          <Property Name="Step3" Type="Boolean" />
+          <Property Name="Step4" Type="Boolean" />
+          <Property Name="IsFinalApproved" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedById" Type="Int32" Nullable="false" />
+          <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_Cust_reg_tbl_tbl_Users" FromRole="Cust_reg_tbl" ToRole="tbl_Users" />
+          <NavigationProperty Name="CustomerApprovals" Relationship="CVPortalModel.FK_CustomerApproval_Cust_reg_tbl" FromRole="Cust_reg_tbl" ToRole="CustomerApproval" />
+          <NavigationProperty Name="CustomerFiles" Relationship="CVPortalModel.FK_CustomerFiles_Cust_reg_tbl" FromRole="Cust_reg_tbl" ToRole="CustomerFile" />
+        </EntityType>
+        <EntityType Name="CustomerApproval">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="ApproverRole" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedById" Type="Int32" Nullable="false" />
+          <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Cust_reg_tbl" Relationship="CVPortalModel.FK_CustomerApproval_Cust_reg_tbl" FromRole="CustomerApproval" ToRole="Cust_reg_tbl" />
+          <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_CustomerApproval_tbl_Users" FromRole="CustomerApproval" ToRole="tbl_Users" />
+        </EntityType>
+        <EntityType Name="CustomerFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="FileUploadType" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Data" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Cust_reg_tbl" Relationship="CVPortalModel.FK_CustomerFiles_Cust_reg_tbl" FromRole="CustomerFile" ToRole="Cust_reg_tbl" />
         </EntityType>
         <EntityType Name="ExceptionLog">
           <Key>
@@ -727,6 +981,8 @@
           <Property Name="Amount" Type="Decimal" Precision="15" Scale="5" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cust_reg_tbl" Relationship="CVPortalModel.FK_Cust_reg_tbl_tbl_Users" FromRole="tbl_Users" ToRole="Cust_reg_tbl" />
+          <NavigationProperty Name="CustomerApprovals" Relationship="CVPortalModel.FK_CustomerApproval_tbl_Users" FromRole="tbl_Users" ToRole="CustomerApproval" />
           <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" FromRole="tbl_Users" ToRole="Vend_reg_tbl" />
           <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_tbl_Users" FromRole="tbl_Users" ToRole="VendorApproval" />
           <NavigationProperty Name="webpages_Roles" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="tbl_Users" ToRole="webpages_Roles" />
@@ -884,6 +1140,54 @@
           <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="tbl_Users" />
         </EntityType>
+        <Association Name="FK_Cust_reg_tbl_tbl_Users">
+          <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="1" />
+          <End Type="CVPortalModel.Cust_reg_tbl" Role="Cust_reg_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cust_reg_tbl">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerApproval_Cust_reg_tbl">
+          <End Type="CVPortalModel.Cust_reg_tbl" Role="Cust_reg_tbl" Multiplicity="1" />
+          <End Type="CVPortalModel.CustomerApproval" Role="CustomerApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cust_reg_tbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerApproval">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerFiles_Cust_reg_tbl">
+          <End Type="CVPortalModel.Cust_reg_tbl" Role="Cust_reg_tbl" Multiplicity="1" />
+          <End Type="CVPortalModel.CustomerFile" Role="CustomerFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cust_reg_tbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerFile">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerApproval_tbl_Users">
+          <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="1" />
+          <End Type="CVPortalModel.CustomerApproval" Role="CustomerApproval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CustomerApproval">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_VendorApproval_LX_TaxCode">
           <End Type="CVPortalModel.LX_TaxCode" Role="LX_TaxCode" Multiplicity="0..1" />
           <End Type="CVPortalModel.VendorApproval" Role="VendorApproval" Multiplicity="*" />
@@ -998,6 +1302,90 @@
                 <ScalarProperty Name="Crncy_Description" ColumnName="Crncy_Description" />
                 <ScalarProperty Name="Crncy_Code" ColumnName="Crncy_Code" />
                 <ScalarProperty Name="Crncy_ID" ColumnName="Crncy_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cust_reg_tbl">
+            <EntityTypeMapping TypeName="CVPortalModel.Cust_reg_tbl">
+              <MappingFragment StoreEntitySet="Cust_reg_tbl">
+                <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="IsFinalApproved" ColumnName="IsFinalApproved" />
+                <ScalarProperty Name="Step4" ColumnName="Step4" />
+                <ScalarProperty Name="Step3" ColumnName="Step3" />
+                <ScalarProperty Name="Step2" ColumnName="Step2" />
+                <ScalarProperty Name="Step1" ColumnName="Step1" />
+                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ITR_ReturnTDSDeduct" ColumnName="ITR_ReturnTDSDeduct" />
+                <ScalarProperty Name="ITR_ReturnStsTurnover" ColumnName="ITR_ReturnStsTurnover" />
+                <ScalarProperty Name="ITR_ReturnSts" ColumnName="ITR_ReturnSts" />
+                <ScalarProperty Name="Swift_Code" ColumnName="Swift_Code" />
+                <ScalarProperty Name="IFSC_RTGS_code" ColumnName="IFSC_RTGS_code" />
+                <ScalarProperty Name="MICR_code" ColumnName="MICR_code" />
+                <ScalarProperty Name="Account_no" ColumnName="Account_no" />
+                <ScalarProperty Name="Branch_name_Add" ColumnName="Branch_name_Add" />
+                <ScalarProperty Name="Bank_name" ColumnName="Bank_name" />
+                <ScalarProperty Name="Benificiary_name" ColumnName="Benificiary_name" />
+                <ScalarProperty Name="DDNo_UTRNo" ColumnName="DDNo_UTRNo" />
+                <ScalarProperty Name="Seucirty_Deposit" ColumnName="Seucirty_Deposit" />
+                <ScalarProperty Name="GST_Reg_no" ColumnName="GST_Reg_no" />
+                <ScalarProperty Name="Type_Cust_gst" ColumnName="Type_Cust_gst" />
+                <ScalarProperty Name="PAN_No" ColumnName="PAN_No" />
+                <ScalarProperty Name="CINNo_LLPNo" ColumnName="CINNo_LLPNo" />
+                <ScalarProperty Name="AC_contact_Email" ColumnName="AC_contact_Email" />
+                <ScalarProperty Name="AC_contact_Mob" ColumnName="AC_contact_Mob" />
+                <ScalarProperty Name="AC_contact_Phno" ColumnName="AC_contact_Phno" />
+                <ScalarProperty Name="AC_contact_name" ColumnName="AC_contact_name" />
+                <ScalarProperty Name="AC_contact_Desig" ColumnName="AC_contact_Desig" />
+                <ScalarProperty Name="Contact_no" ColumnName="Contact_no" />
+                <ScalarProperty Name="Supp_Add_Pincode" ColumnName="Supp_Add_Pincode" />
+                <ScalarProperty Name="Supp_Add_City" ColumnName="Supp_Add_City" />
+                <ScalarProperty Name="Supp_Add_State" ColumnName="Supp_Add_State" />
+                <ScalarProperty Name="Supp_Add_Country" ColumnName="Supp_Add_Country" />
+                <ScalarProperty Name="Supp_Address" ColumnName="Supp_Address" />
+                <ScalarProperty Name="Dlr_Add_Pincode" ColumnName="Dlr_Add_Pincode" />
+                <ScalarProperty Name="Dlr_Add_City" ColumnName="Dlr_Add_City" />
+                <ScalarProperty Name="Dlr_Add_State" ColumnName="Dlr_Add_State" />
+                <ScalarProperty Name="Dlr_Add_Country" ColumnName="Dlr_Add_Country" />
+                <ScalarProperty Name="Dlr_Address" ColumnName="Dlr_Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CEO_Contact_no" ColumnName="CEO_Contact_no" />
+                <ScalarProperty Name="CEO_Designation" ColumnName="CEO_Designation" />
+                <ScalarProperty Name="CEO_name" ColumnName="CEO_name" />
+                <ScalarProperty Name="Cust_name" ColumnName="Cust_name" />
+                <ScalarProperty Name="Org_Sts" ColumnName="Org_Sts" />
+                <ScalarProperty Name="Cust_CodeSecurity" ColumnName="Cust_CodeSecurity" />
+                <ScalarProperty Name="Cust_CodeSpares" ColumnName="Cust_CodeSpares" />
+                <ScalarProperty Name="Cust_CodeVehicles" ColumnName="Cust_CodeVehicles" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerApprovals">
+            <EntityTypeMapping TypeName="CVPortalModel.CustomerApproval">
+              <MappingFragment StoreEntitySet="CustomerApproval">
+                <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ApproverRole" ColumnName="ApproverRole" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerFiles">
+            <EntityTypeMapping TypeName="CVPortalModel.CustomerFile">
+              <MappingFragment StoreEntitySet="CustomerFiles">
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FileUploadType" ColumnName="FileUploadType" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -152,7 +152,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     dataContext.Vend_reg_tbl.Add(data);
                     dataContext.SaveChanges();
 
-                    var oldVendorId = dataContext.Vend_reg_tbl.Where(x => x.VendorCode == vendor.VendorCode && x.IsFinalApproved).OrderByDescending(x => x.CreatedByDate).FirstOrDefault().ID;
+                    var oldVendorId = dataContext.Vend_reg_tbl.Where(x => x.VendorCode == vendor.VendorCode && x.IsFinalApproved).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.ID;
                     var objVendorFiles = new List<VendorFile>();
                     var vendorFiles = dataContext.VendorFiles.Where(x => x.VendorId == oldVendorId).ToList();
 
@@ -187,7 +187,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     string subject = "Your vendor form details";
 
                     var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorRequest.html"));
-                    string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorCustomerLogin/{newVendorId}");
+                    string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{newVendorId}");
                     body = body.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                     body = body.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 

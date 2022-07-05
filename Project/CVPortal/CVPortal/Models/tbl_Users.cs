@@ -17,6 +17,8 @@ namespace CVPortal.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tbl_Users()
         {
+            this.Cust_reg_tbl = new HashSet<Cust_reg_tbl>();
+            this.CustomerApprovals = new HashSet<CustomerApproval>();
             this.Vend_reg_tbl = new HashSet<Vend_reg_tbl>();
             this.VendorApprovals = new HashSet<VendorApproval>();
             this.webpages_Roles = new HashSet<webpages_Roles>();
@@ -35,6 +37,10 @@ namespace CVPortal.Models
         public string OTP { get; set; }
         public bool IsActive { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cust_reg_tbl> Cust_reg_tbl { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomerApproval> CustomerApprovals { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vend_reg_tbl> Vend_reg_tbl { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
