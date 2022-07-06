@@ -267,6 +267,8 @@ namespace CVPortal.Controllers
 
                     string[] userRoles = Roles.GetRolesForUser(model.Email);
 
+                    Session["Role"] = userRoles.FirstOrDefault()?.ToString();
+
                     if (userRoles.Contains("Admin"))
                     {
                         return RedirectToAction("../Admin/User/UserIndex");

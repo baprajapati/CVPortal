@@ -40,13 +40,8 @@ namespace CVPortal.ViewModels
 
         [Required(ErrorMessage = "Please select type of customer under GST")]
         public string Type_Cust_gst { get; set; }
-
-        [Required(ErrorMessage = "Please enter GST reg no")]
         public string GST_Reg_no { get; set; }
-
         public HttpPostedFileBase GSTFile { get; set; }
-
-        [Required(ErrorMessage = "Please upload GST file")]
         public string GSTFileName { get; set; }
 
         public bool IsMain { get; set; }

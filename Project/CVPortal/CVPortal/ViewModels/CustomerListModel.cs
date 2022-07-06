@@ -20,5 +20,6 @@ namespace CVPortal.ViewModels
         public string LegalDepartment { get; set; }
         public string FinanceDepartment { get; set; }
         public string ITDepartment { get; set; }
+        public bool Step4 { get; set; }
     }
 }

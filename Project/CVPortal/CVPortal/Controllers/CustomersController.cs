@@ -352,6 +352,18 @@ namespace CVPortal.Controllers
                         return View(model);
                     }
 
+                    if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
+                    {
+                        ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
+                        return View(model);
+                    }
+
+                    if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
+                    {
+                        ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
+                        return View(model);
+                    }
+
                     var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (customer != null)
                     {

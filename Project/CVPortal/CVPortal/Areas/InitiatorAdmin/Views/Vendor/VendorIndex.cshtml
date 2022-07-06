@@ -99,7 +99,13 @@
                         {
                             "class": "text-center",
                             "render": function (data, type, row, meta) {
-                                return "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printVendor'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>";
+                                return "<a href='/Vendors/VendorStep1/" + row.Id + "' title='View' target='_blank'>View</a>";
+                            }, "targets": 'no-sort', "orderable": false
+                        },
+                        {
+                            "class": "text-center",
+                            "render": function (data, type, row, meta) {
+                                return row.Step4 ? "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printVendor'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>" : "";
                             }, "targets": 'no-sort', "orderable": false
                         }
                     ]
@@ -111,6 +117,11 @@
 
             $(".search-button").click(function () {
                 users.draw();
+            });
+
+            $(".export-button").click(function () {
+                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Vendor" })' + '?vendorCode=' + $("#VendorCode").val()
+                    + "&email=" + $("#Email").val() + "&vendorName=" + $("#VendorName").val() + "&status=" + $("#Status").val();
             });
 
             $('#lstUsers').on('click', '.printVendor', function () {
@@ -128,7 +139,7 @@
 
         function printVendor(id) {
             $.ajax({
-                url: '@Url.Action("VendorPrint", new { area = "Admin", controller = "Vendor" })',
+                url: '@Url.Action("VendorPrint", new { area = "InitiatorAdmin", controller = "Vendor" })',
                 type: "POST",
                 data: JSON.stringify({ id: id }),
                 contentType: "application/json; charset=utf-8",
@@ -171,6 +182,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form_group text-right">
+                        <input type="button" value="Export" class="btn btn-primary export-button" />
                         @Html.ActionLink("Add New Vendor", "AddVendor", new { controller = "Vendor" }, new { @class = "btn btn-primary" })
                     </div>
                 </div>
@@ -236,6 +248,7 @@
                                     <th>Finance</th>
                                     <th>IT</th>
                                     <th>Status</th>
+                                    <th>View</th>
                                     <th>Print</th>
                                 </tr>
                             </thead>

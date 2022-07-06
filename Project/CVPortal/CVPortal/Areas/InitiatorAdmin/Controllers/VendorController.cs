@@ -10,6 +10,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using WebMatrix.WebData;
 
 namespace CVPortal.Areas.InitiatorAdmin.Controllers
@@ -283,6 +285,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                         Email = item.Email,
                         vend_name = item.vend_name,
                         VendorCode = item.VendorCode,
+                        Step4 = item.Step4 ?? false,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
                         Status = item.IsFinalApproved ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
@@ -348,7 +351,47 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                 var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
                 if (vendor != null)
                 {
-                    htmlContent = htmlContent.Replace("[VendorName]", vendor.vend_name);
+                    htmlContent = htmlContent.Replace("[ORG_STS]", vendor.Org_Sts == "1" ? "Private Ltd" :
+                        vendor.Org_Sts == "2" ? "Partnership/LLP" : vendor.Org_Sts == "3" ? "Proprietorship" :
+                        vendor.Org_Sts == "4" ? "Public Ltd (Listed)" : "Others");
+                    htmlContent = htmlContent.Replace("[VEND_NAME]", vendor.vend_name);
+                    htmlContent = htmlContent.Replace("[CEO_NAME]", vendor.CEO_name);
+                    htmlContent = htmlContent.Replace("[DESIGNATION]", vendor.Designation);
+                    htmlContent = htmlContent.Replace("[CONTACT_NO]", vendor.Contact_no);
+                    htmlContent = htmlContent.Replace("[EMAIL]", vendor.Email);
+                    htmlContent = htmlContent.Replace("[ADDRESS1]", $"{vendor.Address1}, {vendor.Address1Pincode} - {vendor.Address1City}, {vendor.Address1State}, {vendor.Address1Country}");
+                    htmlContent = htmlContent.Replace("[ADDRESS2]", $"{vendor.Address2}, {vendor.Address2Pincode} - {vendor.Address2City}, {vendor.Address2State}, {vendor.Address2Country}");
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_DESIG]", vendor.AC_contact_Desig);
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_NAME]", vendor.AC_contact_name);
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_PHNO]", vendor.AC_contact_Phno);
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_EMAIL]", vendor.AC_contact_Email);
+                    htmlContent = htmlContent.Replace("[SPY_CONTACT_DESIG]", vendor.Spy_contact_Desig);
+                    htmlContent = htmlContent.Replace("[SPY_CONTACT_NAME]", vendor.Spy_contact_name);
+                    htmlContent = htmlContent.Replace("[SPY_CONTACT_PHNO]", vendor.Spy_contact_Phno);
+                    htmlContent = htmlContent.Replace("[SPY_CONTACT_EMAIL]", vendor.Spy_contact_Email);
+                    htmlContent = htmlContent.Replace("[CIN_NO]", vendor.CIN_No);
+                    htmlContent = htmlContent.Replace("[PAN_NO]", vendor.PAN_No);
+                    htmlContent = htmlContent.Replace("[TYPE_VEND_GST]", vendor.Type_vend_gst == "1" ? "Registered" :
+                        vendor.Type_vend_gst == "2" ? "Unregistered" : "Composite");
+                    htmlContent = htmlContent.Replace("[GST_REG_NO]", vendor.GST_Reg_no);
+                    htmlContent = htmlContent.Replace("[ITEM_DESC]", vendor.Item_Desc);
+                    htmlContent = htmlContent.Replace("[HSN_SAC_CODE]", vendor.HSN_SAC_code);
+                    htmlContent = htmlContent.Replace("[MSME_NO]", vendor.MSME_no);
+                    htmlContent = htmlContent.Replace("[ANNU_TURNOVER]", vendor.Annu_TurnOver.ToString());
+                    htmlContent = htmlContent.Replace("[FINANCIALYEAR1]", vendor.FinancialYear1.ToString());
+                    htmlContent = htmlContent.Replace("[FINANCIALYEAR2]", vendor.FinancialYear2.ToString());
+                    htmlContent = htmlContent.Replace("[ISITRFILED1]", vendor.IsITRFiled1 ?? false ? "Yes" : "No");
+                    htmlContent = htmlContent.Replace("[ISITRFILED2]", vendor.IsITRFiled2 ?? false ? "Yes" : "No");
+                    htmlContent = htmlContent.Replace("[ACKNOWLEDGENO1]", vendor.AcknowledgeNo1);
+                    htmlContent = htmlContent.Replace("[ACKNOWLEDGENO2]", vendor.AcknowledgeNo2);
+                    htmlContent = htmlContent.Replace("[ITR_FIELD_DTL]", vendor.ITR_Field_dtl);
+                    htmlContent = htmlContent.Replace("[BENIFICIARY_NAME]", vendor.Benificiary_name);
+                    htmlContent = htmlContent.Replace("[BANK_NAME]", vendor.Bank_name);
+                    htmlContent = htmlContent.Replace("[BRANCH_NAME_ADD]", vendor.Branch_name_Add);
+                    htmlContent = htmlContent.Replace("[ACCOUNT_NO]", vendor.Account_no);
+                    htmlContent = htmlContent.Replace("[MICR_CODE]", vendor.MICR_code.ToString());
+                    htmlContent = htmlContent.Replace("[IFSC_RTGS_CODE]", vendor.IFSC_RTGS_code);
+                    htmlContent = htmlContent.Replace("[DATE]", vendor.Date.ToString());
                 }
 
                 return Json(htmlToPdf.GeneratePdf(htmlContent, null), JsonRequestBehavior.AllowGet);
@@ -357,6 +400,91 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
             {
                 return null;
             }
+        }
+
+        public ActionResult DownloadExcel(string vendorCode, string email, string vendorName, string status)
+        {
+            var data = new List<Vend_reg_tbl>();
+
+            if (!string.IsNullOrEmpty(vendorCode))
+            {
+                data = dataContext.Vend_reg_tbl.Where(x => x.VendorCode != null && x.VendorCode.ToLower().Contains(vendorCode.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                data = (!string.IsNullOrEmpty(vendorCode))
+                    ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
+                    : dataContext.Vend_reg_tbl.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(vendorName))
+            {
+                data = (!string.IsNullOrEmpty(vendorCode)) || (!string.IsNullOrEmpty(email))
+                    ? data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList()
+                    : dataContext.Vend_reg_tbl.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                if ((!string.IsNullOrEmpty(vendorCode)) || (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(vendorName)))
+                {
+                    if ("Approved".Contains(status))
+                    {
+                        data = data.Where(x => x.IsFinalApproved).ToList();
+                    }
+                    else if ("Pending".Contains(status))
+                    {
+                        data = data.Where(x => !x.IsFinalApproved).ToList();
+                    }
+                    else
+                    {
+                        data = new List<Vend_reg_tbl>();
+                    }
+                }
+                else
+                {
+                    if ("Approved".Contains(status))
+                    {
+                        data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved).ToList();
+                    }
+                    else if ("Pending".Contains(status))
+                    {
+                        data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                    }
+                    else
+                    {
+                        data = new List<Vend_reg_tbl>();
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(vendorCode) && string.IsNullOrEmpty(email)
+                && string.IsNullOrEmpty(vendorName) && string.IsNullOrEmpty(status))
+            {
+                data = dataContext.Vend_reg_tbl.ToList();
+            }
+
+            var grid = new GridView();
+            grid.DataSource = data;
+            grid.DataBind();
+
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
+            Response.ContentType = "application/ms-excel";
+
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+            grid.RenderControl(htw);
+
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return View("MyView");
         }
     }
 }

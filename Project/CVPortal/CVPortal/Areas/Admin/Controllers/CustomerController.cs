@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using WebMatrix.WebData;
 
 namespace CVPortal.Areas.Admin.Controllers
@@ -113,6 +115,7 @@ namespace CVPortal.Areas.Admin.Controllers
                         Email = item.Email,
                         Cust_name = item.Cust_name,
                         CustomerCode = item.CustomerCode,
+                        Step4 = item.Step4 ?? false,
                         Status = item.IsFinalApproved ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
                         NextApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
@@ -157,7 +160,40 @@ namespace CVPortal.Areas.Admin.Controllers
                 var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
                 if (customer != null)
                 {
-                    htmlContent = htmlContent.Replace("[CustomerName]", customer.Cust_name);
+                    htmlContent = htmlContent.Replace("[ORG_STS]", customer.Org_Sts == "1" ? "Private Ltd" :
+                                            customer.Org_Sts == "2" ? "Partnership/LLP" : customer.Org_Sts == "3" ? "Proprietorship" :
+                                            customer.Org_Sts == "4" ? "Public Ltd (Listed)" : "Others");
+                    htmlContent = htmlContent.Replace("[CUST_NAME]", customer.Cust_name);
+                    htmlContent = htmlContent.Replace("[CEO_NAME]", customer.CEO_name);
+                    htmlContent = htmlContent.Replace("[CEO_DESIGNATION]", customer.CEO_Designation);
+                    htmlContent = htmlContent.Replace("[CEO_CONTACT_NO]", customer.CEO_Contact_no);
+                    htmlContent = htmlContent.Replace("[CONTACT_NO]", customer.Contact_no);
+                    htmlContent = htmlContent.Replace("[EMAIL]", customer.Email);
+                    htmlContent = htmlContent.Replace("[ADDRESS1]", $"{customer.Dlr_Address}, {customer.Dlr_Add_Pincode} - {customer.Dlr_Add_City}, {customer.Dlr_Add_State}, {customer.Dlr_Add_Country}");
+                    htmlContent = htmlContent.Replace("[ADDRESS2]", $"{customer.Supp_Address}, {customer.Supp_Add_Pincode} - {customer.Supp_Add_City}, {customer.Supp_Add_State}, {customer.Supp_Add_Country}");
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_DESIG]", customer.AC_contact_Desig);
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_NAME]", customer.AC_contact_name);
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_PHNO]", customer.AC_contact_Phno);
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_MOB]", customer.AC_contact_Mob);
+                    htmlContent = htmlContent.Replace("[AC_CONTACT_EMAIL]", customer.AC_contact_Email);
+                    htmlContent = htmlContent.Replace("[CINNO_LLPNO]", customer.CINNo_LLPNo);
+                    htmlContent = htmlContent.Replace("[PAN_NO]", customer.PAN_No);
+                    htmlContent = htmlContent.Replace("[TYPE_CUST_GST]", customer.Type_Cust_gst == "1" ? "Registered" :
+                        customer.Type_Cust_gst == "2" ? "Unregistered" : "Composite");
+                    htmlContent = htmlContent.Replace("[GST_REG_NO]", customer.GST_Reg_no);
+                    htmlContent = htmlContent.Replace("[SEUCIRTY_DEPOSIT]", customer.Seucirty_Deposit.ToString());
+                    htmlContent = htmlContent.Replace("[DDNO_UTRNO]", customer.DDNo_UTRNo);
+                    htmlContent = htmlContent.Replace("[BENIFICIARY_NAME]", customer.Benificiary_name);
+                    htmlContent = htmlContent.Replace("[BANK_NAME]", customer.Bank_name);
+                    htmlContent = htmlContent.Replace("[BRANCH_NAME_ADD]", customer.Branch_name_Add);
+                    htmlContent = htmlContent.Replace("[ACCOUNT_NO]", customer.Account_no);
+                    htmlContent = htmlContent.Replace("[MICR_CODE]", customer.MICR_code.ToString());
+                    htmlContent = htmlContent.Replace("[IFSC_RTGS_CODE]", customer.IFSC_RTGS_code);
+                    htmlContent = htmlContent.Replace("[SWIFT_CODE]", customer.Swift_Code);
+                    htmlContent = htmlContent.Replace("[ITR_RETURNSTS]", customer.ITR_ReturnSts);
+                    htmlContent = htmlContent.Replace("[ITR_RETURNSTSTURNOVER]", customer.ITR_ReturnStsTurnover ?? false ? "Yes" : "No");
+                    htmlContent = htmlContent.Replace("[ITR_RETURNTDSDEDUCT]", customer.ITR_ReturnTDSDeduct ?? false ? "Yes" : "No");
+                    htmlContent = htmlContent.Replace("[DATE]", customer.Date.ToString());
                 }
 
                 return Json(htmlToPdf.GeneratePdf(htmlContent, null), JsonRequestBehavior.AllowGet);
@@ -166,6 +202,91 @@ namespace CVPortal.Areas.Admin.Controllers
             {
                 return null;
             }
+        }
+
+        public ActionResult DownloadExcel(string customerCode, string email, string customerName, string status)
+        {
+            var data = new List<Cust_reg_tbl>();
+
+            if (!string.IsNullOrEmpty(customerCode))
+            {
+                data = dataContext.Cust_reg_tbl.Where(x => x.CustomerCode != null && x.CustomerCode.ToLower().Contains(customerCode.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                data = (!string.IsNullOrEmpty(customerCode))
+                    ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
+                    : dataContext.Cust_reg_tbl.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(customerName))
+            {
+                data = (!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email))
+                    ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList()
+                    : dataContext.Cust_reg_tbl.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                if ((!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(customerName)))
+                {
+                    if ("Approved".Contains(status))
+                    {
+                        data = data.Where(x => x.IsFinalApproved).ToList();
+                    }
+                    else if ("Pending".Contains(status))
+                    {
+                        data = data.Where(x => !x.IsFinalApproved).ToList();
+                    }
+                    else
+                    {
+                        data = new List<Cust_reg_tbl>();
+                    }
+                }
+                else
+                {
+                    if ("Approved".Contains(status))
+                    {
+                        data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
+                    }
+                    else if ("Pending".Contains(status))
+                    {
+                        data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                    }
+                    else
+                    {
+                        data = new List<Cust_reg_tbl>();
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(customerCode) && string.IsNullOrEmpty(email)
+                && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(status))
+            {
+                data = dataContext.Cust_reg_tbl.ToList();
+            }
+
+            var grid = new GridView();
+            grid.DataSource = data;
+            grid.DataBind();
+
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
+            Response.ContentType = "application/ms-excel";
+
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+            grid.RenderControl(htw);
+
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return View("MyView");
         }
     }
 }

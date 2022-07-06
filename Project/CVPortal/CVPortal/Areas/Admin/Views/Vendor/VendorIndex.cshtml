@@ -99,7 +99,13 @@
                         {
                             "class": "text-center",
                             "render": function (data, type, row, meta) {
-                                return "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printVendor'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>";
+                                return "<a href='/Vendors/VendorStep1/" + row.Id + "' title='View' target='_blank'>View</a>";
+                            }, "targets": 'no-sort', "orderable": false
+                        },
+                        {
+                            "class": "text-center",
+                            "render": function (data, type, row, meta) {
+                                return row.Step4 ? "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printVendor'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>" : "";
                             }, "targets": 'no-sort', "orderable": false
                         }
                     ]
@@ -111,6 +117,11 @@
 
             $(".search-button").click(function () {
                 users.draw();
+            });
+
+            $(".export-button").click(function () {
+                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Vendor" })' + '?vendorCode=' + $("#VendorCode").val()
+                    + "&email=" + $("#Email").val() + "&vendorName=" + $("#VendorName").val() + "&status=" + $("#Status").val();
             });
 
             $('#lstUsers').on('click', '.printVendor', function () {
@@ -168,6 +179,9 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Vendors</h1>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <input type="button" value="Export" class="btn btn-primary export-button" />
                 </div>
             </div>
         </div>
@@ -231,6 +245,7 @@
                                     <th>Finance</th>
                                     <th>IT</th>
                                     <th>Status</th>
+                                    <th>View</th>
                                     <th>Print</th>
                                 </tr>
                             </thead>
