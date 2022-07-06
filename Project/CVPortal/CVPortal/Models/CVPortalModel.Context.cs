@@ -29,6 +29,7 @@ namespace CVPortal.Models
         public virtual DbSet<Cust_reg_tbl> Cust_reg_tbl { get; set; }
         public virtual DbSet<CustomerApproval> CustomerApprovals { get; set; }
         public virtual DbSet<CustomerFile> CustomerFiles { get; set; }
+        public virtual DbSet<EmailHistory> EmailHistories { get; set; }
         public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; }
         public virtual DbSet<GSTType_Master> GSTType_Master { get; set; }
         public virtual DbSet<LoginLog> LoginLogs { get; set; }

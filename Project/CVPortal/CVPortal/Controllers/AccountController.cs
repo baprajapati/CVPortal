@@ -52,6 +52,7 @@ namespace CVPortal.Controllers
                     objVendor.OTP = "123456";//new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
 
+                    email = objVendor?.Email;
                     string mailTo = email;
                     string CC = string.Empty;
                     string BCC = string.Empty;
@@ -64,7 +65,7 @@ namespace CVPortal.Controllers
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
-                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, objVendor.ID, EmailTypeEnum.OTPVendor, objVendor.ID);
 
                     return Json(new { status = true });
                 }
@@ -74,6 +75,7 @@ namespace CVPortal.Controllers
                 {
                     objUser.OTP = "123456";//new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
+                    email = objUser?.EmailAddress;
 
                     string mailTo = email;
                     string CC = string.Empty;
@@ -87,7 +89,7 @@ namespace CVPortal.Controllers
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
-                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, objUser.Id, EmailTypeEnum.OTPUser, objUser.Id);
 
                     return Json(new { status = true });
                 }
@@ -111,6 +113,7 @@ namespace CVPortal.Controllers
                 {
                     objVendor.OTP = "123456";//new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
+                    email = objVendor?.Email;
 
                     string mailTo = email;
                     string CC = string.Empty;
@@ -124,7 +127,7 @@ namespace CVPortal.Controllers
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
-                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, objVendor.ID, EmailTypeEnum.OTPCustomer, objVendor.ID);
 
                     return Json(new { status = true });
                 }
@@ -134,6 +137,7 @@ namespace CVPortal.Controllers
                 {
                     objUser.OTP = "123456";//new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
+                    email = objUser?.EmailAddress;
 
                     string mailTo = email;
                     string CC = string.Empty;
@@ -147,7 +151,7 @@ namespace CVPortal.Controllers
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
-                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, objUser.Id, EmailTypeEnum.OTPUser, objUser.Id);
 
                     return Json(new { status = true });
                 }

@@ -72,6 +72,7 @@ namespace CVPortal.Models
         public string IFSC_RTGS_code { get; set; }
         public Nullable<decimal> Date { get; set; }
         public string Type_of_Vend { get; set; }
+        public string NextApprovar { get; set; }
         public string OTP { get; set; }
         public string VendorCode { get; set; }
         public Nullable<bool> Step1 { get; set; }

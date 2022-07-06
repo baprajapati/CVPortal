@@ -212,6 +212,7 @@
     <Content Include="Content\js\jquery.dataTables.min.js" />
     <Content Include="Content\js\toastr.js" />
     <Compile Include="App_Code\ApprovarRoleEnum.cs" />
+    <Compile Include="App_Code\EmailTypeEnum.cs" />
     <Compile Include="App_Code\VendorApprovalEnum.cs" />
     <Compile Include="App_Code\FileUploadEnum.cs" />
     <Compile Include="App_Code\Utility.cs" />
@@ -258,6 +259,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CVPortalModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EmailHistory.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ExceptionLog.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>

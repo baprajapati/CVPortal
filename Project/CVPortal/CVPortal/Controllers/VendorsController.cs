@@ -203,7 +203,6 @@ namespace CVPortal.Controllers
                 }
 
                 model.Id = vendor.ID;
-                model.Type_of_Vend = vendor.Type_of_Vend;
                 model.IsMain = vendor.IsNewVendor && Utility.UserCode.Equals(vendor.Email);
                 model.IsApprover = vendor.Step4 ?? false && !vendor.IsFinalApproved;
                 model.IsExistingUpdate = !vendor.IsNewVendor && !string.IsNullOrEmpty(vendor.ExistingReason) && Utility.UserCode.Equals(vendor.Email);
@@ -215,7 +214,12 @@ namespace CVPortal.Controllers
                     {
                         if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            if (!string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT))
+                            if (vendor.VendorApprovals.Count(x => !x.IsDeleted && x.VendorId == id) == 1 && !string.IsNullOrEmpty(vendor.NextApprovar))
+                            {
+                                var user = dataContext.tbl_Users.First(x => x.HAUSER == vendor.NextApprovar);
+                                model.IsApprover = user?.Id == Utility.UserId;
+                            }
+                            else if (!string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT))
                             {
                                 var user = dataContext.tbl_Users.First(x => x.HAUSER == vendorApprover.tbl_Users.HANEXT);
                                 model.IsApprover = user.Id == Utility.UserId;
@@ -401,6 +405,12 @@ namespace CVPortal.Controllers
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
                 return RedirectToAction("../Account/VendorLogin/" + id);
 
+            var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
+            if (vendor != null)
+            {
+                ViewBag.TextMessage = vendor.IsFinalApproved ? "Vendor already approved!" : "Approval is in progress!";
+            }
+
             ViewBag.Id = id;
             return View();
         }
@@ -420,10 +430,6 @@ namespace CVPortal.Controllers
         [HttpPost]
         public ActionResult VendorStep1(VendorStep1 model)
         {
-            //var subject = "Vendor Form Submitted";
-            //var body = "https://localhost:44318/Vendor/Index/1";
-
-            //Utility.SendMail("baprajapati2444@gmail.com", null, null, subject, body, "Vendor Form Submitted", null, true);
             if (model.IsMain || model.IsExistingUpdate)
             {
                 if (ModelState.IsValid)
@@ -481,6 +487,18 @@ namespace CVPortal.Controllers
                     if (!string.IsNullOrEmpty(model.CIN_No) && string.IsNullOrEmpty(model.CINFileName))
                     {
                         ModelState.AddModelError(nameof(model.CINFileName), "Please upload CIN file");
+                        return View(model);
+                    }
+
+                    if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
+                    {
+                        ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
+                        return View(model);
+                    }
+
+                    if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
+                    {
+                        ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
                         return View(model);
                     }
 
@@ -857,7 +875,6 @@ namespace CVPortal.Controllers
                             }
                         }
 
-                        vendor.Type_of_Vend = model.Type_of_Vend;
                         vendor.Step4 = true;
                         dataContext.SaveChanges();
 
@@ -873,7 +890,7 @@ namespace CVPortal.Controllers
 
                         string displayName = string.Empty;
                         string attachments = string.Empty;
-                        Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                        Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Vendor, model.Id);
                     }
 
                     return RedirectToAction("FinalForm", new { id = model.Id });
@@ -900,7 +917,7 @@ namespace CVPortal.Controllers
 
                 string displayName = string.Empty;
                 string attachments = string.Empty;
-                Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Vendor, model.Id);
 
                 return RedirectToAction("FinalForm", new { id = model.Id });
             }
@@ -937,7 +954,7 @@ namespace CVPortal.Controllers
                     {
                         if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            model.ApproverRole = !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                            model.ApproverRole = (vendor.VendorApprovals.Count(x => !x.IsDeleted && x.VendorId == model.VendorId) == 1 && !string.IsNullOrEmpty(vendor.NextApprovar)) || !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
                         }
                         else
                         {
@@ -980,7 +997,7 @@ namespace CVPortal.Controllers
 
                             string displayName = string.Empty;
                             string attachments = string.Empty;
-                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Vendor, model.VendorId);
                         }
                         else
                         {
@@ -999,7 +1016,7 @@ namespace CVPortal.Controllers
 
                             string displayName = string.Empty;
                             string attachments = string.Empty;
-                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Vendor, model.VendorId);
                         }
                     }
                     else
@@ -1026,7 +1043,7 @@ namespace CVPortal.Controllers
 
                             string displayName = string.Empty;
                             string attachments = string.Empty;
-                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Vendor, model.VendorId);
                         }
                     }
 
@@ -1042,7 +1059,7 @@ namespace CVPortal.Controllers
 
                     string displayName1 = string.Empty;
                     string attachments1 = string.Empty;
-                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true);
+                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true, Utility.UserId, EmailTypeEnum.Vendor, model.VendorId);
 
                     return Json(new { status = true });
                 }
@@ -1083,7 +1100,7 @@ namespace CVPortal.Controllers
                     {
                         if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            data.ApproverRole = !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                            data.ApproverRole = (vendor.VendorApprovals.Count(x => !x.IsDeleted && x.VendorId == id) == 1 && !string.IsNullOrEmpty(vendor.NextApprovar)) || !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
                         }
                         else
                         {
@@ -1114,12 +1131,13 @@ namespace CVPortal.Controllers
 
                     var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorRejected.html"));
                     string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{id}");
+                    body1 = body1.Replace("[REMARKS]", remarks);
                     body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                     body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
                     string displayName1 = string.Empty;
                     string attachments1 = string.Empty;
-                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true);
+                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true, Utility.UserId, EmailTypeEnum.Vendor, id);
 
                     return Json(new { status = true });
                 }

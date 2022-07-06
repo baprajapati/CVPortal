@@ -58,13 +58,13 @@
                     type: "POST",
                     data: JSON.stringify({
                         vendorId: $("#Id").val(),
-                        termsCode: $("#TermsCode").val(),
+                        termsCodeId: $("#TermsCode").val(),
                         bankCode: $("#BankCode").val(),
                         bankBranch: $("#BankBranch").val(),
-                        paymentType: $("#PaymentType").val(),
-                        taxCode: $("#TaxCode").val(),
+                        paymentTypeId: $("#PaymentType").val(),
+                        taxCodeId: $("#TaxCode").val(),
                         company: $("#Company").val(),
-                        vendorType: $("#VendorType").val(),
+                        vendorTypeId: $("#VendorType").val(),
                         documentPfx: $("#DocumentPfx").val()
                     }),
                     contentType: "application/json; charset=utf-8",
@@ -148,24 +148,7 @@
                     <label>Step 4</label>
                 </div>
             </div>
-            <br />
-            <label style="font-size:20px;text-decoration:underline;">For Internal Use Only (SMIPL)</label>
             <br /><br />
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Type of Vendor<span class="color-red"> * </span></label><br />
-                    <span>(put tick Mark)</span>
-                </div>
-                <div class="col-md-9">
-                    @Html.RadioButtonFor(model => model.Type_of_Vend, "1", Model.IsMain ? (object)new { @id = "vendorType1" } : new { @id = "vendorType1", @disabled = "disabled" })
-                    <label for="vendorType1" style="font-weight: 500; margin-right: 30px;">Regular Supply/Services</label>
-                    @Html.RadioButtonFor(model => model.Type_of_Vend, "2", Model.IsMain ? (object)new { @id = "vendorType2" } : new { @id = "vendorType2", @disabled = "disabled" })
-                    <label for="vendorType2" style="font-weight: 500; margin-right: 30px;">One time Supply/Services</label>
-                    <br />
-                    @Html.ValidationMessageFor(model => model.Type_of_Vend)
-                </div>
-            </div>
-            <br />
             <div class="row">
                 <div class="col-md-3">
                     Audited Balance Sheet

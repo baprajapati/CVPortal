@@ -196,7 +196,12 @@ namespace CVPortal.Controllers
                     {
                         if (customerApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            if (!string.IsNullOrEmpty(customerApprover.tbl_Users.HANEXT))
+                            if (customer.CustomerApprovals.Count(x => !x.IsDeleted && x.CustomerId == id) == 1 && !string.IsNullOrEmpty(customer.NextApprover))
+                            {
+                                var user = dataContext.tbl_Users.First(x => x.HAUSER == customer.NextApprover);
+                                model.IsApprover = user?.Id == Utility.UserId;
+                            }
+                            else if (!string.IsNullOrEmpty(customerApprover.tbl_Users.HANEXT))
                             {
                                 var user = dataContext.tbl_Users.First(x => x.HAUSER == customerApprover.tbl_Users.HANEXT);
                                 model.IsApprover = user.Id == Utility.UserId;
@@ -267,6 +272,14 @@ namespace CVPortal.Controllers
 
             if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
                 return RedirectToAction("../Account/CustomerLogin/" + id);
+
+
+            var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
+            if (customer != null)
+            {
+                ViewBag.TextMessage = customer.IsFinalApproved ? "Vendor already approved!" : "Approval is in progress!";
+            }
+
 
             ViewBag.Id = id;
             return View();
@@ -588,7 +601,7 @@ namespace CVPortal.Controllers
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
-                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Customer, model.Id);
                 }
 
                 return RedirectToAction("FinalForm", new { id = model.Id });
@@ -620,7 +633,7 @@ namespace CVPortal.Controllers
                     {
                         if (customerApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            model.ApproverRole = !string.IsNullOrEmpty(customerApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                            model.ApproverRole = (customer.CustomerApprovals.Count(x => !x.IsDeleted && x.CustomerId == model.CustomerId) == 1 && !string.IsNullOrEmpty(customer.NextApprover)) || !string.IsNullOrEmpty(customerApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
                         }
                         else
                         {
@@ -663,7 +676,7 @@ namespace CVPortal.Controllers
 
                             string displayName = string.Empty;
                             string attachments = string.Empty;
-                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Customer, model.CustomerId);
                         }
                         else
                         {
@@ -682,7 +695,7 @@ namespace CVPortal.Controllers
 
                             string displayName = string.Empty;
                             string attachments = string.Empty;
-                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Customer, model.Id);
                         }
                     }
                     else
@@ -709,7 +722,7 @@ namespace CVPortal.Controllers
 
                             string displayName = string.Empty;
                             string attachments = string.Empty;
-                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                            Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, Utility.UserId, EmailTypeEnum.Customer, model.Id);
                         }
                     }
 
@@ -725,7 +738,7 @@ namespace CVPortal.Controllers
 
                     string displayName1 = string.Empty;
                     string attachments1 = string.Empty;
-                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true);
+                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true, Utility.UserId, EmailTypeEnum.Customer, model.Id);
 
                     return Json(new { status = true });
                 }
@@ -766,7 +779,7 @@ namespace CVPortal.Controllers
                     {
                         if (customerApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            data.ApproverRole = !string.IsNullOrEmpty(customerApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                            data.ApproverRole = (customer.CustomerApprovals.Count(x => !x.IsDeleted && x.CustomerId == id) == 1 && !string.IsNullOrEmpty(customer.NextApprover)) || !string.IsNullOrEmpty(customerApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
                         }
                         else
                         {
@@ -797,12 +810,13 @@ namespace CVPortal.Controllers
 
                     var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\CustomerRejected.html"));
                     string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/CustomerLogin/{id}");
+                    body1 = body1.Replace("[REMARKS]", remarks);
                     body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
                     body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
 
                     string displayName1 = string.Empty;
                     string attachments1 = string.Empty;
-                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true);
+                    Utility.SendMail(mailTo1, CC1, BCC1, subject1, body1, displayName1, attachments1, true, Utility.UserId, EmailTypeEnum.Customer, id);
 
                     return Json(new { status = true });
                 }

@@ -193,7 +193,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
-                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, WebSecurity.CurrentUserId, EmailTypeEnum.Vendor, newVendorId);
 
                     return RedirectToAction("VendorIndex");
                 }

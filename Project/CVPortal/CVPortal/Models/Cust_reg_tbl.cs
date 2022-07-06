@@ -64,6 +64,7 @@ namespace CVPortal.Models
         public Nullable<bool> ITR_ReturnStsTurnover { get; set; }
         public Nullable<bool> ITR_ReturnTDSDeduct { get; set; }
         public Nullable<decimal> Date { get; set; }
+        public string NextApprover { get; set; }
         public string OTP { get; set; }
         public string CustomerCode { get; set; }
         public Nullable<bool> Step1 { get; set; }

@@ -227,7 +227,9 @@ namespace CVPortal.Areas.Admin.Controllers
 
                     string displayName = string.Empty;
                     string attachments = string.Empty;
-                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true);
+
+                    var entityId = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == user.Email)?.Id;
+                    Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, WebSecurity.CurrentUserId, EmailTypeEnum.User, entityId);
 
                     return RedirectToAction("UserIndex");
                 }

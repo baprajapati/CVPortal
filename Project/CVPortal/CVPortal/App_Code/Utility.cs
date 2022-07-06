@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CVPortal.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace CVPortal.App_Code
 
         #region SendMail
 
-        public static bool SendMail(string EmailTo, string CC, string BCC, string Subject, string Body, string DisplayName, string Attachments, bool IsBodyHtml)
+        public static bool SendMail(string EmailTo, string CC, string BCC, string Subject, string Body, string DisplayName, string Attachments, bool IsBodyHtml, int userId, EmailTypeEnum emailType, int? entityId)
         {
             bool result = true;
             try
@@ -74,7 +75,7 @@ namespace CVPortal.App_Code
                         message.IsBodyHtml = IsBodyHtml;
                         message.Body = Body;
 
-                        foreach(var item in EmailTo.Split(','))
+                        foreach (var item in EmailTo.Split(','))
                         {
                             message.To.Add(item);
                         }
@@ -90,12 +91,33 @@ namespace CVPortal.App_Code
                             foreach (string sAttachment in Attachments.Split(",".ToCharArray()))
                                 message.Attachments.Add(new Attachment(sAttachment));
                         }
+
+                        bool isSent = false;
                         try
                         {
                             smtpClient.Send(message);
+                            isSent = true;
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
+                        }
+
+                        using (CVPortalEntities dataContext = new CVPortalEntities())
+                        {
+                            dataContext.EmailHistories.Add(new EmailHistory()
+                            {
+                                EmailType = emailType.ToString(),
+                                EntityId = entityId,
+                                MailTo = EmailTo,
+                                CC = CC,
+                                BCC = BCC,
+                                Subject = Subject,
+                                HtmlContent = Body,
+                                IsMailSent = isSent,
+                                CreatedById = userId,
+                                CreatedByDate = DateTime.Now
+                            });
+                            dataContext.SaveChanges();
                         }
                     }
                 }

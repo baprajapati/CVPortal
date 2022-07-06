@@ -53,7 +53,7 @@
           <Property Name="DDNo_UTRNo" Type="nvarchar" MaxLength="16" />
           <Property Name="Benificiary_name" Type="nvarchar" MaxLength="50" />
           <Property Name="Bank_name" Type="nvarchar" MaxLength="30" />
-          <Property Name="Branch_name_Add" Type="nvarchar" MaxLength="25" />
+          <Property Name="Branch_name_Add" Type="nvarchar" MaxLength="1000" />
           <Property Name="Account_no" Type="nvarchar" MaxLength="25" />
           <Property Name="MICR_code" Type="numeric" Precision="9" Scale="0" />
           <Property Name="IFSC_RTGS_code" Type="nvarchar" MaxLength="11" />
@@ -62,6 +62,7 @@
           <Property Name="ITR_ReturnStsTurnover" Type="bit" />
           <Property Name="ITR_ReturnTDSDeduct" Type="bit" />
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
+          <Property Name="NextApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
           <Property Name="CustomerCode" Type="nvarchar" MaxLength="1000" />
           <Property Name="Step1" Type="bit" />
@@ -95,6 +96,22 @@
           <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="ContentType" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Data" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmailHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmailType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EntityId" Type="int" Nullable="false" />
+          <Property Name="MailTo" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="CC" Type="nvarchar" MaxLength="1000" />
+          <Property Name="BCC" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="HtmlContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsMailSent" Type="bit" Nullable="false" />
+          <Property Name="CreatedById" Type="int" Nullable="false" />
+          <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="ExceptionLog">
           <Key>
@@ -298,12 +315,13 @@
           <Property Name="ITR_Field_dtl" Type="nvarchar" MaxLength="24" />
           <Property Name="Benificiary_name" Type="nvarchar" MaxLength="50" />
           <Property Name="Bank_name" Type="nvarchar" MaxLength="30" />
-          <Property Name="Branch_name_Add" Type="nvarchar" MaxLength="25" />
+          <Property Name="Branch_name_Add" Type="nvarchar" MaxLength="1000" />
           <Property Name="Account_no" Type="nvarchar" MaxLength="25" />
           <Property Name="MICR_code" Type="numeric" Precision="9" Scale="0" />
           <Property Name="IFSC_RTGS_code" Type="nvarchar" MaxLength="11" />
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="nvarchar" MaxLength="1" />
+          <Property Name="NextApprovar" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
           <Property Name="VendorCode" Type="nvarchar" MaxLength="1000" />
           <Property Name="Step1" Type="bit" />
@@ -571,6 +589,7 @@
           <EntitySet Name="Cust_reg_tbl" EntityType="Self.Cust_reg_tbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerApproval" EntityType="Self.CustomerApproval" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerFiles" EntityType="Self.CustomerFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmailHistory" EntityType="Self.EmailHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExceptionLog" EntityType="Self.ExceptionLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GSTType_Master" EntityType="Self.GSTType_Master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoginLogs" EntityType="Self.LoginLogs" Schema="dbo" store:Type="Tables" />
@@ -657,6 +676,7 @@
           <EntitySet Name="Cust_reg_tbl" EntityType="CVPortalModel.Cust_reg_tbl" />
           <EntitySet Name="CustomerApprovals" EntityType="CVPortalModel.CustomerApproval" />
           <EntitySet Name="CustomerFiles" EntityType="CVPortalModel.CustomerFile" />
+          <EntitySet Name="EmailHistories" EntityType="CVPortalModel.EmailHistory" />
           <EntitySet Name="ExceptionLogs" EntityType="CVPortalModel.ExceptionLog" />
           <EntitySet Name="GSTType_Master" EntityType="CVPortalModel.GSTType_Master" />
           <EntitySet Name="LoginLogs" EntityType="CVPortalModel.LoginLog" />
@@ -777,7 +797,7 @@
           <Property Name="DDNo_UTRNo" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="Benificiary_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Bank_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Branch_name_Add" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Branch_name_Add" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Account_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="MICR_code" Type="Decimal" Precision="9" Scale="0" />
           <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
@@ -786,6 +806,7 @@
           <Property Name="ITR_ReturnStsTurnover" Type="Boolean" />
           <Property Name="ITR_ReturnTDSDeduct" Type="Boolean" />
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="NextApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CustomerCode" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Step1" Type="Boolean" />
@@ -825,6 +846,22 @@
           <Property Name="ContentType" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Data" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Cust_reg_tbl" Relationship="CVPortalModel.FK_CustomerFiles_Cust_reg_tbl" FromRole="CustomerFile" ToRole="Cust_reg_tbl" />
+        </EntityType>
+        <EntityType Name="EmailHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EntityId" Type="Int32" Nullable="false" />
+          <Property Name="MailTo" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="CC" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="BCC" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="HtmlContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsMailSent" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedById" Type="Int32" Nullable="false" />
+          <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="ExceptionLog">
           <Key>
@@ -1036,12 +1073,13 @@
           <Property Name="ITR_Field_dtl" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
           <Property Name="Benificiary_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Bank_name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Branch_name_Add" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Branch_name_Add" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Account_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="MICR_code" Type="Decimal" Precision="9" Scale="0" />
           <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="NextApprovar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="VendorCode" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Step1" Type="Boolean" />
@@ -1317,6 +1355,7 @@
                 <ScalarProperty Name="Step1" ColumnName="Step1" />
                 <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="NextApprover" ColumnName="NextApprover" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="ITR_ReturnTDSDeduct" ColumnName="ITR_ReturnTDSDeduct" />
                 <ScalarProperty Name="ITR_ReturnStsTurnover" ColumnName="ITR_ReturnStsTurnover" />
@@ -1385,6 +1424,23 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="FileUploadType" ColumnName="FileUploadType" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailHistories">
+            <EntityTypeMapping TypeName="CVPortalModel.EmailHistory">
+              <MappingFragment StoreEntitySet="EmailHistory">
+                <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="IsMailSent" ColumnName="IsMailSent" />
+                <ScalarProperty Name="HtmlContent" ColumnName="HtmlContent" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="BCC" ColumnName="BCC" />
+                <ScalarProperty Name="CC" ColumnName="CC" />
+                <ScalarProperty Name="MailTo" ColumnName="MailTo" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="EmailType" ColumnName="EmailType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1565,6 +1621,7 @@
                 <ScalarProperty Name="Step1" ColumnName="Step1" />
                 <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="NextApprovar" ColumnName="NextApprovar" />
                 <ScalarProperty Name="Type_of_Vend" ColumnName="Type_of_Vend" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="IFSC_RTGS_code" ColumnName="IFSC_RTGS_code" />
