@@ -114,6 +114,7 @@ namespace CVPortal.Areas.Admin.Controllers
                         Seg_ID = departmentViewModel.Seg_ID,
                         Dept_Code = departmentViewModel.Dept_Code,
                         Dept_Desc = departmentViewModel.Dept_Desc,
+                        IsActive = true,
                         CreatedById = WebSecurity.CurrentUserId,
                         CreatedByDate = DateTime.Now
                     };
@@ -152,28 +153,23 @@ namespace CVPortal.Areas.Admin.Controllers
             return result;
         }
 
-        public JsonResult DeleteDepartment(int id)
+        [HttpGet]
+        public JsonResult ActiveDeactiveDepartment(int id, bool status)
         {
             try
             {
-                var objDepartment = dataContext.Lx_GSV.FirstOrDefault(x => x.GSV_ID == id);
-                if (objDepartment != null)
+                var objUser = dataContext.Lx_GSV.FirstOrDefault(x => x.GSV_ID == id);
+                if (objUser != null)
                 {
-                    var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.Dept_Code == objDepartment.Dept_Code);
-                    if(objUser != null)
-                    {
-                        return Json(new { status = false, result = "Department used in user, so you can't delete this department" });
-                    }
-
-                    dataContext.Lx_GSV.Remove(objDepartment);
+                    objUser.IsActive = status;
                     dataContext.SaveChanges();
                 }
 
-                return Json(new { status = true });
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { status = false, result = ex.GetBaseException().Message });
+                return Json(new { status = false, result = ex.GetBaseException().Message }, JsonRequestBehavior.AllowGet);
             }
         }
 

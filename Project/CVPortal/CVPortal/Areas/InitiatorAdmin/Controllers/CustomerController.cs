@@ -55,6 +55,21 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
             }
         }
 
+        public ActionResult CustomerIndexApproved()
+        {
+            if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
+                return RedirectToAction("../../Account/Login");
+
+            try
+            {
+                return View();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddCustomer(CustomerViewModel customer)
@@ -124,21 +139,125 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
 
                 if (!string.IsNullOrEmpty(model.CustomerCode))
                 {
-                    data = dataContext.Cust_reg_tbl.Where(x => x.CustomerCode != null && x.CustomerCode.ToLower().Contains(model.CustomerCode.ToLower())).ToList();
+                    data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(model.CustomerCode.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Email))
                 {
                     data = (!string.IsNullOrEmpty(model.CustomerCode))
                         ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
+                        : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Cust_name))
                 {
                     data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email))
                         ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
+                        : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.Status))
+                {
+                    if ((!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name)))
+                    {
+                        if ("Approved".Contains(model.Status))
+                        {
+                            data = data.Where(x => x.IsFinalApproved).ToList();
+                        }
+                        else if ("Pending".Contains(model.Status))
+                        {
+                            data = data.Where(x => !x.IsFinalApproved).ToList();
+                        }
+                        else
+                        {
+                            data = new List<Cust_reg_tbl>();
+                        }
+                    }
+                    else
+                    {
+                        if ("Approved".Contains(model.Status))
+                        {
+                            data = new List<Cust_reg_tbl>();
+                        }
+                        else if ("Pending".Contains(model.Status))
+                        {
+                            data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                        }
+                        else
+                        {
+                            data = new List<Cust_reg_tbl>();
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(model.CustomerCode) && string.IsNullOrEmpty(model.Email)
+                    && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status))
+                {
+                    data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                }
+
+                var customerApprovers = dataContext.CustomerApprovals.Where(x => !x.IsDeleted).ToList();
+                var customers = new List<CustomerListModel>();
+
+                data.ForEach(item =>
+                {
+                    customers.Add(new CustomerListModel()
+                    {
+                        Id = item.ID,
+                        Email = item.Email,
+                        Cust_name = item.Cust_name,
+                        CustomerCode = item.CustomerCode?.ToString(),
+                        Step4 = item.Step4 ?? false,
+                        Status = item.IsFinalApproved ? "Approved" : "Pending",
+                        Owner = item.tbl_Users.HANAME,
+                        NextApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        InitiatorDepartment = $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        HODDepartment = $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        LegalDepartment = $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        FinanceDepartment = $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        ITDepartment = $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})"
+                    });
+                });
+
+                result = this.Json(new
+                {
+                    draw = Convert.ToInt32(Request.Form.GetValues("draw")[0]),
+                    recordsTotal = (customers.Count > 0) ? customers.Count : 0,
+                    recordsFiltered = (customers.Count > 0) ? customers.Count : 0,
+                    data = customers
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+            }
+
+            return result;
+        }
+
+        public ActionResult GetCustomerApproved(CustomerListModel model)
+        {
+            var result = new JsonResult();
+            try
+            {
+                var data = new List<Cust_reg_tbl>();
+
+                if (!string.IsNullOrEmpty(model.CustomerCode))
+                {
+                    data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(model.CustomerCode.ToLower())).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    data = (!string.IsNullOrEmpty(model.CustomerCode))
+                        ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList()
+                        : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.Cust_name))
+                {
+                    data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email))
+                        ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList()
+                        : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Status))
@@ -166,7 +285,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                         }
                         else if ("Pending".Contains(model.Status))
                         {
-                            data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                            data = new List<Cust_reg_tbl>();
                         }
                         else
                         {
@@ -178,7 +297,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                 if (string.IsNullOrEmpty(model.CustomerCode) && string.IsNullOrEmpty(model.Email)
                     && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status))
                 {
-                    data = dataContext.Cust_reg_tbl.ToList();
+                    data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
                 }
 
                 var customerApprovers = dataContext.CustomerApprovals.Where(x => !x.IsDeleted).ToList();
@@ -191,7 +310,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                         Id = item.ID,
                         Email = item.Email,
                         Cust_name = item.Cust_name,
-                        CustomerCode = item.CustomerCode,
+                        CustomerCode = item.CustomerCode?.ToString(),
                         Step4 = item.Step4 ?? false,
                         Status = item.IsFinalApproved ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
@@ -224,7 +343,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
         {
             try
             {
-                var objCustomer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.CustomerCode == customerCode);
+                var objCustomer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.CustomerCode == Convert.ToInt32(customerCode));
                 var customerDetails = new CustomerListModel()
                 {
                     Cust_name = objCustomer?.Cust_name,
@@ -307,21 +426,106 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
 
             if (!string.IsNullOrEmpty(customerCode))
             {
-                data = dataContext.Cust_reg_tbl.Where(x => x.CustomerCode != null && x.CustomerCode.ToLower().Contains(customerCode.ToLower())).ToList();
+                data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(customerCode.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(email))
             {
                 data = (!string.IsNullOrEmpty(customerCode))
                     ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
-                    : dataContext.Cust_reg_tbl.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+                    : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(customerName))
             {
                 data = (!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email))
                     ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList()
-                    : dataContext.Cust_reg_tbl.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
+                    : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                if ((!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(customerName)))
+                {
+                    if ("Approved".Contains(status))
+                    {
+                        data = data.Where(x => x.IsFinalApproved).ToList();
+                    }
+                    else if ("Pending".Contains(status))
+                    {
+                        data = data.Where(x => !x.IsFinalApproved).ToList();
+                    }
+                    else
+                    {
+                        data = new List<Cust_reg_tbl>();
+                    }
+                }
+                else
+                {
+                    if ("Approved".Contains(status))
+                    {
+                        data = new List<Cust_reg_tbl>();
+                    }
+                    else if ("Pending".Contains(status))
+                    {
+                        data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                    }
+                    else
+                    {
+                        data = new List<Cust_reg_tbl>();
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(customerCode) && string.IsNullOrEmpty(email)
+                && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(status))
+            {
+                data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+            }
+
+            var grid = new GridView();
+            grid.DataSource = data;
+            grid.DataBind();
+
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
+            Response.ContentType = "application/ms-excel";
+
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+            grid.RenderControl(htw);
+
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return View("MyView");
+        }
+
+        public ActionResult DownloadExcelApproved(string customerCode, string email, string customerName, string status)
+        {
+            var data = new List<Cust_reg_tbl>();
+
+            if (!string.IsNullOrEmpty(customerCode))
+            {
+                data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(customerCode.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                data = (!string.IsNullOrEmpty(customerCode))
+                    ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
+                    : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(customerName))
+            {
+                data = (!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email))
+                    ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList()
+                    : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(status))
@@ -349,7 +553,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
                     }
                     else if ("Pending".Contains(status))
                     {
-                        data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                        data = new List<Cust_reg_tbl>();
                     }
                     else
                     {
@@ -361,7 +565,7 @@ namespace CVPortal.Areas.InitiatorAdmin.Controllers
             if (string.IsNullOrEmpty(customerCode) && string.IsNullOrEmpty(email)
                 && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(status))
             {
-                data = dataContext.Cust_reg_tbl.ToList();
+                data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
             }
 
             var grid = new GridView();

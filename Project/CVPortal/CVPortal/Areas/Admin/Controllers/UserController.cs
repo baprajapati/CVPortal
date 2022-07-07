@@ -41,7 +41,7 @@ namespace CVPortal.Areas.Admin.Controllers
 
         public SelectList GetDepartments(string[] selectedValue)
         {
-            var departments = dataContext.Lx_GSV.ToList();
+            var departments = dataContext.Lx_GSV.Where(x => x.IsActive).ToList();
 
             List<SelectListItem> list = new List<SelectListItem>();
 

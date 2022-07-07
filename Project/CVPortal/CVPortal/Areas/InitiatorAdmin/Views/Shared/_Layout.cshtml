@@ -55,13 +55,25 @@
                         <li class="nav-item">
                             <a href="@Url.Action("VendorIndex","Vendor")" class="nav-link vendorindex">
                                 <i class="nav-icon fas fa-th"></i>
-                                <p>Vendors</p>
+                                <p>Vendors Pending</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("VendorIndexApproved","Vendor")" class="nav-link vendorindexapproved">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>Vendors Approved</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="@Url.Action("CustomerIndex","Customer")" class="nav-link customerindex">
                                 <i class="nav-icon fas fa-th"></i>
-                                <p>Customers</p>
+                                <p>Customers Pending</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("CustomerIndexApproved","Customer")" class="nav-link customerindexapproved">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>Customers Approved</p>
                             </a>
                         </li>
                     </ul>
@@ -71,9 +83,9 @@
         @RenderBody()
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> V20
+                <b>Version</b> V1.0
             </div>
-            <strong>Copyright &copy; 2020 <a href="https://www.suzukimotorcycle.co.in/">Suzuki Motorcycle India Pvt. Ltd.</a>.</strong> All rights
+            <strong>Copyright &copy; 2022 <a href="https://www.suzukimotorcycle.co.in/">Suzuki Motorcycle India Pvt. Ltd.</a>.</strong> All rights
             reserved.
         </footer>
         <aside class="control-sidebar control-sidebar-dark"></aside>
@@ -99,8 +111,12 @@
             $(".nav-item a").removeClass("active");
             $(".topmenu li").removeClass("active");
 
-            if (window.location.href.includes("VendorIndex") || window.location.href.includes("AddVendor")) {
+            if (window.location.href.includes("VendorIndexApproved")) {
+                $(".vendorindexapproved").addClass("active");
+            } else if (window.location.href.includes("VendorIndex") || window.location.href.includes("AddVendor")) {
                 $(".vendorindex").addClass("active");
+            } else if (window.location.href.includes("CustomerIndexApproved")) {
+                $(".customerindexapproved").addClass("active");
             } else if (window.location.href.includes("CustomerIndex") || window.location.href.includes("AddCustomer")) {
                 $(".customerindex").addClass("active");
             }

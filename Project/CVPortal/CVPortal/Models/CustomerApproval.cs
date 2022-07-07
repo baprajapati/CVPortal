@@ -16,6 +16,8 @@ namespace CVPortal.Models
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
+        public string DealerType { get; set; }
+        public Nullable<decimal> Code { get; set; }
         public string ApproverRole { get; set; }
         public string Status { get; set; }
         public string Remarks { get; set; }

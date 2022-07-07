@@ -17,13 +17,34 @@ namespace CVPortal.Controllers
         CVPortalEntities dataContext = new CVPortalEntities();
 
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string a)
         {
+            var user = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && x.HAUSER == a);
+            if (user != null && WebSecurity.Login(user.EmailAddress, user.Password, false))
+            {
+                Utility.UserCode = user.EmailAddress;
+                Session["UserFullName"] = user.HANAME;
+                FormsAuthentication.SetAuthCookie(user.EmailAddress, false);
+
+                string[] userRoles = Roles.GetRolesForUser(user.EmailAddress);
+
+                Session["Role"] = userRoles.FirstOrDefault()?.ToString();
+
+                if (userRoles.Contains("Admin"))
+                {
+                    return RedirectToAction("../Admin/User/UserIndex");
+                }
+                else
+                {
+                    return RedirectToAction("../InitiatorAdmin/Vendor/VendorIndex");
+                }
+            }
+
             return View(new LoginViewModel());
         }
 
         [AllowAnonymous]
-        public ActionResult VendorLogin(int? id)
+        public ActionResult VendorLogin(int? id, string a)
         {
             return View(new VendorCustomerLoginViewModel()
             {
@@ -273,13 +294,9 @@ namespace CVPortal.Controllers
                     {
                         return RedirectToAction("../Admin/User/UserIndex");
                     }
-                    else if (userRoles.Contains("InitiatorAdmin"))
-                    {
-                        return RedirectToAction("../InitiatorAdmin/Vendor/VendorIndex");
-                    }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Incorrect user name or password.");
+                        return RedirectToAction("../InitiatorAdmin/Vendor/VendorIndex");
                     }
                 }
                 else

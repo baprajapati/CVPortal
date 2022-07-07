@@ -46,12 +46,21 @@
                         },
                         {
                             "render": function (data, type, row, meta) {
+                                return row.IsActive
+                                    ? "Active"
+                                    : "Inactive"
+                            }, "targets": 'no-sort', "orderable": false
+                        },
+                        {
+                            "render": function (data, type, row, meta) {
                                 return "<a href='@Url.Action("EditDepartment", new { area = "Admin", controller = "Department" })/" + row.GSV_ID + "' class='icon-pencil' title='Edit'>Edit</a>"
                             }, "targets": 'no-sort', "orderable": false
                         },
                         {
                             "render": function (data, type, row, meta) {
-                                return "<a  href='javascript:void(0);' data-departmentid=" + row.GSV_ID + " title='Delete' class='icon-remove btn-cross-red deleteDepartment'>Delete</a>"
+                                return row.IsActive
+                                    ? "<a  href='javascript:void(0);' data-departmentid=" + row.GSV_ID + " title='Inactivate' class='icon-remove btn-cross-red activeUser'>Inactivate</a>"
+                                    : "<a  href='javascript:void(0);' data-departmentid=" + row.GSV_ID + " title='Activate' class='icon-remove btn-cross-red inactiveUser'>Activate</a>"
                             }, "targets": 'no-sort', "orderable": false
                         }
                     ]
@@ -61,26 +70,50 @@
         jQuery(document).ready(function () {
             getDepartments();
 
-            $('#lstDepartments').on('click', '.deleteDepartment', function () {
+            $('#lstDepartments').on('click', '.activeUser', function () {
                 var userID = $(this).data('departmentid');
-                bootbox.confirm("Are you sure want to delete ?", function (result) {
+                bootbox.confirm("Are you sure want to inactivate ?", function (result) {
                     if (result) {
                         $.ajax({
-                            url: '@Url.Action("DeleteDepartment", new { area = "Admin", controller = "Department" })',
-                            type: "POST",
-                            data: JSON.stringify({ id: userID }),
+                            url: '@Url.Action("ActiveDeactiveDepartment", new { area = "Admin", controller = "Department" })/' + userID + "?status=false",
+                            type: "GET",
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             success: function (response) {
                                 if (response.status) {
-                                    toastr.success("Department deleted successfully.", "Department");
+                                    toastr.success("Department inactivated successfully.", "Department");
                                     users.draw();
                                 } else {
                                     toastr.error(response.result, "Department");
                                 }
                             },
                             error: function (response) {
-                                toastr.error(response.responseText, "User");
+                                toastr.error(response.responseText, "Department");
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#lstDepartments').on('click', '.inactiveUser', function () {
+                var userID = $(this).data('departmentid');
+                bootbox.confirm("Are you sure want to activate ?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("ActiveDeactiveDepartment", new { area = "Admin", controller = "Department" })/' + userID + "?status=true",
+                            type: "GET",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.status) {
+                                    toastr.success("Department activated successfully.", "Department");
+                                    users.draw();
+                                } else {
+                                    toastr.error(response.result, "Department");
+                                }
+                            },
+                            error: function (response) {
+                                toastr.error(response.responseText, "Department");
                             }
                         });
                     }
@@ -115,6 +148,7 @@
                                     <th>Seg Code</th>
                                     <th>Dept Code</th>
                                     <th>Description</th>
+                                    <th>Status</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>

@@ -18,6 +18,7 @@ namespace CVPortal.Models
         public string Seg_ID { get; set; }
         public string Dept_Code { get; set; }
         public string Dept_Desc { get; set; }
+        public bool IsActive { get; set; }
         public Nullable<int> CreatedById { get; set; }
         public Nullable<System.DateTime> CreatedByDate { get; set; }
     }

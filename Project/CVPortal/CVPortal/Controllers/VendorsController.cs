@@ -973,7 +973,26 @@ namespace CVPortal.Controllers
 
                     if (model.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
                     {
-                        vendor.VendorCode = vendor.IsNewVendor ? (1000 + vendor.ID).ToString() : vendor.VendorCode;
+                        if (vendor.IsNewVendor)
+                        {
+                            if (vendor.Nature_of_service == "1")
+                            {
+                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 53001001 + 1000;
+                            }
+                            else if (vendor.Nature_of_service == "2" || vendor.Nature_of_service == "3")
+                            {
+                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 12001001 + 1000;
+                            }
+                            else if (vendor.Nature_of_service == "4")
+                            {
+                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 21001001 + 1000;
+                            }
+                            else if (vendor.Nature_of_service == "5")
+                            {
+                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 91001001 + 1000;
+                            }
+                        }
+
                         vendor.IsFinalApproved = true;
                     }
 
@@ -1167,7 +1186,7 @@ namespace CVPortal.Controllers
                         Email = item.Email,
                         vend_name = item.vend_name,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
-                        VendorCode = item.VendorCode,
+                        VendorCode = item.VendorCode?.ToString(),
                         Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
                         NextApprover = $"{vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",

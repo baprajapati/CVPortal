@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "Customer";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/InitiatorAdmin/Views/Shared/_Layout.cshtml";
 }
 @section scripts{
     <script>
@@ -21,7 +21,7 @@
                     "pageLength": '50',
                     "ajax":
                     {
-                        "url": '@Url.Action("GetCustomer", new { area = "Admin", controller = "Customer" })',
+                        "url": '@Url.Action("GetCustomerApproved", new { area = "InitiatorAdmin", controller = "Customer" })',
                         "type": "POST",
                         "dataType": "JSON",
                         "data": function (d) {
@@ -113,7 +113,7 @@
             });
 
             $(".export-button").click(function () {
-                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Customer" })' + '?email=' + $("#Email").val() + "&customerName=" + $("#CustomerName").val() + "&status=" + $("#Status").val();
+                window.location.href = '@Url.Action("DownloadExcelApproved", new { area = "Admin", controller = "Customer" })' + '?email=' + $("#Email").val() + "&customerName=" + $("#CustomerName").val() + "&status=" + $("#Status").val();
             });
 
             $('#lstUsers').on('click', '.printCustomer', function () {
@@ -131,7 +131,7 @@
 
         function printCustomer(id) {
             $.ajax({
-                url: '@Url.Action("CustomerPrint", new { area = "Admin", controller = "Customer" })',
+                url: '@Url.Action("CustomerPrint", new { area = "InitiatorAdmin", controller = "Customer" })',
                 type: "POST",
                 data: JSON.stringify({ id: id }),
                 contentType: "application/json; charset=utf-8",
@@ -172,8 +172,11 @@
                 <div class="col-sm-6">
                     <h1>Customers</h1>
                 </div>
-                <div class="col-sm-6 text-right">
-                    <input type="button" value="Export" class="btn btn-primary export-button" />
+                <div class="col-sm-6">
+                    <div class="form_group text-right">
+                        <input type="button" value="Export" class="btn btn-primary export-button" />
+                        @Html.ActionLink("Add New Customer", "AddCustomer", new { controller = "Customer" }, new { @class = "btn btn-primary" })
+                    </div>
                 </div>
             </div>
         </div>
@@ -184,7 +187,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                           <div class="col-md-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="Email">Email</label>
                                     @Html.TextBox("Email", "", new { @class = "form-control", placeholder = "Email" })
@@ -198,7 +201,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="Status">Status</label>
+                                    <label for="CustomerCode">Status</label>
                                     @Html.TextBox("Status", "", new { @class = "form-control", placeholder = "Status" })
                                 </div>
                             </div>

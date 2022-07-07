@@ -662,9 +662,29 @@ namespace CVPortal.Controllers
 
                     customer.CustomerApprovals.Add(model);
 
+                    if (model.ApproverRole == "InitiatorAdmin")
+                    {
+                        if(model.DealerType == "Scrap")
+                        {
+                            customer.Cust_CodeVehicles = dataContext.Cust_reg_tbl.Where(x=> x.DealerType == "Scrap").Max(x => x.Cust_CodeSpares) ?? 0 + 1;
+                        }
+                        else
+                        {
+                            if(model.DealerType == "Domestic")
+                            {
+                                customer.Cust_CodeSpares = dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSpares) ?? 0 + 1;
+                            }
+
+                            customer.Cust_CodeVehicles = model.Code;
+                        }
+
+                        customer.Cust_CodeSecurity = dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSecurity) ?? 0 + 1;
+                        customer.IsFinalApproved = true;
+                    }
+
                     if (model.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
                     {
-                        customer.CustomerCode = string.IsNullOrEmpty(customer.CustomerCode) ? (1000 + customer.ID).ToString() : customer.CustomerCode;
+                        customer.CustomerCode = customer.CustomerCode != null ? 1000 + customer.ID : customer.CustomerCode;
                         customer.IsFinalApproved = true;
                     }
 
@@ -857,7 +877,7 @@ namespace CVPortal.Controllers
                         Id = item.ID,
                         Email = item.Email,
                         Cust_name = item.Cust_name,
-                        CustomerCode = item.CustomerCode,
+                        CustomerCode = item.CustomerCode?.ToString(),
                         Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
                         NextApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",

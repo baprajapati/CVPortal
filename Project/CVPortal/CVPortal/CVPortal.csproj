@@ -161,6 +161,10 @@
     <Content Include="Areas\InitiatorAdmin\Views\Customer\AddCustomer.cshtml" />
     <Content Include="Areas\InitiatorAdmin\Views\Customer\CustomerIndex.cshtml" />
     <Content Include="Areas\Admin\Views\Customer\CustomerIndex.cshtml" />
+    <Content Include="Areas\InitiatorAdmin\Views\Vendor\VendorIndexApproved.cshtml" />
+    <Content Include="Areas\InitiatorAdmin\Views\Customer\CustomerIndexApproved.cshtml" />
+    <Content Include="Areas\Admin\Views\Customer\CustomerIndexApproved.cshtml" />
+    <Content Include="Areas\Admin\Views\Vendor\VendorIndexApproved.cshtml" />
     <None Include="Content\AdminLTE\jquery\jquery.validate-vsdoc.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.js" />
     <Content Include="Content\AdminLTE\jquery\jquery.validate.unobtrusive.js" />

@@ -58,14 +58,8 @@
                     type: "POST",
                     data: JSON.stringify({
                         customerId: $("#Id").val(),
-                        termsCode: $("#TermsCode").val(),
-                        bankCode: $("#BankCode").val(),
-                        bankBranch: $("#BankBranch").val(),
-                        paymentType: $("#PaymentType").val(),
-                        taxCode: $("#TaxCode").val(),
-                        company: $("#Company").val(),
-                        customerType: $("#CustomerType").val(),
-                        documentPfx: $("#DocumentPfx").val()
+                        code: $("#Code").val(),
+                        dealerType: $("#DealerType").val()
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -83,6 +77,15 @@
                         toastr.error(response.responseText, "Customer");
                     }
                 });
+            });
+
+            $("#DealerType").change(function (e) {
+                if (this.value == "Scrap") {
+                    $(".approve-code").hide();
+                    $("#Code").val("");
+                } else {
+                    $(".approve-code").show();
+                }
             });
 
             $("#btnReject").click(function (e) {
@@ -234,57 +237,30 @@
             <div class="modal-header">
                 <label class="modal-title" id="exampleModalLabel">Approve Confirmation</label>
             </div>
-            @*@if (HttpContext.Current.Session["Role"].ToString() == string.Empty
-                    || (HttpContext.Current.Session["Role"].ToString() != "FinanceDepartment"
-                    && HttpContext.Current.Session["Role"].ToString() != "ITDepartment"))
-                {*@
-            <div class="modal-body">
-                <span>Are you sure, you want to approve?</span>
-            </div>
-            @*}*@
-
-            @if (HttpContext.Current.Session["Role"].ToString() == "FinanceDepartment")
+            @if (HttpContext.Current.Session["Role"].ToString() == string.Empty
+                    || HttpContext.Current.Session["Role"].ToString() != "InitiatorAdmin")
             {
-                @*<div class="modal-body">
-                        <div class="form-group">
-                            <label for="TermsCode">Terms Code</label>
-                            @Html.DropDownList("TermsCode", ViewBag.TermsCodeList as SelectList, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            <label for="BankCode">Bank Code</label>
-                            @Html.DropDownList("BankCode", ViewBag.BankCodeList as SelectList, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            <label for="BankBranch">Bank Branch</label>
-                            @Html.TextBox("BankBranch", "001", new { @class = "form-control", placeholder = "Bank Branch", @readonly = "readonly" })
-                        </div>
-                        <div class="form-group">
-                            <label for="PaymentType">Payment Type</label>
-                            @Html.DropDownList("PaymentType", ViewBag.PaymentTypeList as SelectList, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            <label for="TaxCode">Tax Code</label>
-                            @Html.DropDownList("TaxCode", ViewBag.TaxCodeList as SelectList, new { @class = "form-control" })
-                        </div>
-                    </div>*@
+                <div class="modal-body">
+                    <span>Are you sure, you want to approve?</span>
+                </div>
             }
 
-            @if (HttpContext.Current.Session["Role"].ToString() == "ITDepartment")
+            @if (HttpContext.Current.Session["Role"].ToString() == "InitiatorAdmin")
             {
-                @*<div class="modal-body">
-                        <div class="form-group">
-                            <label for="TermsCode">Company</label>
-                            @Html.TextBox("Company", "10", new { @class = "form-control", placeholder = "Company", @readonly = "readonly" })
-                        </div>
-                        <div class="form-group">
-                            <label for="BankCode">Customer Type</label>
-                            @Html.DropDownList("CustomerType", ViewBag.CustomerTypeList as SelectList, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            <label for="BankBranch">Document Pfx</label>
-                            @Html.TextBox("DocumentPfx", "MU", new { @class = "form-control", placeholder = "Document Pfx", @readonly = "readonly" })
-                        </div>
-                    </div>*@
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="DealerType">Dealer Type</label>
+                        <select class="form-control" id="DealerType">
+                            <option value="Domestic">Domestic</option>
+                            <option value="ASSC">ASSC</option>
+                            <option value="Scrap">Scrap</option>
+                        </select>
+                    </div>
+                    <div class="form-group approve-code">
+                        <label for="BankBranch">Code</label>
+                        @Html.TextBox("Code", "", new { @class = "form-control", placeholder = "Bank Branch" })
+                    </div>
+                </div>
             }
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Close</button>

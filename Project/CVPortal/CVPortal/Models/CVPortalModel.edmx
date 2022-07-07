@@ -61,10 +61,11 @@
           <Property Name="ITR_ReturnSts" Type="nvarchar" MaxLength="10" />
           <Property Name="ITR_ReturnStsTurnover" Type="bit" />
           <Property Name="ITR_ReturnTDSDeduct" Type="bit" />
+          <Property Name="DealerType" Type="nvarchar" MaxLength="50" />
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="NextApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
-          <Property Name="CustomerCode" Type="nvarchar" MaxLength="1000" />
+          <Property Name="CustomerCode" Type="int" />
           <Property Name="Step1" Type="bit" />
           <Property Name="Step2" Type="bit" />
           <Property Name="Step3" Type="bit" />
@@ -79,6 +80,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="DealerType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Code" Type="numeric" Precision="8" Scale="0" />
           <Property Name="ApproverRole" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Remarks" Type="nvarchar(max)" />
@@ -103,7 +106,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmailType" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="EntityId" Type="int" Nullable="false" />
+          <Property Name="EntityId" Type="int" />
           <Property Name="MailTo" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="CC" Type="nvarchar" MaxLength="1000" />
           <Property Name="BCC" Type="nvarchar" MaxLength="1000" />
@@ -197,6 +200,7 @@
           <Property Name="Seg_ID" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Dept_Code" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Dept_Desc" Type="nvarchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="int" />
           <Property Name="CreatedByDate" Type="datetime" />
         </EntityType>
@@ -323,7 +327,7 @@
           <Property Name="Type_of_Vend" Type="nvarchar" MaxLength="1" />
           <Property Name="NextApprovar" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
-          <Property Name="VendorCode" Type="nvarchar" MaxLength="1000" />
+          <Property Name="VendorCode" Type="int" />
           <Property Name="Step1" Type="bit" />
           <Property Name="Step2" Type="bit" />
           <Property Name="Step3" Type="bit" />
@@ -805,10 +809,11 @@
           <Property Name="ITR_ReturnSts" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="ITR_ReturnStsTurnover" Type="Boolean" />
           <Property Name="ITR_ReturnTDSDeduct" Type="Boolean" />
+          <Property Name="DealerType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="NextApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerCode" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerCode" Type="Int32" />
           <Property Name="Step1" Type="Boolean" />
           <Property Name="Step2" Type="Boolean" />
           <Property Name="Step3" Type="Boolean" />
@@ -826,6 +831,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="DealerType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="ApproverRole" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -853,7 +860,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EmailType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EntityId" Type="Int32" Nullable="false" />
+          <Property Name="EntityId" Type="Int32" />
           <Property Name="MailTo" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="CC" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="BCC" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
@@ -947,6 +954,7 @@
           <Property Name="Seg_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dept_Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dept_Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" />
           <Property Name="CreatedByDate" Type="DateTime" Precision="3" />
         </EntityType>
@@ -1081,7 +1089,7 @@
           <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="NextApprovar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="VendorCode" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="VendorCode" Type="Int32" />
           <Property Name="Step1" Type="Boolean" />
           <Property Name="Step2" Type="Boolean" />
           <Property Name="Step3" Type="Boolean" />
@@ -1357,6 +1365,7 @@
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
                 <ScalarProperty Name="NextApprover" ColumnName="NextApprover" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DealerType" ColumnName="DealerType" />
                 <ScalarProperty Name="ITR_ReturnTDSDeduct" ColumnName="ITR_ReturnTDSDeduct" />
                 <ScalarProperty Name="ITR_ReturnStsTurnover" ColumnName="ITR_ReturnStsTurnover" />
                 <ScalarProperty Name="ITR_ReturnSts" ColumnName="ITR_ReturnSts" />
@@ -1411,6 +1420,8 @@
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ApproverRole" ColumnName="ApproverRole" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="DealerType" ColumnName="DealerType" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -1530,6 +1541,7 @@
               <MappingFragment StoreEntitySet="Lx_GSV">
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Dept_Desc" ColumnName="Dept_Desc" />
                 <ScalarProperty Name="Dept_Code" ColumnName="Dept_Code" />
                 <ScalarProperty Name="Seg_ID" ColumnName="Seg_ID" />

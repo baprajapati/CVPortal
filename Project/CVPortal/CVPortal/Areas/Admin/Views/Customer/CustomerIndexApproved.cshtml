@@ -21,7 +21,7 @@
                     "pageLength": '50',
                     "ajax":
                     {
-                        "url": '@Url.Action("GetCustomer", new { area = "Admin", controller = "Customer" })',
+                        "url": '@Url.Action("GetCustomerApproved", new { area = "Admin", controller = "Customer" })',
                         "type": "POST",
                         "dataType": "JSON",
                         "data": function (d) {
@@ -113,7 +113,7 @@
             });
 
             $(".export-button").click(function () {
-                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Customer" })' + '?email=' + $("#Email").val() + "&customerName=" + $("#CustomerName").val() + "&status=" + $("#Status").val();
+                window.location.href = '@Url.Action("DownloadExcelApproved", new { area = "Admin", controller = "Customer" })' + '?email=' + $("#Email").val() + "&customerName=" + $("#CustomerName").val() + "&status=" + $("#Status").val();
             });
 
             $('#lstUsers').on('click', '.printCustomer', function () {

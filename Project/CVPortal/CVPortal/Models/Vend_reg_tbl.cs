@@ -74,7 +74,7 @@ namespace CVPortal.Models
         public string Type_of_Vend { get; set; }
         public string NextApprovar { get; set; }
         public string OTP { get; set; }
-        public string VendorCode { get; set; }
+        public Nullable<int> VendorCode { get; set; }
         public Nullable<bool> Step1 { get; set; }
         public Nullable<bool> Step2 { get; set; }
         public Nullable<bool> Step3 { get; set; }

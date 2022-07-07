@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Customer";
+    ViewBag.Title = "Vendor";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 @section scripts{
@@ -8,7 +8,7 @@
         var users;
         var onClickSearch = false;
 
-        function getCustomers() {
+        function getVendors() {
             users = $('#lstUsers').DataTable
                 ({
                     "language":
@@ -21,12 +21,13 @@
                     "pageLength": '50',
                     "ajax":
                     {
-                        "url": '@Url.Action("GetCustomer", new { area = "Admin", controller = "Customer" })',
+                        "url": '@Url.Action("GetVendorApproved", new { area = "Admin", controller = "Vendor" })',
                         "type": "POST",
                         "dataType": "JSON",
                         "data": function (d) {
+                            d.VendorCode = $("#VendorCode").val();
                             d.Email = $("#Email").val();
-                            d.Cust_name = $("#CustomerName").val();
+                            d.vend_name = $("#VendorName").val();
                             d.Status = $("#Status").val();
                             return d;
                         }
@@ -39,10 +40,16 @@
                     'aaSorting': [[0, 'desc']],
                     "columns": [
                         {
+                            "data": "NewExistingVendor", "name": "NewExistingVendor"
+                        },
+                        {
+                            "data": "VendorCode", "name": "VendorCode"
+                        },
+                        {
                             "data": "Email", "name": "Email"
                         },
                         {
-                            "data": "Cust_name", "name": "Cust_name"
+                            "data": "vend_name", "name": "vend_name"
                         },
                         {
                             "data": "Owner", "name": "Owner"
@@ -92,13 +99,13 @@
                         {
                             "class": "text-center",
                             "render": function (data, type, row, meta) {
-                                return "<a href='/Customers/CustomerStep1/" + row.Id + "' title='View' target='_blank'>View</a>";
+                                return "<a href='/Vendors/VendorStep1/" + row.Id + "' title='View' target='_blank'>View</a>";
                             }, "targets": 'no-sort', "orderable": false
                         },
                         {
                             "class": "text-center",
                             "render": function (data, type, row, meta) {
-                                return row.Step4 ? "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printCustomer'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>" : "";
+                                return row.Step4 ? "<a href='javascript:void(0);' data-id='" + row.Id + "' id='" + row.Id + "' title='Print' class='printVendor'>Print</a><i class='fa fa-spinner fa-spin " + row.Id + "' style='display: none;'></i>" : "";
                             }, "targets": 'no-sort', "orderable": false
                         }
                     ]
@@ -106,32 +113,33 @@
         }
 
         jQuery(document).ready(function () {
-            getCustomers();
+            getVendors();
 
             $(".search-button").click(function () {
                 users.draw();
             });
 
             $(".export-button").click(function () {
-                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Customer" })' + '?email=' + $("#Email").val() + "&customerName=" + $("#CustomerName").val() + "&status=" + $("#Status").val();
+                window.location.href = '@Url.Action("DownloadExcelApproved", new { area = "Admin", controller = "Vendor" })' + '?vendorCode=' + $("#VendorCode").val()
+                    + "&email=" + $("#Email").val() + "&vendorName=" + $("#VendorName").val() + "&status=" + $("#Status").val();
             });
 
-            $('#lstUsers').on('click', '.printCustomer', function () {
-                if (!$(".printCustomer").hasClass("disabled")) {
+            $('#lstUsers').on('click', '.printVendor', function () {
+                if (!$(".printVendor").hasClass("disabled")) {
                     var id = $(this).data('id');
 
-                    $(".printCustomer").addClass("disabled");
+                    $(".printVendor").addClass("disabled");
                     $("#" + id).hide();
                     $("." + id).show();
 
-                    printCustomer(id);
+                    printVendor(id);
                 }
             });
         });
 
-        function printCustomer(id) {
+        function printVendor(id) {
             $.ajax({
-                url: '@Url.Action("CustomerPrint", new { area = "Admin", controller = "Customer" })',
+                url: '@Url.Action("VendorPrint", new { area = "Admin", controller = "Vendor" })',
                 type: "POST",
                 data: JSON.stringify({ id: id }),
                 contentType: "application/json; charset=utf-8",
@@ -148,7 +156,7 @@
 
                     document.body.appendChild(objFra);
 
-                    $(".printCustomer").removeClass("disabled");
+                    $(".printVendor").removeClass("disabled");
                     $("#" + id).show();
                     $("." + id).hide();
 
@@ -156,10 +164,10 @@
                     objFra.contentWindow.print();
                 },
                 error: function (response) {
-                    $(".printCustomer").removeClass("disabled");
+                    $(".printVendor").removeClass("disabled");
                     $("." + id).hide();
                     $("#" + id).show();
-                    toastr.error(response.responseText, "Customer");
+                    toastr.error(response.responseText, "Vendor");
                 }
             });
         }
@@ -170,7 +178,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Customers</h1>
+                    <h1>Vendors</h1>
                 </div>
                 <div class="col-sm-6 text-right">
                     <input type="button" value="Export" class="btn btn-primary export-button" />
@@ -184,7 +192,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                           <div class="col-md-3">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="VendorCode">Code</label>
+                                    @Html.TextBox("VendorCode", "", new { @class = "form-control", placeholder = "Code" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="Email">Email</label>
                                     @Html.TextBox("Email", "", new { @class = "form-control", placeholder = "Email" })
@@ -192,13 +206,13 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="CustomerName">Customer Name</label>
-                                    @Html.TextBox("CustomerName", "", new { @class = "form-control", placeholder = "Customer Name" })
+                                    <label for="VendorName">Vendor Name</label>
+                                    @Html.TextBox("VendorName", "", new { @class = "form-control", placeholder = "Vendor Name" })
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="Status">Status</label>
+                                    <label for="VendorCode">Status</label>
                                     @Html.TextBox("Status", "", new { @class = "form-control", placeholder = "Status" })
                                 </div>
                             </div>
@@ -219,8 +233,10 @@
                         <table class="table table-striped table-bordered table-hover" id="lstUsers">
                             <thead class="table_header">
                                 <tr>
+                                    <th>New / Existing</th>
+                                    <th>Code</th>
                                     <th>Email</th>
-                                    <th>Customer Name</th>
+                                    <th>Vendor Name</th>
                                     <th>Owner</th>
                                     <th>Next Approver</th>
                                     <th>Initiator Department</th>
