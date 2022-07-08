@@ -50,6 +50,11 @@
             $("#btnApprove").click(function (e) {
                 e.preventDefault();
 
+                if ($("#DealerType").val() != "Scrap" && $("#Code").val() == "") {
+                    toastr.error("Code is required.", "Customer");
+                    return;
+                }
+
                 $(this).html("Loading...");
                 $(".btnClose").hide();
 
@@ -209,10 +214,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    @Html.RadioButtonFor(model => model.ITR_ReturnTDSDeduct, true, Model.IsMain ? (object)new { @id = "IsITRFiled11" } : new { @id = "IsITRFiled11", @disabled = "disabled" })
-                    <label for="IsITRFiled11" style="font-weight: 500; margin-right: 30px;">Yes</label>
-                    @Html.RadioButtonFor(model => model.ITR_ReturnTDSDeduct, false, Model.IsMain ? (object)new { @id = "IsITRFiled12" } : new { @id = "IsITRFiled12", @disabled = "disabled" })
-                    <label for="IsITRFiled12" style="font-weight: 500; margin-right: 30px;">No</label>
+                    @Html.RadioButtonFor(model => model.ITR_ReturnTDSDeduct, true, Model.IsMain ? (object)new { @id = "IsITRFiled13" } : new { @id = "IsITRFiled13", @disabled = "disabled" })
+                    <label for="IsITRFiled13" style="font-weight: 500; margin-right: 30px;">Yes</label>
+                    @Html.RadioButtonFor(model => model.ITR_ReturnTDSDeduct, false, Model.IsMain ? (object)new { @id = "IsITRFiled14" } : new { @id = "IsITRFiled14", @disabled = "disabled" })
+                    <label for="IsITRFiled14" style="font-weight: 500; margin-right: 30px;">No</label>
                     @Html.ValidationMessageFor(model => model.ITR_ReturnTDSDeduct)
                 </div>
             </div>
@@ -238,14 +243,14 @@
                 <label class="modal-title" id="exampleModalLabel">Approve Confirmation</label>
             </div>
             @if (HttpContext.Current.Session["Role"].ToString() == string.Empty
-                    || HttpContext.Current.Session["Role"].ToString() != "InitiatorAdmin")
+                    || HttpContext.Current.Session["Role"].ToString() != "InitiatorAdmin" || !Model.IsCreatedUser)
             {
                 <div class="modal-body">
                     <span>Are you sure, you want to approve?</span>
                 </div>
             }
 
-            @if (HttpContext.Current.Session["Role"].ToString() == "InitiatorAdmin")
+            @if (HttpContext.Current.Session["Role"].ToString() == "InitiatorAdmin" && Model.IsCreatedUser)
             {
                 <div class="modal-body">
                     <div class="form-group">
@@ -258,7 +263,7 @@
                     </div>
                     <div class="form-group approve-code">
                         <label for="BankBranch">Code</label>
-                        @Html.TextBox("Code", "", new { @class = "form-control", placeholder = "Bank Branch" })
+                        @Html.TextBox("Code", "", new { @class = "form-control", placeholder = "Code" })
                     </div>
                 </div>
             }

@@ -28,6 +28,7 @@ namespace CVPortal.Models
         public string Status { get; set; }
         public string Remarks { get; set; }
         public bool IsDeleted { get; set; }
+        public string CreatedByCode { get; set; }
         public int CreatedById { get; set; }
         public System.DateTime CreatedByDate { get; set; }
     

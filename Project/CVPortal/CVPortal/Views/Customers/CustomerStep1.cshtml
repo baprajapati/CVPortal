@@ -130,10 +130,10 @@
                 </div>
                 <div class="col-md-6">
                     @Html.RadioButtonFor(model => model.Org_Sts, "3", Model.IsMain ? (object)new { @id = "orgStatus3" } : new { @id = "orgStatus3", disabled = "disabled" })
-                    <label for="orgStatus3" style="font-weight: 500;">Proprietorship</label><br />
+                    <label for="orgStatus3" style="font-weight: 500;">Proprietorship</label>
                     <br />
-                    @Html.RadioButtonFor(model => model.Org_Sts, "5", Model.IsMain ? (object)new { @id = "orgStatus5" } : new { @id = "orgStatus5", disabled = "disabled" })
-                    <label for="orgStatus5" style="font-weight: 500;">Others</label>
+                    @Html.RadioButtonFor(model => model.Org_Sts, "4", Model.IsMain ? (object)new { @id = "orgStatus4" } : new { @id = "orgStatus4", disabled = "disabled" })
+                    <label for="orgStatus4" style="font-weight: 500;">Others</label>
                 </div>
             </div><br />
             <div class="row">

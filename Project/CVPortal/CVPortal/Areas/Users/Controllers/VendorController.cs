@@ -14,7 +14,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebMatrix.WebData;
 
-namespace CVPortal.Areas.InitiatorAdmin.Controllers
+namespace CVPortal.Areas.Users.Controllers
 {
     public class VendorController : Controller
     {

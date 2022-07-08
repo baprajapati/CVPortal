@@ -1,7 +1,7 @@
 ﻿@model CVPortal.ViewModels.VendorViewModel
 @{
     ViewBag.Title = "Add Vendor";
-    Layout = "~/Areas/InitiatorAdmin/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Users/Views/Shared/_Layout.cshtml";
 }
 
 <div class="content-wrapper">
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="VendorCode">Employee Code</label>
-                                    @Html.TextBoxFor(model => model.VendorCode, new { id = "txtVendorCode", @class = "form-control", placeholder = "Vendor Code", @readonly = "readonly" })
+                                    @Html.TextBoxFor(model => model.VendorCode, new { id = "txtEmployeeCode", @class = "form-control", placeholder = "Employee Code", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.VendorCode, "")
                                 </div>
                                 <div class="form-group">
@@ -73,13 +73,18 @@
 
     <script type="text/javascript">
         function SetNewExistingVendor(value) {
+            $("#txtEmployeeCode").val("");
+            $("#txtEmail").val("");
+            $("#txtVendorName").val("");
+            $("#ExistingReason").val("");
+
             if (value == 'True') {
-                $("#txtVendorCode").attr("readonly", "readonly");
+                $("#txtEmployeeCode").attr("readonly", "readonly");
                 $("#txtEmail").removeAttr("readonly");
                 $("#txtVendorName").removeAttr("readonly");
                 $(".existing-reason").hide();
             } else if (value == 'False') {
-                $("#txtVendorCode").removeAttr("readonly");
+                $("#txtEmployeeCode").removeAttr("readonly");
                 $("#txtEmail").attr("readonly", "readonly")
                 $("#txtVendorName").attr("readonly", "readonly")
                 $(".existing-reason").show();
@@ -93,9 +98,9 @@
                 SetNewExistingVendor(this.value);
             });
 
-            $("#txtVendorCode").change(function (e) {
+            $("#txtEmployeeCode").change(function (e) {
               $.ajax({
-                  url: '@Url.Action("GetVendorDetails", new { area = "InitiatorAdmin", controller = "Vendor" })?vendorCode=' + $("#txtVendorCode").val(),
+                  url: '@Url.Action("GetVendorDetails", new { area = "Users", controller = "Vendor" })?vendorCode=' + $("#txtEmployeeCode").val(),
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",

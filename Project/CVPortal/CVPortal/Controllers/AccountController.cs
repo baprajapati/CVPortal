@@ -23,6 +23,7 @@ namespace CVPortal.Controllers
             if (user != null && WebSecurity.Login(user.EmailAddress, user.Password, false))
             {
                 Utility.UserCode = user.EmailAddress;
+                Utility.UserId = user.Id;
                 Session["UserFullName"] = user.HANAME;
                 FormsAuthentication.SetAuthCookie(user.EmailAddress, false);
 
@@ -36,7 +37,7 @@ namespace CVPortal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("../InitiatorAdmin/Vendor/VendorIndex");
+                    return RedirectToAction("../Users/Vendor/VendorIndex");
                 }
             }
 
@@ -283,6 +284,7 @@ namespace CVPortal.Controllers
                 if (user != null && WebSecurity.Login(model.Email, model.Password, false))
                 {
                     Utility.UserCode = user.EmailAddress;
+                    Utility.UserId = user.Id;
                     Session["UserFullName"] = user.HANAME;
                     FormsAuthentication.SetAuthCookie(model.Email, false);
 
@@ -296,7 +298,7 @@ namespace CVPortal.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("../InitiatorAdmin/Vendor/VendorIndex");
+                        return RedirectToAction("../Users/Vendor/VendorIndex");
                     }
                 }
                 else
@@ -313,6 +315,7 @@ namespace CVPortal.Controllers
         {
             FormsAuthentication.SignOut();
             Utility.UserCode = string.Empty;
+            Utility.UserId = 0;
             return RedirectToAction("Login");
         }
 
@@ -320,6 +323,7 @@ namespace CVPortal.Controllers
         {
             FormsAuthentication.SignOut();
             Utility.UserCode = string.Empty;
+            Utility.UserId = 0;
             return RedirectToAction("VendorLogin/" + id);
         }
 
@@ -327,6 +331,7 @@ namespace CVPortal.Controllers
         {
             FormsAuthentication.SignOut();
             Utility.UserCode = string.Empty;
+            Utility.UserId = 0;
             return RedirectToAction("CustomerLogin/" + id);
         }
     }

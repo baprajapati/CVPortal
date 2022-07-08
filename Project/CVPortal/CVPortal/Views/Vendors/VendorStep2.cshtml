@@ -387,10 +387,6 @@
                         @Html.RadioButtonFor(model => model.Nature_of_service, "5", Model.IsMain ? (object)new { @id = "serviceNature5" } : new { @id = "serviceNature5", @disabled = "disabled" })
                         <label for="serviceNature5" style="font-weight: 500; margin-right: 30px;">Imports</label>
                     </div>
-                    <div class="col-md-4">
-                        @Html.RadioButtonFor(model => model.Nature_of_service, "6", Model.IsMain ? (object)new { @id = "serviceNature6" } : new { @id = "serviceNature6", @disabled = "disabled" })
-                        <label for="serviceNature6" style="font-weight: 500;">Others</label>
-                    </div>
                     @Html.ValidationMessageFor(model => model.Nature_of_service)
                 </div>
             </div>

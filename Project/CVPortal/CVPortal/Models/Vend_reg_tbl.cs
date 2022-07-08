@@ -73,6 +73,21 @@ namespace CVPortal.Models
         public Nullable<decimal> Date { get; set; }
         public string Type_of_Vend { get; set; }
         public string NextApprovar { get; set; }
+        public string TermsCode { get; set; }
+        public string BankCode { get; set; }
+        public string BankBranch { get; set; }
+        public string PaymentType { get; set; }
+        public string TaxCode { get; set; }
+        public string Company { get; set; }
+        public string VendorType { get; set; }
+        public string DocumentPfx { get; set; }
+        public string Currency { get; set; }
+        public string InitiatorAdminApproval { get; set; }
+        public string InitiatorDepartmentApproval { get; set; }
+        public string HODDepartmentApproval { get; set; }
+        public string LegalDepartmentApproval { get; set; }
+        public string FinanceDepartmentApproval { get; set; }
+        public string ITDepartmentApproval { get; set; }
         public string OTP { get; set; }
         public Nullable<int> VendorCode { get; set; }
         public Nullable<bool> Step1 { get; set; }

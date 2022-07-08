@@ -1,22 +1,22 @@
 ﻿using System.Web.Mvc;
 
-namespace CVPortal.Areas.InitiatorAdmin
+namespace CVPortal.Areas.Users
 {
-    public class InitiatorAdminAreaRegistration : AreaRegistration 
+    public class UsersAreaRegistration : AreaRegistration 
     {
         public override string AreaName 
         {
             get 
             {
-                return "InitiatorAdmin";
+                return "Users";
             }
         }
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
-                "InitiatorAdmin_default",
-                "InitiatorAdmin/{controller}/{action}/{id}",
+                "Users_default",
+                "Users/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }
             );
         }

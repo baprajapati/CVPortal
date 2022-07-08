@@ -996,6 +996,23 @@ namespace CVPortal.Controllers
                         vendor.IsFinalApproved = true;
                     }
 
+                    if(model.TermsCodeId != null)
+                    {
+                        vendor.TermsCode = dataContext.PaymentTermsMasters.FirstOrDefault(x => x.PTerms_ID == model.TermsCodeId)?.PTerms_Code;
+                        vendor.BankCode = model.BankCode;
+                        vendor.BankBranch = model.BankBranch;
+                        vendor.PaymentType = dataContext.PayTypeMasters.FirstOrDefault(x => x.PayType_ID == model.PaymentTypeId)?.PayType_Code;
+                        vendor.TaxCode = dataContext.LX_TaxCode.FirstOrDefault(x => x.Id == model.TaxCodeId)?.ItemTaxCDE;
+                    }
+
+                    if (model.VendorTypeId != null)
+                    {
+                        vendor.Company = model.Company;
+                        vendor.VendorType = dataContext.VendorTypeMasters.FirstOrDefault(x => x.VT_ID == model.VendorTypeId)?.VendorType;
+                        vendor.Currency = dataContext.VendorTypeMasters.FirstOrDefault(x => x.VT_ID == model.VendorTypeId)?.Currency;
+                        vendor.DocumentPfx = model.DocumentPfx;
+                    }
+
                     dataContext.SaveChanges();
 
                     if (model.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())

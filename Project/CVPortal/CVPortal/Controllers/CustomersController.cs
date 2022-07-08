@@ -188,6 +188,7 @@ namespace CVPortal.Controllers
                 model.ITR_ReturnTDSDeduct = customer.ITR_ReturnTDSDeduct;
                 model.IsMain = Utility.UserCode.Equals(customer.Email);
                 model.IsApprover = customer.Step4 ?? false && !customer.IsFinalApproved;
+                model.IsCreatedUser = customer.CreatedById == Utility.UserId;
 
                 if (model.IsApprover)
                 {
@@ -662,15 +663,15 @@ namespace CVPortal.Controllers
 
                     customer.CustomerApprovals.Add(model);
 
-                    if (model.ApproverRole == "InitiatorAdmin")
+                    if (Session["Role"].ToString() == "InitiatorAdmin" && customer.CreatedById == Utility.UserId)
                     {
-                        if(model.DealerType == "Scrap")
+                        if (model.DealerType == "Scrap")
                         {
-                            customer.Cust_CodeVehicles = dataContext.Cust_reg_tbl.Where(x=> x.DealerType == "Scrap").Max(x => x.Cust_CodeSpares) ?? 0 + 1;
+                            customer.Cust_CodeVehicles = dataContext.Cust_reg_tbl.Where(x => x.DealerType == "Scrap").Max(x => x.Cust_CodeSpares) ?? 0 + 1;
                         }
                         else
                         {
-                            if(model.DealerType == "Domestic")
+                            if (model.DealerType == "Domestic")
                             {
                                 customer.Cust_CodeSpares = dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSpares) ?? 0 + 1;
                             }
@@ -679,7 +680,6 @@ namespace CVPortal.Controllers
                         }
 
                         customer.Cust_CodeSecurity = dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSecurity) ?? 0 + 1;
-                        customer.IsFinalApproved = true;
                     }
 
                     if (model.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())

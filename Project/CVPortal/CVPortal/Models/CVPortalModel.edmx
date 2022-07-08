@@ -257,7 +257,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="HAID" Type="char" MaxLength="2" />
           <Property Name="HAUSER" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="HACOMP" Type="int" />
@@ -326,6 +326,21 @@
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="nvarchar" MaxLength="1" />
           <Property Name="NextApprovar" Type="nvarchar" MaxLength="50" />
+          <Property Name="TermsCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankBranch" Type="nvarchar" MaxLength="50" />
+          <Property Name="PaymentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="TaxCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Company" Type="nvarchar" MaxLength="50" />
+          <Property Name="VendorType" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentPfx" Type="nvarchar" MaxLength="50" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="50" />
+          <Property Name="InitiatorAdminApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="InitiatorDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="HODDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="LegalDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="FinanceDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="ITDepartmentApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
           <Property Name="VendorCode" Type="int" />
           <Property Name="Step1" Type="bit" />
@@ -354,6 +369,7 @@
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Remarks" Type="nvarchar(max)" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="CreatedByCode" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
         </EntityType>
@@ -1014,7 +1030,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="HAID" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="HAUSER" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="HACOMP" Type="Int32" />
@@ -1088,6 +1104,21 @@
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="NextApprovar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TermsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankBranch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TaxCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VendorType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentPfx" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InitiatorAdminApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InitiatorDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HODDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LegalDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FinanceDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ITDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="VendorCode" Type="Int32" />
           <Property Name="Step1" Type="Boolean" />
@@ -1119,6 +1150,7 @@
           <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedByCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="LX_TaxCode" Relationship="CVPortalModel.FK_VendorApproval_LX_TaxCode" FromRole="VendorApproval" ToRole="LX_TaxCode" />
@@ -1633,6 +1665,21 @@
                 <ScalarProperty Name="Step1" ColumnName="Step1" />
                 <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
+                <ScalarProperty Name="ITDepartmentApproval" ColumnName="ITDepartmentApproval" />
+                <ScalarProperty Name="FinanceDepartmentApproval" ColumnName="FinanceDepartmentApproval" />
+                <ScalarProperty Name="LegalDepartmentApproval" ColumnName="LegalDepartmentApproval" />
+                <ScalarProperty Name="HODDepartmentApproval" ColumnName="HODDepartmentApproval" />
+                <ScalarProperty Name="InitiatorDepartmentApproval" ColumnName="InitiatorDepartmentApproval" />
+                <ScalarProperty Name="InitiatorAdminApproval" ColumnName="InitiatorAdminApproval" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="DocumentPfx" ColumnName="DocumentPfx" />
+                <ScalarProperty Name="VendorType" ColumnName="VendorType" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="BankBranch" ColumnName="BankBranch" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+                <ScalarProperty Name="TermsCode" ColumnName="TermsCode" />
                 <ScalarProperty Name="NextApprovar" ColumnName="NextApprovar" />
                 <ScalarProperty Name="Type_of_Vend" ColumnName="Type_of_Vend" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
@@ -1693,6 +1740,7 @@
               <MappingFragment StoreEntitySet="VendorApproval">
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="CreatedByCode" ColumnName="CreatedByCode" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="Status" ColumnName="Status" />

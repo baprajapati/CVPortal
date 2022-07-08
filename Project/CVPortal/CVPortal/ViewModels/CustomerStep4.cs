@@ -24,5 +24,6 @@ namespace CVPortal.ViewModels
 
         public bool IsMain { get; set; }
         public bool IsApprover { get; set; }
+        public bool IsCreatedUser { get; set; }
     }
 }
