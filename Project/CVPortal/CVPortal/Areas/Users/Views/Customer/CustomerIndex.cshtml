@@ -175,7 +175,10 @@
                 <div class="col-sm-6">
                     <div class="form_group text-right">
                         <input type="button" value="Export" class="btn btn-primary export-button" />
-                        @Html.ActionLink("Add New Customer", "AddCustomer", new { controller = "Customer" }, new { @class = "btn btn-primary" })
+                        @if (Session["Role"].ToString() == "InitiatorAdmin")
+                        {
+                            @Html.ActionLink("Add New Customer", "AddCustomer", new { controller = "Customer" }, new { @class = "btn btn-primary" })
+                        }
                     </div>
                 </div>
             </div>

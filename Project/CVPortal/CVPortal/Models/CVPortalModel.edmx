@@ -65,6 +65,12 @@
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="NextApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
+          <Property Name="InitiatorAdminApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="InitiatorDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="HODDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="LegalDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="FinanceDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="ITDepartmentApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="CustomerCode" Type="int" />
           <Property Name="Step1" Type="bit" />
           <Property Name="Step2" Type="bit" />
@@ -86,6 +92,7 @@
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Remarks" Type="nvarchar(max)" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="CreatedByCode" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
         </EntityType>
@@ -829,6 +836,12 @@
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="NextApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InitiatorAdminApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InitiatorDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HODDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LegalDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FinanceDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ITDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CustomerCode" Type="Int32" />
           <Property Name="Step1" Type="Boolean" />
           <Property Name="Step2" Type="Boolean" />
@@ -853,6 +866,7 @@
           <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedByCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Cust_reg_tbl" Relationship="CVPortalModel.FK_CustomerApproval_Cust_reg_tbl" FromRole="CustomerApproval" ToRole="Cust_reg_tbl" />
@@ -1394,6 +1408,12 @@
                 <ScalarProperty Name="Step2" ColumnName="Step2" />
                 <ScalarProperty Name="Step1" ColumnName="Step1" />
                 <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="ITDepartmentApproval" ColumnName="ITDepartmentApproval" />
+                <ScalarProperty Name="FinanceDepartmentApproval" ColumnName="FinanceDepartmentApproval" />
+                <ScalarProperty Name="LegalDepartmentApproval" ColumnName="LegalDepartmentApproval" />
+                <ScalarProperty Name="HODDepartmentApproval" ColumnName="HODDepartmentApproval" />
+                <ScalarProperty Name="InitiatorDepartmentApproval" ColumnName="InitiatorDepartmentApproval" />
+                <ScalarProperty Name="InitiatorAdminApproval" ColumnName="InitiatorAdminApproval" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
                 <ScalarProperty Name="NextApprover" ColumnName="NextApprover" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
@@ -1448,6 +1468,7 @@
               <MappingFragment StoreEntitySet="CustomerApproval">
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="CreatedByCode" ColumnName="CreatedByCode" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="Status" ColumnName="Status" />

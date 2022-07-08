@@ -67,6 +67,12 @@ namespace CVPortal.Models
         public Nullable<decimal> Date { get; set; }
         public string NextApprover { get; set; }
         public string OTP { get; set; }
+        public string InitiatorAdminApproval { get; set; }
+        public string InitiatorDepartmentApproval { get; set; }
+        public string HODDepartmentApproval { get; set; }
+        public string LegalDepartmentApproval { get; set; }
+        public string FinanceDepartmentApproval { get; set; }
+        public string ITDepartmentApproval { get; set; }
         public Nullable<int> CustomerCode { get; set; }
         public Nullable<bool> Step1 { get; set; }
         public Nullable<bool> Step2 { get; set; }
