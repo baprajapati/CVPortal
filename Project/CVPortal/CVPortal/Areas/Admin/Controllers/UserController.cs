@@ -420,6 +420,13 @@ namespace CVPortal.Areas.Admin.Controllers
                     var data = dataContext.tbl_Users.FirstOrDefault(x => x.Id == user.Id);
                     if (data != null)
                     {
+                        var roleName = Roles.GetRolesForUser(data.EmailAddress).First().ToString();
+                        if(roleName != user.RoleName)
+                        {
+                            Roles.RemoveUserFromRole(data.EmailAddress, roleName);
+                            Roles.AddUserToRole(data.EmailAddress, user.RoleName);
+                        }
+
                         data.EmailAddress = user.Email;
                         data.HANEXT = user.HANEXT;
                         data.HAUSER = user.HAUSER;

@@ -29,8 +29,12 @@
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(model => model.Id)
                             @Html.HiddenFor(model => model.Password)
-                            @Html.HiddenFor(model => model.RoleName)
                             <div class="card-body">
+                                <div class="form-group">
+                                    <label for="RoleName">Role</label>
+                                    @Html.DropDownListFor(model => model.RoleName, ViewBag.RoleList as SelectList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RoleName, "")
+                                </div>
                                 <div class="form-group">
                                     <label for="Email">User Code</label>
                                     @Html.TextBoxFor(model => model.HAUSER, new { id = "txtHAUSER", @class = "form-control", placeholder = "User Code" })
@@ -50,10 +54,6 @@
                                     <label for="Email">Email</label>
                                     @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control", placeholder = "Email" })
                                     @Html.ValidationMessageFor(model => model.Email, "")
-                                </div>
-                                <div class="form-group">
-                                    <label for="RoleName">Role</label>
-                                    @Html.TextBoxFor(model => model.RoleName, new { id = "txtRoleName", @class = "form-control", placeholder = "RoleName", disabled = "disabled" })
                                 </div>
                                 <div class="form-group">
                                     <label for="RoleName">Next User</label>

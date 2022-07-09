@@ -99,7 +99,7 @@
                         {
                             "class": "text-center",
                             "render": function (data, type, row, meta) {
-                                return "<a href='/Vendors/VendorStep1/" + row.Id + "' title='View' target='_blank'>View</a>";
+                                return row.Step4 ? "<a href='/Vendors/VendorStep1/" + row.Id + "' title='View' target='_blank'>View</a>" : "";
                             }, "targets": 'no-sort', "orderable": false
                         },
                         {
