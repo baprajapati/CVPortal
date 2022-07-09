@@ -32,11 +32,14 @@ namespace CVPortal.Models
         public string Email { get; set; }
         public string Address1 { get; set; }
         public string Address1Country { get; set; }
+        public string Address1StateCode { get; set; }
         public string Address1State { get; set; }
         public string Address1City { get; set; }
         public string Address1Pincode { get; set; }
+        public Nullable<bool> IsSameAsAddress1 { get; set; }
         public string Address2 { get; set; }
         public string Address2Country { get; set; }
+        public string Address2StateCode { get; set; }
         public string Address2State { get; set; }
         public string Address2City { get; set; }
         public string Address2Pincode { get; set; }
@@ -72,7 +75,7 @@ namespace CVPortal.Models
         public string IFSC_RTGS_code { get; set; }
         public Nullable<decimal> Date { get; set; }
         public string Type_of_Vend { get; set; }
-        public string NextApprovar { get; set; }
+        public string NextApprover { get; set; }
         public string TermsCode { get; set; }
         public string BankCode { get; set; }
         public string BankBranch { get; set; }

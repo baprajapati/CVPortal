@@ -46,11 +46,14 @@ namespace CVPortal.Controllers
                 model.Dlr_Address = customer.Dlr_Address;
                 model.Dlr_Add_Country = customer.Dlr_Add_Country;
                 model.Dlr_Add_State = customer.Dlr_Add_State;
+                model.Dlr_Add_StateCode = customer.Dlr_Add_StateCode;
                 model.Dlr_Add_City = customer.Dlr_Add_City;
                 model.Dlr_Add_Pincode = customer.Dlr_Add_Pincode;
+                model.IsSameAsDlr_Address = customer.IsSameAsDlr_Address ?? false;
                 model.Supp_Address = customer.Supp_Address;
                 model.Supp_Add_Country = customer.Supp_Add_Country;
                 model.Supp_Add_State = customer.Supp_Add_State;
+                model.Supp_Add_StateCode = customer.Supp_Add_StateCode;
                 model.Supp_Add_City = customer.Supp_Add_City;
                 model.Supp_Add_Pincode = customer.Supp_Add_Pincode;
                 model.Contact_no = customer.Contact_no;
@@ -197,15 +200,14 @@ namespace CVPortal.Controllers
                     {
                         if (customerApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            if (customer.CustomerApprovals.Count(x => !x.IsDeleted && x.CustomerId == id) == 1 && !string.IsNullOrEmpty(customer.NextApprover))
+                            var isApproverRole = customer.NextApprover == ApprovarRoleEnum.InitiatorDepartment.ToString() || customer.NextApprover == ApprovarRoleEnum.HODDepartment.ToString()
+                                || customer.NextApprover == ApprovarRoleEnum.LegalDepartment.ToString() || customer.NextApprover == ApprovarRoleEnum.FinanceDepartment.ToString()
+                                || customer.NextApprover == ApprovarRoleEnum.ITDepartment.ToString();
+
+                            if (!isApproverRole)
                             {
-                                var user = dataContext.tbl_Users.First(x => x.HAUSER == customer.NextApprover);
+                                var user = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == customer.NextApprover);
                                 model.IsApprover = user?.Id == Utility.UserId;
-                            }
-                            else if (!string.IsNullOrEmpty(customerApprover.tbl_Users.HANEXT))
-                            {
-                                var user = dataContext.tbl_Users.First(x => x.HAUSER == customerApprover.tbl_Users.HANEXT);
-                                model.IsApprover = user.Id == Utility.UserId;
                             }
                             else
                             {
@@ -252,7 +254,8 @@ namespace CVPortal.Controllers
                     }
                     else
                     {
-                        model.IsApprover = customer.CreatedById == Utility.UserId;
+                        var user = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == customer.NextApprover);
+                        model.IsApprover = user?.Id == Utility.UserId;
                     }
                 }
             }
@@ -316,11 +319,14 @@ namespace CVPortal.Controllers
                         customer.Dlr_Address = model.Dlr_Address;
                         customer.Dlr_Add_Country = model.Dlr_Add_Country;
                         customer.Dlr_Add_State = model.Dlr_Add_State;
+                        customer.Dlr_Add_StateCode = model.Dlr_Add_StateCode;
                         customer.Dlr_Add_City = model.Dlr_Add_City;
                         customer.Dlr_Add_Pincode = model.Dlr_Add_Pincode;
+                        customer.IsSameAsDlr_Address = model.IsSameAsDlr_Address;
                         customer.Supp_Address = model.Supp_Address;
                         customer.Supp_Add_Country = model.Supp_Add_Country;
                         customer.Supp_Add_State = model.Supp_Add_State;
+                        customer.Supp_Add_StateCode = model.Supp_Add_StateCode;
                         customer.Supp_Add_City = model.Supp_Add_City;
                         customer.Supp_Add_Pincode = model.Supp_Add_Pincode;
                         customer.Contact_no = model.Contact_no;
@@ -606,6 +612,7 @@ namespace CVPortal.Controllers
                     customer.LegalDepartmentApproval = "P";
                     customer.FinanceDepartmentApproval = "P";
                     customer.ITDepartmentApproval = "P";
+                    customer.NextApprover = customer.tbl_Users.HAUSER;
 
                     dataContext.SaveChanges();
 
@@ -672,29 +679,42 @@ namespace CVPortal.Controllers
                     if (Session["Role"].ToString() == "InitiatorAdmin")
                     {
                         customer.InitiatorAdminApproval = "A";
+
+                        var nextApprover = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId)?.HANEXT;
+                        customer.NextApprover = !string.IsNullOrEmpty(nextApprover) ? nextApprover : ApprovarRoleEnum.InitiatorDepartment.ToString();
                     }
-                    else
+                    else if (model.ApproverRole != ApprovarRoleEnum.NextApprover.ToString())
                     {
                         if (model.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())
                         {
                             customer.InitiatorDepartmentApproval = "A";
+                            customer.NextApprover = ApprovarRoleEnum.HODDepartment.ToString();
                         }
                         else if (model.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())
                         {
                             customer.HODDepartmentApproval = "A";
+                            customer.NextApprover = ApprovarRoleEnum.LegalDepartment.ToString();
                         }
                         else if (model.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                         {
                             customer.LegalDepartmentApproval = "A";
+                            customer.NextApprover = ApprovarRoleEnum.FinanceDepartment.ToString();
                         }
                         else if (model.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())
                         {
                             customer.FinanceDepartmentApproval = "A";
+                            customer.NextApprover = ApprovarRoleEnum.ITDepartment.ToString();
                         }
                         else if (model.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())
                         {
                             customer.ITDepartmentApproval = "A";
+                            customer.NextApprover = null;
                         }
+                    }
+                    else
+                    {
+                        var nextApprover = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId)?.HANEXT;
+                        customer.NextApprover = !string.IsNullOrEmpty(nextApprover) ? nextApprover : ApprovarRoleEnum.InitiatorDepartment.ToString();
                     }
 
                     customer.CustomerApprovals.Add(model);
@@ -896,6 +916,7 @@ namespace CVPortal.Controllers
                     customer.Step2 = false;
                     customer.Step3 = false;
                     customer.Step4 = false;
+                    customer.NextApprover = null;
 
                     dataContext.SaveChanges();
 
@@ -944,7 +965,8 @@ namespace CVPortal.Controllers
                         CustomerCode = item.CustomerCode?.ToString(),
                         Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
-                        NextApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        NextApprover = item.NextApprover,
+                        PreviousApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         InitiatorDepartment = $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         HODDepartment = $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         LegalDepartment = string.IsNullOrEmpty(item.CINNo_LLPNo) ? "Legal Department not required" : $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",

@@ -50,7 +50,13 @@
                         {
                             "data": "NextApprover", "name": "NextApprover",
                             "render": function (data, type, row, meta) {
-                                return row.NextApprover != " ()" ? row.NextApprover : "";
+                                return row.NextApprover;
+                            }
+                        },
+                        {
+                            "data": "PreviousApprover", "name": "PreviousApprover",
+                            "render": function (data, type, row, meta) {
+                                return row.PreviousApprover != " ()" ? row.PreviousApprover : "";
                             }
                         },
                         {
@@ -223,6 +229,7 @@
                                     <th>Customer Name</th>
                                     <th>Owner</th>
                                     <th>Next Approver</th>
+                                    <th>Previous Approver</th>
                                     <th>Initiator Department</th>
                                     <th>HOD</th>
                                     <th>Legal</th>

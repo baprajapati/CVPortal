@@ -75,6 +75,22 @@
             $("#orgStatus4").click(function () {
                 $("#Org_Sts").val("4");
             });
+
+            $("#IsSameAsDlr_Address").click(function () {
+                if ($(this).is(':checked')) {
+                    $("#Supp_Address").val($("#Dlr_Address").val());
+                    $("#Supp_Add_Pincode").val($("#Dlr_Add_Pincode").val());
+                    $("#Supp_Add_Country").val($("#Dlr_Add_Country").val());
+                    $("#Supp_Add_State").val($("#Dlr_Add_State").val());
+                    $("#Supp_Add_City").val($("#Dlr_Add_City").val());
+                } else {
+                    $("#Supp_Address").val("");
+                    $("#Supp_Add_Pincode").val("");
+                    $("#Supp_Add_Country").val("");
+                    $("#Supp_Add_State").val("");
+                    $("#Supp_Add_City").val("");
+                }
+            });
         });
     </script>
 }
@@ -203,9 +219,13 @@
                         <span>Dealer Address (Registered / Corporate Office)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-5">
                     @Html.TextBoxFor(model => model.Dlr_Address, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Dlr_Address)
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Dlr_Add_StateCode, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Dlr_Add_StateCode)
                 </div>
                 <div class="col-md-2">
                     @Html.TextBoxFor(model => model.Dlr_Add_Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
@@ -227,6 +247,12 @@
                 </div>
             </div><br />
             <div class="row">
+                <div class="col-md-offset-3 col-md-9">
+                    @Html.CheckBoxFor(model => model.IsSameAsDlr_Address, Model.IsMain ? (object)new { } : new { @disabled = "disabled" })
+                    <label for="IsSameAsAddress1" style="font-weight: 500;">Same as Dealer Address (Registered / Corporate Office)</label>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-2">
                         <span>5.</span>
@@ -235,9 +261,13 @@
                         <span>Supply Address (Showroom/Workshop)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-5">
                     @Html.TextBoxFor(model => model.Supp_Address, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Supp_Address)
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Supp_Add_StateCode, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Supp_Add_StateCode)
                 </div>
                 <div class="col-md-2">
                     @Html.TextBoxFor(model => model.Supp_Add_Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })

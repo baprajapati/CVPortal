@@ -31,11 +31,14 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Address" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dlr_Add_StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_State" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_City" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_Pincode" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsSameAsDlr_Address" Type="bit" />
           <Property Name="Supp_Address" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Supp_Add_StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_State" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_City" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_Pincode" Type="nvarchar" MaxLength="50" />
@@ -264,7 +267,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HAID" Type="char" MaxLength="2" />
           <Property Name="HAUSER" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="HACOMP" Type="int" />
@@ -292,11 +295,14 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address1StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1State" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1City" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1Pincode" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsSameAsAddress1" Type="bit" />
           <Property Name="Address2" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address2StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2State" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2City" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2Pincode" Type="nvarchar" MaxLength="50" />
@@ -332,7 +338,7 @@
           <Property Name="IFSC_RTGS_code" Type="nvarchar" MaxLength="11" />
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="nvarchar" MaxLength="1" />
-          <Property Name="NextApprovar" Type="nvarchar" MaxLength="50" />
+          <Property Name="NextApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="TermsCode" Type="nvarchar" MaxLength="50" />
           <Property Name="BankCode" Type="nvarchar" MaxLength="50" />
           <Property Name="BankBranch" Type="nvarchar" MaxLength="50" />
@@ -802,11 +808,14 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dlr_Add_StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsSameAsDlr_Address" Type="Boolean" />
           <Property Name="Supp_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Supp_Add_StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1044,7 +1053,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HAID" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="HAUSER" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="HACOMP" Type="Int32" />
@@ -1077,11 +1086,14 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address1StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsSameAsAddress1" Type="Boolean" />
           <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address2StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1117,7 +1129,7 @@
           <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="NextApprovar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NextApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TermsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BankCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BankBranch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1443,11 +1455,14 @@
                 <ScalarProperty Name="Supp_Add_Pincode" ColumnName="Supp_Add_Pincode" />
                 <ScalarProperty Name="Supp_Add_City" ColumnName="Supp_Add_City" />
                 <ScalarProperty Name="Supp_Add_State" ColumnName="Supp_Add_State" />
+                <ScalarProperty Name="Supp_Add_StateCode" ColumnName="Supp_Add_StateCode" />
                 <ScalarProperty Name="Supp_Add_Country" ColumnName="Supp_Add_Country" />
                 <ScalarProperty Name="Supp_Address" ColumnName="Supp_Address" />
+                <ScalarProperty Name="IsSameAsDlr_Address" ColumnName="IsSameAsDlr_Address" />
                 <ScalarProperty Name="Dlr_Add_Pincode" ColumnName="Dlr_Add_Pincode" />
                 <ScalarProperty Name="Dlr_Add_City" ColumnName="Dlr_Add_City" />
                 <ScalarProperty Name="Dlr_Add_State" ColumnName="Dlr_Add_State" />
+                <ScalarProperty Name="Dlr_Add_StateCode" ColumnName="Dlr_Add_StateCode" />
                 <ScalarProperty Name="Dlr_Add_Country" ColumnName="Dlr_Add_Country" />
                 <ScalarProperty Name="Dlr_Address" ColumnName="Dlr_Address" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1701,7 +1716,7 @@
                 <ScalarProperty Name="BankBranch" ColumnName="BankBranch" />
                 <ScalarProperty Name="BankCode" ColumnName="BankCode" />
                 <ScalarProperty Name="TermsCode" ColumnName="TermsCode" />
-                <ScalarProperty Name="NextApprovar" ColumnName="NextApprovar" />
+                <ScalarProperty Name="NextApprover" ColumnName="NextApprover" />
                 <ScalarProperty Name="Type_of_Vend" ColumnName="Type_of_Vend" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="IFSC_RTGS_code" ColumnName="IFSC_RTGS_code" />
@@ -1737,11 +1752,14 @@
                 <ScalarProperty Name="Address2Pincode" ColumnName="Address2Pincode" />
                 <ScalarProperty Name="Address2City" ColumnName="Address2City" />
                 <ScalarProperty Name="Address2State" ColumnName="Address2State" />
+                <ScalarProperty Name="Address2StateCode" ColumnName="Address2StateCode" />
                 <ScalarProperty Name="Address2Country" ColumnName="Address2Country" />
                 <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="IsSameAsAddress1" ColumnName="IsSameAsAddress1" />
                 <ScalarProperty Name="Address1Pincode" ColumnName="Address1Pincode" />
                 <ScalarProperty Name="Address1City" ColumnName="Address1City" />
                 <ScalarProperty Name="Address1State" ColumnName="Address1State" />
+                <ScalarProperty Name="Address1StateCode" ColumnName="Address1StateCode" />
                 <ScalarProperty Name="Address1Country" ColumnName="Address1Country" />
                 <ScalarProperty Name="Address1" ColumnName="Address1" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

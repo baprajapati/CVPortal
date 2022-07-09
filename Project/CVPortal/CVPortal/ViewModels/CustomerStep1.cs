@@ -38,11 +38,16 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "State required")]
         public string Dlr_Add_State { get; set; }
 
+        [Required(ErrorMessage = "State code required")]
+        public string Dlr_Add_StateCode { get; set; }
+
         [Required(ErrorMessage = "City required")]
         public string Dlr_Add_City { get; set; }
 
         [Required(ErrorMessage = "Please enter pincode")]
         public string Dlr_Add_Pincode { get; set; }
+
+        public bool IsSameAsDlr_Address { get; set; }
 
         [Required(ErrorMessage = "Please enter address (PO/Supplies/Mfg/Trd.)")]
         public string Supp_Address { get; set; }
@@ -52,6 +57,9 @@ namespace CVPortal.ViewModels
 
         [Required(ErrorMessage = "State required")]
         public string Supp_Add_State { get; set; }
+
+        [Required(ErrorMessage = "State code required")]
+        public string Supp_Add_StateCode { get; set; }
 
         [Required(ErrorMessage = "City required")]
         public string Supp_Add_City { get; set; }

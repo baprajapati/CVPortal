@@ -33,11 +33,14 @@ namespace CVPortal.Models
         public string Email { get; set; }
         public string Dlr_Address { get; set; }
         public string Dlr_Add_Country { get; set; }
+        public string Dlr_Add_StateCode { get; set; }
         public string Dlr_Add_State { get; set; }
         public string Dlr_Add_City { get; set; }
         public string Dlr_Add_Pincode { get; set; }
+        public Nullable<bool> IsSameAsDlr_Address { get; set; }
         public string Supp_Address { get; set; }
         public string Supp_Add_Country { get; set; }
+        public string Supp_Add_StateCode { get; set; }
         public string Supp_Add_State { get; set; }
         public string Supp_Add_City { get; set; }
         public string Supp_Add_Pincode { get; set; }

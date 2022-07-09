@@ -15,6 +15,7 @@ namespace CVPortal.ViewModels
         public string CustomerCode { get; set; }
         public string Owner { get; set; }
         public string NextApprover { get; set; }
+        public string PreviousApprover { get; set; }
         public string InitiatorDepartment { get; set; }
         public string HODDepartment { get; set; }
         public string LegalDepartment { get; set; }

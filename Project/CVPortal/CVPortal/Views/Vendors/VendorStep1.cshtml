@@ -79,6 +79,24 @@
             $("#orgStatus5").click(function () {
                 $("#Org_Sts").val("5");
             });
+
+            $("#IsSameAsAddress1").click(function () {
+                if ($(this).is(':checked')) {
+                    $("#Address2").val($("#Address1").val());
+                    $("#Address2Pincode").val($("#Address1Pincode").val());
+                    $("#Address2Country").val($("#Address1Country").val());
+                    $("#Address2State").val($("#Address1State").val());
+                    $("#Address2StateCode").val($("#Address1StateCode").val());
+                    $("#Address2City").val($("#Address1City").val());
+                } else {
+                    $("#Address2").val("");
+                    $("#Address2Pincode").val("");
+                    $("#Address2Country").val("");
+                    $("#Address2State").val("");
+                    $("#Address2StateCode").val("");
+                    $("#Address2City").val("");
+                }
+            });
         });
     </script>
 }
@@ -211,9 +229,13 @@
                         <span>Address (Registered / Corporate Office)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-5">
                     @Html.TextBoxFor(model => model.Address1, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Address1)
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Address1StateCode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address1StateCode)
                 </div>
                 <div class="col-md-2">
                     @Html.TextBoxFor(model => model.Address1Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
@@ -235,6 +257,12 @@
                 </div>
             </div><br />
             <div class="row">
+                <div class="col-md-offset-3 col-md-9">
+                    @Html.CheckBoxFor(model => model.IsSameAsAddress1, Model.IsMain || Model.IsExistingUpdate ? (object)new { } : new { @disabled = "disabled" })
+                    <label for="IsSameAsAddress1" style="font-weight: 500;">Same as Address (Registered / Corporate Office)</label>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3">
                     <div class="col-md-2">
                         <span>5.</span>
@@ -243,9 +271,13 @@
                         <span>Address (PO/Supplies/Mfg/Trd.)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-5">
                     @Html.TextBoxFor(model => model.Address2, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.Address2StateCode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Address2StateCode)
                 </div>
                 <div class="col-md-2">
                     @Html.TextBoxFor(model => model.Address2Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
