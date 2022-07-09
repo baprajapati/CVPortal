@@ -296,7 +296,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     {
                         if ("Active".Contains(model.Status))
                         {
-                            data = dataContext.tbl_Users.Where(x => x.IsActive).ToList();
+                            data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId && x.IsActive).ToList();
                         }
                         else if ("Inactive".Contains(model.Status))
                         {
@@ -421,7 +421,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     if (data != null)
                     {
                         var roleName = Roles.GetRolesForUser(data.EmailAddress).First().ToString();
-                        if(roleName != user.RoleName)
+                        if (roleName != user.RoleName)
                         {
                             Roles.RemoveUserFromRole(data.EmailAddress, roleName);
                             Roles.AddUserToRole(data.EmailAddress, user.RoleName);
@@ -443,6 +443,18 @@ namespace CVPortal.Areas.Admin.Controllers
             }
 
             return View(user);
+        }
+
+        public JsonResult UserCode(string term)
+        {
+            var result = dataContext.tbl_Users.Where(c => c.Id != WebSecurity.CurrentUserId && c.HAUSER.ToString().ToLower().Contains(term)).Select(a => new { label = a.HAUSER }).ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UserStatus(string term)
+        {
+            var result = new List<string> { "Active", "Inactive" }.Where(c => c.ToString().ToLower().Contains(term)).Select(a => new { label = a }).ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

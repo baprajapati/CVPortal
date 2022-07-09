@@ -208,6 +208,7 @@
     <Content Include="Content\img\Suzuki-Logo.jpg" />
     <Content Include="Content\img\user.jpg" />
     <Content Include="Content\img\user2-160x160.jpg" />
+    <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\js\additional-methods.min.js" />
     <Content Include="Content\js\adminlte.min.js" />
     <Content Include="Content\js\bootbox.min.js" />
@@ -346,6 +347,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Content Include="Content\Login\suzuki-bike.png" />
     <Content Include="Content\Login\Suzuki-Logo.jpg" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Views\Account\VendorLogin.cshtml" />
     <Content Include="Views\Vendors\VendorStep2.cshtml" />
     <Content Include="Views\Vendors\VendorStep3.cshtml" />

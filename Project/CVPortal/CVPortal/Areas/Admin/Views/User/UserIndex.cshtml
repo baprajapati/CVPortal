@@ -165,6 +165,20 @@
             $(".search-button").click(function () {
                 users.draw();
             });
+
+            $("#UserCode").autocomplete({
+                source: '/User/UserCode', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
+
+            $("#Status").autocomplete({
+                source: '/User/UserStatus', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
         });
     </script>
 }
