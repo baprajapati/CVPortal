@@ -25,10 +25,13 @@ namespace CVPortal.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AgentSale> AgentSales { get; set; }
         public virtual DbSet<CurrencyCodeMaster> CurrencyCodeMasters { get; set; }
         public virtual DbSet<Cust_reg_tbl> Cust_reg_tbl { get; set; }
         public virtual DbSet<CustomerApproval> CustomerApprovals { get; set; }
         public virtual DbSet<CustomerFile> CustomerFiles { get; set; }
+        public virtual DbSet<CustomerTypeMaster> CustomerTypeMasters { get; set; }
+        public virtual DbSet<DocumentSequencePrefix> DocumentSequencePrefixes { get; set; }
         public virtual DbSet<EmailHistory> EmailHistories { get; set; }
         public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; }
         public virtual DbSet<GSTType_Master> GSTType_Master { get; set; }

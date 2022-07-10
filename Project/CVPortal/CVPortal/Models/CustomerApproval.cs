@@ -21,6 +21,14 @@ namespace CVPortal.Models
         public string ApproverRole { get; set; }
         public string Status { get; set; }
         public string Remarks { get; set; }
+        public string Company { get; set; }
+        public Nullable<int> CustomerTypeId { get; set; }
+        public Nullable<int> CurrencyCodeId { get; set; }
+        public Nullable<int> PaymentTypeId { get; set; }
+        public Nullable<int> TermsCodeId { get; set; }
+        public Nullable<int> AgentSalesId { get; set; }
+        public Nullable<int> TaxCodeId { get; set; }
+        public Nullable<int> DocumentSequencePrefixId { get; set; }
         public bool IsDeleted { get; set; }
         public string CreatedByCode { get; set; }
         public int CreatedById { get; set; }

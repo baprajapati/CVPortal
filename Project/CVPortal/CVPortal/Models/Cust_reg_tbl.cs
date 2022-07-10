@@ -76,6 +76,14 @@ namespace CVPortal.Models
         public string LegalDepartmentApproval { get; set; }
         public string FinanceDepartmentApproval { get; set; }
         public string ITDepartmentApproval { get; set; }
+        public string Company { get; set; }
+        public string CustomerType { get; set; }
+        public string PaymentType { get; set; }
+        public string TermsCode { get; set; }
+        public string CurrencyCode { get; set; }
+        public string AgentSales { get; set; }
+        public string TaxCode { get; set; }
+        public string DocumentSequencePrefix { get; set; }
         public Nullable<int> CustomerCode { get; set; }
         public Nullable<bool> Step1 { get; set; }
         public Nullable<bool> Step2 { get; set; }

@@ -238,6 +238,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AgentSale.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CurrencyCodeMaster.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
@@ -245,6 +248,9 @@
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerFile.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerTypeMaster.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Cust_reg_tbl.cs">
@@ -264,6 +270,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CVPortalModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DocumentSequencePrefix.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EmailHistory.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>

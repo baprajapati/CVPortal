@@ -265,8 +265,148 @@ namespace CVPortal.Controllers
             }
 
             ViewBag.Id = id;
+            ViewBag.CustomerTypeList = GetCustomerType(null);
+            ViewBag.PaymentTypeList = GetPaymentTypes(null);
+            ViewBag.TermsCodeList = GetTermsCode(null);
+            ViewBag.AgentSalesList = GetAgentSales(null);
+            ViewBag.TaxCodeList = GetTaxCodes(null);
+            ViewBag.CurrencyCodeList = GetCurrencyCodes(null);
+            ViewBag.DocumentSequencePrefixList = GetDocumentSequencePrefix(null);
 
             return View(model);
+        }
+
+        public SelectList GetCustomerType(string[] selectedValue)
+        {
+            var customerTypes = dataContext.CustomerTypeMasters.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            customerTypes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.Code} - {item.Description}",
+                    Value = item.Id.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.Id.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetPaymentTypes(string[] selectedValue)
+        {
+            var termsCodes = dataContext.PayTypeMasters.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.PayType_Code} - {item.PayType_Desc}",
+                    Value = item.PayType_ID.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.PayType_ID.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetTermsCode(string[] selectedValue)
+        {
+            var termsCodes = dataContext.PaymentTermsMasters.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.PTerms_Code} - {item.PTerms_CodeDesc}",
+                    Value = item.PTerms_ID.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.PTerms_ID.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetAgentSales(string[] selectedValue)
+        {
+            var agentSales = dataContext.AgentSales.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            agentSales.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.Code} - {item.Description}",
+                    Value = item.Id.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.Id.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetTaxCodes(string[] selectedValue)
+        {
+            var termsCodes = dataContext.LX_TaxCode.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.ItemTaxCDE} - {item.TaxDSC}",
+                    Value = item.Id.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.Id.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetCurrencyCodes(string[] selectedValue)
+        {
+            var termsCodes = dataContext.CurrencyCodeMasters.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            termsCodes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.Crncy_Code} - {item.Crncy_Description}",
+                    Value = item.Crncy_ID.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.Crncy_ID.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
+        public SelectList GetDocumentSequencePrefix(string[] selectedValue)
+        {
+            var prefixes = dataContext.DocumentSequencePrefixes.ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            prefixes.ForEach(item =>
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = $"{item.Code} - {item.Description}",
+                    Value = item.Id.ToString(),
+                    Selected = selectedValue != null && selectedValue.Contains(item.Id.ToString())
+                });
+            });
+
+            return new SelectList(list, "Value", "Text");
         }
 
         public ActionResult FinalForm(int? id)
@@ -281,7 +421,7 @@ namespace CVPortal.Controllers
             var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (customer != null)
             {
-                ViewBag.TextMessage = customer.IsFinalApproved ? "Vendor already approved!" : "Approval is in progress!";
+                ViewBag.TextMessage = customer.IsFinalApproved ? "Customer already approved!" : "Approval is in progress!";
             }
 
 
@@ -634,6 +774,14 @@ namespace CVPortal.Controllers
                 return RedirectToAction("FinalForm", new { id = model.Id });
             }
 
+            ViewBag.CustomerTypeList = GetCustomerType(null);
+            ViewBag.PaymentTypeList = GetPaymentTypes(null);
+            ViewBag.TermsCodeList = GetTermsCode(null);
+            ViewBag.AgentSalesList = GetAgentSales(null);
+            ViewBag.TaxCodeList = GetTaxCodes(null);
+            ViewBag.CurrencyCodeList = GetCurrencyCodes(null);
+            ViewBag.DocumentSequencePrefixList = GetDocumentSequencePrefix(null);
+
             return View(model);
         }
 
@@ -742,6 +890,22 @@ namespace CVPortal.Controllers
                     {
                         customer.CustomerCode = customer.CustomerCode != null ? 1000 + customer.ID : customer.CustomerCode;
                         customer.IsFinalApproved = true;
+                    }
+
+                    if (model.TermsCodeId != null)
+                    {
+                        customer.TermsCode = dataContext.PaymentTermsMasters.FirstOrDefault(x => x.PTerms_ID == model.TermsCodeId)?.PTerms_Code;
+                        customer.PaymentType = dataContext.PayTypeMasters.FirstOrDefault(x => x.PayType_ID == model.PaymentTypeId)?.PayType_Code;
+                        customer.CurrencyCode = dataContext.CurrencyCodeMasters.FirstOrDefault(x => x.Crncy_ID == model.CurrencyCodeId)?.Crncy_Code;
+                        customer.TaxCode = dataContext.LX_TaxCode.FirstOrDefault(x => x.Id == model.TaxCodeId)?.ItemTaxCDE;
+                    }
+
+                    if (model.CustomerTypeId != null)
+                    {
+                        customer.Company = model.Company;
+                        customer.CustomerType = dataContext.CustomerTypeMasters.FirstOrDefault(x => x.Id == model.CustomerTypeId)?.Code;
+                        customer.AgentSales = dataContext.AgentSales.FirstOrDefault(x => x.Id == model.AgentSalesId)?.Code;
+                        customer.DocumentSequencePrefix = dataContext.DocumentSequencePrefixes.FirstOrDefault(x => x.Id == model.DocumentSequencePrefixId)?.Code;
                     }
 
                     dataContext.SaveChanges();

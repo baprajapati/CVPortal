@@ -64,7 +64,13 @@
                     data: JSON.stringify({
                         customerId: $("#Id").val(),
                         code: $("#Code").val(),
-                        dealerType: $("#DealerType").val()
+                        termsCodeId: $("#TermsCodeId").val(),
+                        currencyCodeId: $("#CurrencyCodeId").val(),
+                        paymentTypeId: $("#PaymentTypeId").val(),
+                        company: $("#Company").val(),
+                        customerTypeId: $("#CustomerTypeId").val(),
+                        agentSalesId: $("#AgentSalesId").val(),
+                        documentSequencePrefixId: $("#DocumentSequencePrefixId").val()
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -243,7 +249,9 @@
                 <label class="modal-title" id="exampleModalLabel">Approve Confirmation</label>
             </div>
             @if (HttpContext.Current.Session["Role"].ToString() == string.Empty
-                    || HttpContext.Current.Session["Role"].ToString() != "InitiatorAdmin" || !Model.IsCreatedUser)
+                    || HttpContext.Current.Session["Role"].ToString() != "InitiatorAdmin" || !Model.IsCreatedUser
+                    && (HttpContext.Current.Session["Role"].ToString() != "FinanceDepartment"
+                    && HttpContext.Current.Session["Role"].ToString() != "ITDepartment"))
             {
                 <div class="modal-body">
                     <span>Are you sure, you want to approve?</span>
@@ -267,6 +275,51 @@
                     </div>
                 </div>
             }
+
+            @if (HttpContext.Current.Session["Role"].ToString() == "FinanceDepartment")
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TermsCode">Terms Code</label>
+                        @Html.DropDownList("TermsCodeId", ViewBag.TermsCodeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankCode">Currency Code</label>
+                        @Html.DropDownList("CurrencyCodeId", ViewBag.CurrencyCodeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="PaymentType">Payment Type</label>
+                        @Html.DropDownList("PaymentTypeId", ViewBag.PaymentTypeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="TaxCode">Tax Code</label>
+                        @Html.DropDownList("TaxCodeId", ViewBag.TaxCodeList as SelectList, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+
+            @if (HttpContext.Current.Session["Role"].ToString() == "ITDepartment")
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TermsCode">Company</label>
+                        @Html.TextBox("Company", "10", new { @class = "form-control", placeholder = "Company", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankCode">Customer Type</label>
+                        @Html.DropDownList("CustomerTypeId", ViewBag.CustomerTypeList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankBranch">Agent / Sales</label>
+                        @Html.DropDownList("AgentSalesId", ViewBag.AgentSalesList as SelectList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="BankBranch">Document Sequence Prefix</label>
+                        @Html.DropDownList("DocumentSequencePrefixId", ViewBag.DocumentSequencePrefixList as SelectList, new { @class = "form-control" })
+                    </div>
+                </div>
+            }
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="btnApprove">Approve</button>
