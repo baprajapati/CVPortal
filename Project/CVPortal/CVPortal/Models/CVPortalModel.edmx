@@ -41,14 +41,12 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Address" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="Dlr_Add_StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_State" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_City" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_Pincode" Type="nvarchar" MaxLength="50" />
           <Property Name="IsSameAsDlr_Address" Type="bit" />
           <Property Name="Supp_Address" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="Supp_Add_StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_State" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_City" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_Pincode" Type="nvarchar" MaxLength="50" />
@@ -78,9 +76,7 @@
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="NextApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
-          <Property Name="InitiatorAdminApproval" Type="nvarchar" MaxLength="50" />
-          <Property Name="InitiatorDepartmentApproval" Type="nvarchar" MaxLength="50" />
-          <Property Name="HODDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="InitiatorApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="LegalDepartmentApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="FinanceDepartmentApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="ITDepartmentApproval" Type="nvarchar" MaxLength="50" />
@@ -216,7 +212,6 @@
           <Property Name="Currency_Code" Type="nvarchar" MaxLength="3" Nullable="false" />
           <Property Name="Vendor_Add1" Type="nvarchar" MaxLength="50" />
           <Property Name="Vendor_Add2" Type="nvarchar" MaxLength="50" />
-          <Property Name="Vendor_StateCode" Type="nvarchar" MaxLength="3" />
           <Property Name="Vendor_Pincode" Type="nvarchar" MaxLength="9" />
           <Property Name="Vendor_Type" Type="nvarchar" MaxLength="4" />
           <Property Name="Vendor_ContactName" Type="nvarchar" MaxLength="30" />
@@ -236,7 +231,6 @@
           <Property Name="CustAdd1" Type="nvarchar" MaxLength="50" />
           <Property Name="CustAdd2" Type="nvarchar" MaxLength="50" />
           <Property Name="CustAdd3" Type="nvarchar" MaxLength="50" />
-          <Property Name="CustStateCode" Type="nvarchar" MaxLength="3" />
           <Property Name="CustPincode" Type="nvarchar" MaxLength="6" />
           <Property Name="CustConuntryCode" Type="nvarchar" MaxLength="4" />
           <Property Name="CustType" Type="nvarchar" MaxLength="4" />
@@ -340,14 +334,12 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address1StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1State" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1City" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1Pincode" Type="nvarchar" MaxLength="50" />
           <Property Name="IsSameAsAddress1" Type="bit" />
           <Property Name="Address2" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address2StateCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2State" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2City" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2Pincode" Type="nvarchar" MaxLength="50" />
@@ -393,9 +385,7 @@
           <Property Name="VendorType" Type="nvarchar" MaxLength="50" />
           <Property Name="DocumentPfx" Type="nvarchar" MaxLength="50" />
           <Property Name="Currency" Type="nvarchar" MaxLength="50" />
-          <Property Name="InitiatorAdminApproval" Type="nvarchar" MaxLength="50" />
-          <Property Name="InitiatorDepartmentApproval" Type="nvarchar" MaxLength="50" />
-          <Property Name="HODDepartmentApproval" Type="nvarchar" MaxLength="50" />
+          <Property Name="InitiatorApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="LegalDepartmentApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="FinanceDepartmentApproval" Type="nvarchar" MaxLength="50" />
           <Property Name="ITDepartmentApproval" Type="nvarchar" MaxLength="50" />
@@ -869,14 +859,12 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Dlr_Add_StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsSameAsDlr_Address" Type="Boolean" />
           <Property Name="Supp_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Supp_Add_StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -906,9 +894,7 @@
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="NextApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="InitiatorAdminApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="InitiatorDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HODDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InitiatorApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LegalDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FinanceDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ITDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1050,7 +1036,6 @@
           <Property Name="Currency_Code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Add1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Add2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Vendor_StateCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Pincode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Type" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_ContactName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -1070,7 +1055,6 @@
           <Property Name="CustAdd1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CustAdd2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CustAdd3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CustStateCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="CustPincode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="CustConuntryCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="CustType" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
@@ -1182,14 +1166,12 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address1StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsSameAsAddress1" Type="Boolean" />
           <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address2StateCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1235,9 +1217,7 @@
           <Property Name="VendorType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DocumentPfx" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="InitiatorAdminApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="InitiatorDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HODDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InitiatorApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LegalDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FinanceDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ITDepartmentApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1538,9 +1518,7 @@
                 <ScalarProperty Name="ITDepartmentApproval" ColumnName="ITDepartmentApproval" />
                 <ScalarProperty Name="FinanceDepartmentApproval" ColumnName="FinanceDepartmentApproval" />
                 <ScalarProperty Name="LegalDepartmentApproval" ColumnName="LegalDepartmentApproval" />
-                <ScalarProperty Name="HODDepartmentApproval" ColumnName="HODDepartmentApproval" />
-                <ScalarProperty Name="InitiatorDepartmentApproval" ColumnName="InitiatorDepartmentApproval" />
-                <ScalarProperty Name="InitiatorAdminApproval" ColumnName="InitiatorAdminApproval" />
+                <ScalarProperty Name="InitiatorApproval" ColumnName="InitiatorApproval" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
                 <ScalarProperty Name="NextApprover" ColumnName="NextApprover" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
@@ -1570,14 +1548,12 @@
                 <ScalarProperty Name="Supp_Add_Pincode" ColumnName="Supp_Add_Pincode" />
                 <ScalarProperty Name="Supp_Add_City" ColumnName="Supp_Add_City" />
                 <ScalarProperty Name="Supp_Add_State" ColumnName="Supp_Add_State" />
-                <ScalarProperty Name="Supp_Add_StateCode" ColumnName="Supp_Add_StateCode" />
                 <ScalarProperty Name="Supp_Add_Country" ColumnName="Supp_Add_Country" />
                 <ScalarProperty Name="Supp_Address" ColumnName="Supp_Address" />
                 <ScalarProperty Name="IsSameAsDlr_Address" ColumnName="IsSameAsDlr_Address" />
                 <ScalarProperty Name="Dlr_Add_Pincode" ColumnName="Dlr_Add_Pincode" />
                 <ScalarProperty Name="Dlr_Add_City" ColumnName="Dlr_Add_City" />
                 <ScalarProperty Name="Dlr_Add_State" ColumnName="Dlr_Add_State" />
-                <ScalarProperty Name="Dlr_Add_StateCode" ColumnName="Dlr_Add_StateCode" />
                 <ScalarProperty Name="Dlr_Add_Country" ColumnName="Dlr_Add_Country" />
                 <ScalarProperty Name="Dlr_Address" ColumnName="Dlr_Address" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1714,7 +1690,6 @@
                 <ScalarProperty Name="Vendor_ContactName" ColumnName="Vendor_ContactName" />
                 <ScalarProperty Name="Vendor_Type" ColumnName="Vendor_Type" />
                 <ScalarProperty Name="Vendor_Pincode" ColumnName="Vendor_Pincode" />
-                <ScalarProperty Name="Vendor_StateCode" ColumnName="Vendor_StateCode" />
                 <ScalarProperty Name="Vendor_Add2" ColumnName="Vendor_Add2" />
                 <ScalarProperty Name="Vendor_Add1" ColumnName="Vendor_Add1" />
                 <ScalarProperty Name="Currency_Code" ColumnName="Currency_Code" />
@@ -1737,7 +1712,6 @@
                 <ScalarProperty Name="CustType" ColumnName="CustType" />
                 <ScalarProperty Name="CustConuntryCode" ColumnName="CustConuntryCode" />
                 <ScalarProperty Name="CustPincode" ColumnName="CustPincode" />
-                <ScalarProperty Name="CustStateCode" ColumnName="CustStateCode" />
                 <ScalarProperty Name="CustAdd3" ColumnName="CustAdd3" />
                 <ScalarProperty Name="CustAdd2" ColumnName="CustAdd2" />
                 <ScalarProperty Name="CustAdd1" ColumnName="CustAdd1" />
@@ -1848,9 +1822,7 @@
                 <ScalarProperty Name="ITDepartmentApproval" ColumnName="ITDepartmentApproval" />
                 <ScalarProperty Name="FinanceDepartmentApproval" ColumnName="FinanceDepartmentApproval" />
                 <ScalarProperty Name="LegalDepartmentApproval" ColumnName="LegalDepartmentApproval" />
-                <ScalarProperty Name="HODDepartmentApproval" ColumnName="HODDepartmentApproval" />
-                <ScalarProperty Name="InitiatorDepartmentApproval" ColumnName="InitiatorDepartmentApproval" />
-                <ScalarProperty Name="InitiatorAdminApproval" ColumnName="InitiatorAdminApproval" />
+                <ScalarProperty Name="InitiatorApproval" ColumnName="InitiatorApproval" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="DocumentPfx" ColumnName="DocumentPfx" />
                 <ScalarProperty Name="VendorType" ColumnName="VendorType" />
@@ -1896,14 +1868,12 @@
                 <ScalarProperty Name="Address2Pincode" ColumnName="Address2Pincode" />
                 <ScalarProperty Name="Address2City" ColumnName="Address2City" />
                 <ScalarProperty Name="Address2State" ColumnName="Address2State" />
-                <ScalarProperty Name="Address2StateCode" ColumnName="Address2StateCode" />
                 <ScalarProperty Name="Address2Country" ColumnName="Address2Country" />
                 <ScalarProperty Name="Address2" ColumnName="Address2" />
                 <ScalarProperty Name="IsSameAsAddress1" ColumnName="IsSameAsAddress1" />
                 <ScalarProperty Name="Address1Pincode" ColumnName="Address1Pincode" />
                 <ScalarProperty Name="Address1City" ColumnName="Address1City" />
                 <ScalarProperty Name="Address1State" ColumnName="Address1State" />
-                <ScalarProperty Name="Address1StateCode" ColumnName="Address1StateCode" />
                 <ScalarProperty Name="Address1Country" ColumnName="Address1Country" />
                 <ScalarProperty Name="Address1" ColumnName="Address1" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

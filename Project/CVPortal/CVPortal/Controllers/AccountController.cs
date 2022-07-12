@@ -204,7 +204,7 @@ namespace CVPortal.Controllers
                     return Json(new { status = true, result = Utility.UserCode.Equals(vendor.Email) ? stepViewName : "VendorStep1" });
                 }
 
-                var user = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == model.Email || x.HAUSER == model.Email);
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == model.Email || x.HAUSER == model.Email));
                 if (user != null && user.OTP == model.OTP)
                 {
                     WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
@@ -247,7 +247,7 @@ namespace CVPortal.Controllers
                     return Json(new { status = true, result = Utility.UserCode.Equals(customer.Email) ? stepViewName : "CustomerStep1" });
                 }
 
-                var user = dataContext.tbl_Users.FirstOrDefault(x => x.EmailAddress == model.Email || x.HAUSER == model.Email);
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == model.Email || x.HAUSER == model.Email));
                 if (user != null && user.OTP == model.OTP)
                 {
                     WebSecurity.Login(model.Email, Utility.DefaultPassword, false);

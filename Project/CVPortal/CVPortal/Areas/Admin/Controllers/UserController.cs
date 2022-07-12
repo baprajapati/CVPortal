@@ -60,7 +60,7 @@ namespace CVPortal.Areas.Admin.Controllers
 
         public SelectList GetUsers(string[] selectedValue, string currentUser)
         {
-            var users = dataContext.tbl_Users.Where(x => x.EmailAddress != "admin@gmail.com").ToList();
+            var users = dataContext.tbl_Users.Where(x => x.IsActive && x.EmailAddress != "admin@gmail.com").ToList();
 
             List<SelectListItem> list = new List<SelectListItem>()
             {
@@ -101,7 +101,7 @@ namespace CVPortal.Areas.Admin.Controllers
                 ViewBag.DepartmentList = GetDepartments(null);
                 ViewBag.UserList = GetUsers(null, null);
 
-                return View(new UserViewModel() { RoleName = "InitiatorAdmin" });
+                return View(new UserViewModel() { RoleName = "Initiator" });
             }
             catch (Exception)
             {

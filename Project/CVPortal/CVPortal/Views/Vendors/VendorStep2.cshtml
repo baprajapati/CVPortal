@@ -76,6 +76,19 @@
                     $("#MSMEFileName").val(file.name);
                 }
             });
+
+            $("#vendorType2").click(function () {
+                $("#GST_Reg_no").val("");
+                $("#GST_Reg_no").attr("disabled", "disabled");
+            });
+
+            $("#vendorType1").click(function () {
+                $("#GST_Reg_no").removeAttr("disabled");
+            });
+
+            $("#vendorType3").click(function () {
+                $("#GST_Reg_no").removeAttr("disabled");
+            });
         });
     </script>
 }

@@ -62,6 +62,19 @@
                     $("#GSTFileName").val(file.name);
                 }
             });
+
+            $("#customerType2").click(function () {
+                $("#GST_Reg_no").val("");
+                $("#GST_Reg_no").attr("disabled", "disabled");
+            });
+
+            $("#customerType1").click(function () {
+                $("#GST_Reg_no").removeAttr("disabled");
+            });
+
+            $("#customerType3").click(function () {
+                $("#GST_Reg_no").removeAttr("disabled");
+            });
         });
     </script>
 }

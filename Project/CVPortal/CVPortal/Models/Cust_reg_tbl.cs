@@ -33,14 +33,12 @@ namespace CVPortal.Models
         public string Email { get; set; }
         public string Dlr_Address { get; set; }
         public string Dlr_Add_Country { get; set; }
-        public string Dlr_Add_StateCode { get; set; }
         public string Dlr_Add_State { get; set; }
         public string Dlr_Add_City { get; set; }
         public string Dlr_Add_Pincode { get; set; }
         public Nullable<bool> IsSameAsDlr_Address { get; set; }
         public string Supp_Address { get; set; }
         public string Supp_Add_Country { get; set; }
-        public string Supp_Add_StateCode { get; set; }
         public string Supp_Add_State { get; set; }
         public string Supp_Add_City { get; set; }
         public string Supp_Add_Pincode { get; set; }
@@ -70,9 +68,7 @@ namespace CVPortal.Models
         public Nullable<decimal> Date { get; set; }
         public string NextApprover { get; set; }
         public string OTP { get; set; }
-        public string InitiatorAdminApproval { get; set; }
-        public string InitiatorDepartmentApproval { get; set; }
-        public string HODDepartmentApproval { get; set; }
+        public string InitiatorApproval { get; set; }
         public string LegalDepartmentApproval { get; set; }
         public string FinanceDepartmentApproval { get; set; }
         public string ITDepartmentApproval { get; set; }

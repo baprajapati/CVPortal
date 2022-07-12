@@ -38,9 +38,6 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "State required")]
         public string Dlr_Add_State { get; set; }
 
-        [Required(ErrorMessage = "State code required")]
-        public string Dlr_Add_StateCode { get; set; }
-
         [Required(ErrorMessage = "City required")]
         public string Dlr_Add_City { get; set; }
 
@@ -57,9 +54,6 @@ namespace CVPortal.ViewModels
 
         [Required(ErrorMessage = "State required")]
         public string Supp_Add_State { get; set; }
-
-        [Required(ErrorMessage = "State code required")]
-        public string Supp_Add_StateCode { get; set; }
 
         [Required(ErrorMessage = "City required")]
         public string Supp_Add_City { get; set; }

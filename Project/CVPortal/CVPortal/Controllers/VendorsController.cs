@@ -46,14 +46,12 @@ namespace CVPortal.Controllers
                 model.Address1 = vendor.Address1;
                 model.Address1Country = vendor.Address1Country;
                 model.Address1State = vendor.Address1State;
-                model.Address1StateCode = vendor.Address1StateCode;
                 model.Address1City = vendor.Address1City;
                 model.Address1Pincode = vendor.Address1Pincode;
                 model.IsSameAsAddress1 = vendor.IsSameAsAddress1 ?? false;
                 model.Address2 = vendor.Address2;
                 model.Address2Country = vendor.Address2Country;
                 model.Address2State = vendor.Address2State;
-                model.Address2StateCode = vendor.Address2StateCode;
                 model.Address2City = vendor.Address2City;
                 model.Address2Pincode = vendor.Address2Pincode;
                 model.IsMain = vendor.IsNewVendor && Utility.UserCode.Equals(vendor.Email);
@@ -217,8 +215,7 @@ namespace CVPortal.Controllers
                     {
                         if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            var isApproverRole = vendor.NextApprover == ApprovarRoleEnum.InitiatorDepartment.ToString() || vendor.NextApprover == ApprovarRoleEnum.HODDepartment.ToString()
-                                || vendor.NextApprover == ApprovarRoleEnum.LegalDepartment.ToString() || vendor.NextApprover == ApprovarRoleEnum.FinanceDepartment.ToString()
+                            var isApproverRole = vendor.NextApprover == ApprovarRoleEnum.LegalDepartment.ToString() || vendor.NextApprover == ApprovarRoleEnum.FinanceDepartment.ToString()
                                 || vendor.NextApprover == ApprovarRoleEnum.ITDepartment.ToString();
 
                             if (!isApproverRole)
@@ -228,32 +225,15 @@ namespace CVPortal.Controllers
                             }
                             else
                             {
-                                var role = dataContext.webpages_Roles.First(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString());
+                                var roleName = string.IsNullOrEmpty(vendor.CIN_No) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
+                                var role = dataContext.webpages_Roles.First(x => x.RoleName == roleName);
                                 model.IsApprover = role.tbl_Users.Any(x => x.Id == Utility.UserId);
                             }
                         }
                         else
                         {
                             var roles = dataContext.webpages_Roles.ToList();
-                            if (vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())
-                            {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.HODDepartment.ToString())
-                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
-                            }
-                            else if (vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())
-                            {
-                                if (string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor)
-                                {
-                                    model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
-                                      .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
-                                }
-                                else
-                                {
-                                    model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.LegalDepartment.ToString())
-                                       .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
-                                }
-                            }
-                            else if (vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
+                            if (vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                             {
                                 model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
                                     .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
@@ -411,7 +391,7 @@ namespace CVPortal.Controllers
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (vendor != null)
             {
-                ViewBag.TextMessage = vendor.IsFinalApproved ? "Vendor already approved!" : "Approval is in progress!";
+                ViewBag.TextMessage = vendor.IsFinalApproved ? "Your form successfully approved!" : "Form Submitted Successfully<br/><br/>Approval is in progress!";
             }
 
             ViewBag.Id = id;
@@ -457,14 +437,12 @@ namespace CVPortal.Controllers
                         vendor.Address1 = model.Address1;
                         vendor.Address1Country = model.Address1Country;
                         vendor.Address1State = model.Address1State;
-                        vendor.Address1StateCode = model.Address1StateCode;
                         vendor.Address1City = model.Address1City;
                         vendor.Address1Pincode = model.Address1Pincode;
                         vendor.IsSameAsAddress1 = model.IsSameAsAddress1;
                         vendor.Address2 = model.Address2;
                         vendor.Address2Country = model.Address2Country;
                         vendor.Address2State = model.Address2State;
-                        vendor.Address2StateCode = model.Address2StateCode;
                         vendor.Address2City = model.Address2City;
                         vendor.Address2Pincode = model.Address2Pincode;
                         vendor.Step1 = true;
@@ -882,9 +860,7 @@ namespace CVPortal.Controllers
                         }
 
                         vendor.Step4 = true;
-                        vendor.InitiatorAdminApproval = "P";
-                        vendor.InitiatorDepartmentApproval = "P";
-                        vendor.HODDepartmentApproval = "P";
+                        vendor.InitiatorApproval = "P";
                         vendor.LegalDepartmentApproval = "P";
                         vendor.FinanceDepartmentApproval = "P";
                         vendor.ITDepartmentApproval = "P";
@@ -968,13 +944,11 @@ namespace CVPortal.Controllers
                     {
                         if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            model.ApproverRole = (vendor.VendorApprovals.Count(x => !x.IsDeleted && x.VendorId == model.VendorId) == 1 && !string.IsNullOrEmpty(vendor.NextApprover)) || !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                            model.ApproverRole = (vendor.VendorApprovals.Count(x => !x.IsDeleted && x.VendorId == model.VendorId) == 1 && !string.IsNullOrEmpty(vendor.NextApprover)) || !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : string.IsNullOrEmpty(vendor.CIN_No) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
                         }
                         else
                         {
-                            model.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
-                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString()
-                                : vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
+                            model.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
                                 : ApprovarRoleEnum.ITDepartment.ToString();
                         }
                     }
@@ -983,26 +957,16 @@ namespace CVPortal.Controllers
                         model.ApproverRole = ApprovarRoleEnum.NextApprover.ToString();
                     }
 
-                    if (Session["Role"].ToString() == "InitiatorAdmin")
+                    if (Session["Role"].ToString() == "Initiator")
                     {
-                        vendor.InitiatorAdminApproval = "A";
+                        vendor.InitiatorApproval = "A";
 
                         var nextApprover = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId)?.HANEXT;
-                        vendor.NextApprover = !string.IsNullOrEmpty(nextApprover) ? nextApprover : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                        vendor.NextApprover = !string.IsNullOrEmpty(nextApprover) ? nextApprover : string.IsNullOrEmpty(vendor.CIN_No) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
                     }
                     else if (model.ApproverRole != ApprovarRoleEnum.NextApprover.ToString())
                     {
-                        if (model.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())
-                        {
-                            vendor.InitiatorDepartmentApproval = "A";
-                            vendor.NextApprover = ApprovarRoleEnum.HODDepartment.ToString();
-                        }
-                        else if (model.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())
-                        {
-                            vendor.HODDepartmentApproval = "A";
-                            vendor.NextApprover = ApprovarRoleEnum.LegalDepartment.ToString();
-                        }
-                        else if (model.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
+                        if (model.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                         {
                             vendor.LegalDepartmentApproval = "A";
                             vendor.NextApprover = ApprovarRoleEnum.FinanceDepartment.ToString();
@@ -1021,7 +985,7 @@ namespace CVPortal.Controllers
                     else
                     {
                         var nextApprover = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId)?.HANEXT;
-                        vendor.NextApprover = !string.IsNullOrEmpty(nextApprover) ? nextApprover : "InitiatorAdmin";
+                        vendor.NextApprover = !string.IsNullOrEmpty(nextApprover) ? nextApprover : string.IsNullOrEmpty(vendor.CIN_No) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
                     }
 
                     vendor.VendorApprovals.Add(model);
@@ -1092,7 +1056,8 @@ namespace CVPortal.Controllers
                         }
                         else
                         {
-                            var roles = dataContext.webpages_Roles.FirstOrDefault(x => x.RoleName == ApprovarRoleEnum.InitiatorDepartment.ToString());
+                            var roleName = string.IsNullOrEmpty(vendor.CIN_No) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
+                            var roles = dataContext.webpages_Roles.FirstOrDefault(x => x.RoleName == roleName);
                             var emails = roles.tbl_Users.Select(x => x.EmailAddress).ToList();
 
                             string mailTo = string.Join(",", emails);
@@ -1112,9 +1077,7 @@ namespace CVPortal.Controllers
                     }
                     else
                     {
-                        var nextApproverRole = model.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
-                                : model.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString()
-                                : model.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
+                        var nextApproverRole = model.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
                                 : ApprovarRoleEnum.ITDepartment.ToString();
 
                         if (!string.IsNullOrEmpty(nextApproverRole))
@@ -1191,13 +1154,11 @@ namespace CVPortal.Controllers
                     {
                         if (vendorApprover.ApproverRole == ApprovarRoleEnum.NextApprover.ToString())
                         {
-                            data.ApproverRole = (vendor.VendorApprovals.Count(x => !x.IsDeleted && x.VendorId == id) == 1 && !string.IsNullOrEmpty(vendor.NextApprover)) || !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : ApprovarRoleEnum.InitiatorDepartment.ToString();
+                            data.ApproverRole = (vendor.VendorApprovals.Count(x => !x.IsDeleted && x.VendorId == id) == 1 && !string.IsNullOrEmpty(vendor.NextApprover)) || !string.IsNullOrEmpty(vendorApprover.tbl_Users.HANEXT) ? ApprovarRoleEnum.NextApprover.ToString() : string.IsNullOrEmpty(vendor.CIN_No) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
                         }
                         else
                         {
-                            data.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString() ? ApprovarRoleEnum.HODDepartment.ToString()
-                                : vendorApprover.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString() ? string.IsNullOrEmpty(vendor.CIN_No) || !vendor.IsNewVendor ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString()
-                                : vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
+                            data.ApproverRole = vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString() ? ApprovarRoleEnum.FinanceDepartment.ToString()
                                 : ApprovarRoleEnum.ITDepartment.ToString();
                         }
                     }
@@ -1206,21 +1167,13 @@ namespace CVPortal.Controllers
                         data.ApproverRole = ApprovarRoleEnum.NextApprover.ToString();
                     }
 
-                    if (Session["Role"].ToString() == "InitiatorAdmin")
+                    if (Session["Role"].ToString() == "Initiator")
                     {
-                        vendor.InitiatorAdminApproval = "R";
+                        vendor.InitiatorApproval = "R";
                     }
                     else
                     {
-                        if (data.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())
-                        {
-                            vendor.InitiatorDepartmentApproval = "R";
-                        }
-                        else if (data.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())
-                        {
-                            vendor.HODDepartmentApproval = "R";
-                        }
-                        else if (data.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
+                        if (data.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                         {
                             vendor.LegalDepartmentApproval = "R";
                         }
@@ -1291,8 +1244,6 @@ namespace CVPortal.Controllers
                         Owner = item.tbl_Users.HANAME,
                         NextApprover = item.NextApprover,
                         PreviousApprover = $"{vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
-                        InitiatorDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.InitiatorDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
-                        HODDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.HODDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         LegalDepartment = string.IsNullOrEmpty(item.CIN_No) || !item.IsNewVendor ? "Legal Department not required" : $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         FinanceDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         ITDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})"

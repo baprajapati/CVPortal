@@ -46,11 +46,11 @@ namespace CVPortal
                     Roles.AddUserToRole("admin@gmail.com", "Admin");
                 }
 
-                if (!roles.Any(x => x.RoleName == "InitiatorAdmin"))
+                if (!roles.Any(x => x.RoleName == "Initiator"))
                 {
                     dataContext.webpages_Roles.Add(new webpages_Roles()
                     {
-                        RoleName = "InitiatorAdmin"
+                        RoleName = "Initiator"
                     });
                     dataContext.SaveChanges();
                 }
@@ -58,24 +58,6 @@ namespace CVPortal
                 #endregion
 
                 #region Add Roles
-
-                if (!roles.Any(x => x.RoleName == "InitiatorDepartment"))
-                {
-                    dataContext.webpages_Roles.Add(new webpages_Roles()
-                    {
-                        RoleName = "InitiatorDepartment"
-                    });
-                    dataContext.SaveChanges();
-                }
-
-                if (!roles.Any(x => x.RoleName == "HODDepartment"))
-                {
-                    dataContext.webpages_Roles.Add(new webpages_Roles()
-                    {
-                        RoleName = "HODDepartment"
-                    });
-                    dataContext.SaveChanges();
-                }
 
                 if (!roles.Any(x => x.RoleName == "FinanceDepartment"))
                 {

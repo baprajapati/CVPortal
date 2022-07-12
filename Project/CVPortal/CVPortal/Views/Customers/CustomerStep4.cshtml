@@ -249,7 +249,7 @@
                 <label class="modal-title" id="exampleModalLabel">Approve Confirmation</label>
             </div>
             @if (HttpContext.Current.Session["Role"].ToString() == string.Empty
-                    || HttpContext.Current.Session["Role"].ToString() != "InitiatorAdmin" || !Model.IsCreatedUser
+                    || HttpContext.Current.Session["Role"].ToString() != "Initiator" || !Model.IsCreatedUser
                     && (HttpContext.Current.Session["Role"].ToString() != "FinanceDepartment"
                     && HttpContext.Current.Session["Role"].ToString() != "ITDepartment"))
             {
@@ -258,7 +258,7 @@
                 </div>
             }
 
-            @if (HttpContext.Current.Session["Role"].ToString() == "InitiatorAdmin" && Model.IsCreatedUser)
+            @if (HttpContext.Current.Session["Role"].ToString() == "Initiator" && Model.IsCreatedUser)
             {
                 <div class="modal-body">
                     <div class="form-group">

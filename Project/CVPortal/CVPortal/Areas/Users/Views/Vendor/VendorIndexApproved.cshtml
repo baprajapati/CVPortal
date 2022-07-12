@@ -67,18 +67,6 @@
                             }
                         },
                         {
-                            "data": "InitiatorDepartment", "name": "InitiatorDepartment",
-                            "render": function (data, type, row, meta) {
-                                return row.InitiatorDepartment != " ()" ? row.InitiatorDepartment : "";
-                            }
-                        },
-                        {
-                            "data": "HODDepartment", "name": "HODDepartment",
-                            "render": function (data, type, row, meta) {
-                                return row.HODDepartment != " ()" ? row.HODDepartment : "";
-                            }
-                        },
-                        {
                             "data": "LegalDepartment", "name": "LegalDepartment",
                             "render": function (data, type, row, meta) {
                                 return row.LegalDepartment != " ()" ? row.LegalDepartment : "";
@@ -189,7 +177,7 @@
                 <div class="col-sm-6">
                     <div class="form_group text-right">
                         <input type="button" value="Export" class="btn btn-primary export-button" />
-                        @if (Session["Role"].ToString() == "InitiatorAdmin")
+                        @if (Session["Role"].ToString() == "Initiator")
                         {
                             @Html.ActionLink("Add New Vendor", "AddVendor", new { controller = "Vendor" }, new { @class = "btn btn-primary" })
                         }

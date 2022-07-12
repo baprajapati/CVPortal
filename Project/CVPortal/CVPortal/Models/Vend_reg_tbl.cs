@@ -32,14 +32,12 @@ namespace CVPortal.Models
         public string Email { get; set; }
         public string Address1 { get; set; }
         public string Address1Country { get; set; }
-        public string Address1StateCode { get; set; }
         public string Address1State { get; set; }
         public string Address1City { get; set; }
         public string Address1Pincode { get; set; }
         public Nullable<bool> IsSameAsAddress1 { get; set; }
         public string Address2 { get; set; }
         public string Address2Country { get; set; }
-        public string Address2StateCode { get; set; }
         public string Address2State { get; set; }
         public string Address2City { get; set; }
         public string Address2Pincode { get; set; }
@@ -85,9 +83,7 @@ namespace CVPortal.Models
         public string VendorType { get; set; }
         public string DocumentPfx { get; set; }
         public string Currency { get; set; }
-        public string InitiatorAdminApproval { get; set; }
-        public string InitiatorDepartmentApproval { get; set; }
-        public string HODDepartmentApproval { get; set; }
+        public string InitiatorApproval { get; set; }
         public string LegalDepartmentApproval { get; set; }
         public string FinanceDepartmentApproval { get; set; }
         public string ITDepartmentApproval { get; set; }
