@@ -35,6 +35,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="Email">User Code</label>
+                                <input type="text" id="txtUserCode" style="display:none;">
                                 @Html.TextBoxFor(model => model.HAUSER, new { id = "txtHAUSER", @class = "form-control", placeholder = "User Code" })
                                 @Html.ValidationMessageFor(model => model.HAUSER, "")
                             </div>
