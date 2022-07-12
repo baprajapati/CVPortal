@@ -140,7 +140,8 @@ namespace CVPortal.Areas.Users.Controllers
 
                     if (!vendor.IsNewVendor)
                     {
-                        objVendor = dataContext.Vend_reg_tbl.Where(x => x.VendorCode == Convert.ToInt32(vendor.VendorCode)).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
+                        var vendorCode = Convert.ToInt32(vendor.VendorCode);
+                        objVendor = dataContext.Vend_reg_tbl.Where(x => x.VendorCode == vendorCode).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
                         data = objVendor;
                         data.IsFinalApproved = false;
 
