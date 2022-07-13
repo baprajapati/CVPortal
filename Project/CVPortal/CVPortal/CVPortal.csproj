@@ -370,6 +370,7 @@
     <Content Include="Views\Customers\CustomerStep3.cshtml" />
     <Content Include="Views\Customers\CustomerStep4.cshtml" />
     <Content Include="Views\Account\CustomerLogin.cshtml" />
+    <Content Include="Views\Account\Redirect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Login\app.5db8a232.css" />

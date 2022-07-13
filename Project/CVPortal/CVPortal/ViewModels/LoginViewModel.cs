@@ -14,4 +14,12 @@ namespace CVPortal.ViewModels
         [Required]
         public string Password { get; set; }
     }
+
+    public class RoleViewModel
+    {
+        public int? Id { get; set; }
+
+        [Required]
+        public string RoleName { get; set; }
+    }
 }

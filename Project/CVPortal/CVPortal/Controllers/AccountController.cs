@@ -28,16 +28,23 @@ namespace CVPortal.Controllers
                 FormsAuthentication.SetAuthCookie(user.EmailAddress, false);
 
                 string[] userRoles = Roles.GetRolesForUser(user.EmailAddress);
-
-                Session["Role"] = userRoles.FirstOrDefault()?.ToString();
-
-                if (userRoles.Contains("Admin"))
+                if (userRoles.Length == 1)
                 {
-                    return RedirectToAction("../Admin/User/UserIndex");
+                    Session["Role"] = userRoles.FirstOrDefault()?.ToString();
+
+                    if (userRoles.Contains("Admin"))
+                    {
+                        return RedirectToAction("../Admin/User/UserIndex");
+                    }
+                    else
+                    {
+                        return RedirectToAction("../Users/Vendor/VendorIndex");
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("../Users/Vendor/VendorIndex");
+                    TempData["UserRoles"] = string.Join(",", userRoles);
+                    return RedirectToAction("Redirect");
                 }
             }
 
@@ -45,7 +52,39 @@ namespace CVPortal.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult VendorLogin(int? id, string a)
+        public ActionResult Redirect(int? id)
+        {
+            if(TempData["UserRoles"] == null)
+            {
+                FormsAuthentication.SignOut();
+                Utility.UserCode = string.Empty;
+                Utility.UserId = 0;
+                return RedirectToAction("Login");
+            }
+
+            var roles = TempData["UserRoles"].ToString().Split(',');
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            foreach (var item in roles)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Text = item,
+                    Value = item
+                });
+            }
+
+            ViewBag.RoleList = new SelectList(list, "Value", "Text");
+
+            return View(new RoleViewModel()
+            {
+                Id = id
+            });
+        }
+
+        [AllowAnonymous]
+        public ActionResult VendorLogin(int? id)
         {
             return View(new VendorCustomerLoginViewModel()
             {
@@ -113,7 +152,9 @@ namespace CVPortal.Controllers
                     string attachments = string.Empty;
                     Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, objUser.Id, EmailTypeEnum.OTPUser, objUser.Id);
 
-                    return Json(new { status = true });
+                    var roles = Roles.GetRolesForUser(objUser.EmailAddress);
+
+                    return Json(new { status = true, roles });
                 }
 
                 return Json(new { status = false, result = "Email inactivated or not exists in system." });
@@ -175,7 +216,9 @@ namespace CVPortal.Controllers
                     string attachments = string.Empty;
                     Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, objUser.Id, EmailTypeEnum.OTPUser, objUser.Id);
 
-                    return Json(new { status = true });
+                    var roles = Roles.GetRolesForUser(objUser.EmailAddress);
+
+                    return Json(new { status = true, roles });
                 }
 
                 return Json(new { status = false, result = "Email inactivated or not exists in system." });
@@ -211,7 +254,7 @@ namespace CVPortal.Controllers
                     FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = user.EmailAddress;
                     Utility.UserId = user.Id;
-                    Session["Role"] = Roles.GetRolesForUser(user.EmailAddress).First().ToString();
+                    Session["Role"] = model.RoleName;
 
                     vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
@@ -254,7 +297,7 @@ namespace CVPortal.Controllers
                     FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = user.EmailAddress;
                     Utility.UserId = user.Id;
-                    Session["Role"] = Roles.GetRolesForUser(user.EmailAddress).First().ToString();
+                    Session["Role"] = model.RoleName;
 
                     customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
@@ -289,21 +332,49 @@ namespace CVPortal.Controllers
                     FormsAuthentication.SetAuthCookie(model.Email, false);
 
                     string[] userRoles = Roles.GetRolesForUser(model.Email);
-
-                    Session["Role"] = userRoles.FirstOrDefault()?.ToString();
-
-                    if (userRoles.Contains("Admin"))
+                    if (userRoles.Length == 1)
                     {
-                        return RedirectToAction("../Admin/User/UserIndex");
+                        Session["Role"] = userRoles.FirstOrDefault()?.ToString();
+
+                        if (userRoles.Contains("Admin"))
+                        {
+                            return RedirectToAction("../Admin/User/UserIndex");
+                        }
+                        else
+                        {
+                            return RedirectToAction("../Users/Vendor/VendorIndex");
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("../Users/Vendor/VendorIndex");
+                        TempData["UserRoles"] = string.Join(",", userRoles);
+                        return RedirectToAction("Redirect");
                     }
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Incorrect user name or password.");
+                }
+            }
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Redirect(RoleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Session["Role"] = model.RoleName;
+
+                if (model.RoleName.Contains("Admin"))
+                {
+                    return RedirectToAction("../Admin/User/UserIndex");
+                }
+                else if (model.Id == null)
+                {
+                    return RedirectToAction("../Users/Vendor/VendorIndex");
                 }
             }
 

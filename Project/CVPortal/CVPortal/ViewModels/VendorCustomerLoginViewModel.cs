@@ -15,5 +15,8 @@ namespace CVPortal.ViewModels
 
         [Required]
         public string OTP { get; set; }
+
+        [Required]
+        public string RoleName { get; set; }
     }
 }

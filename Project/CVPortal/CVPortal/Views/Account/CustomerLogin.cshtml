@@ -32,6 +32,10 @@
                             $(".js-otp").removeClass("hide");
                             $(".js-send-otp").addClass("hide");
                             $("#txtEmail").attr("disabled", "disabled");
+
+                            $.each(response.roles, function (index, value) {
+                                $('#RoleName').append(new Option(value, value))
+                            });
                         } else {
                             toastr.error(response.result, "Login");
                         }
@@ -56,6 +60,7 @@
                     data: JSON.stringify({
                         id: $("#Id").val(),
                         email: $("#txtEmail").val(),
+                        roleName: $("#RoleName").val(),
                         otp: $("#OTP").val()
                     }),
                     contentType: "application/json; charset=utf-8",
@@ -112,6 +117,13 @@
                                 </button>
                             </form>
                             <form class="md js-submit-otp-form">
+                                <div data-v-24b04a24="" class="signup-mobile-input su-input-group su-static-label js-otp hide" data-v-69ce196a="">
+                                    <label data-v-24b04a24="" class="su-input-label su-visible">Role</label>
+                                    @Html.DropDownListFor(model => model.RoleName, new List<SelectListItem>(), new { @class = "form-control mb-0" })
+                                    <div>
+                                        @Html.ValidationMessageFor(m => m.RoleName, "", new { @class = "error" })
+                                    </div>
+                                </div>
                                 <div data-v-24b04a24="" class="signup-mobile-input su-input-group su-static-label js-otp hide" data-v-69ce196a="">
                                     <label data-v-24b04a24="" class="su-input-label su-visible">OTP</label>
                                     @Html.TextBoxFor(m => m.OTP, new { @class = "su-spinner", autocorrect = "off", placeholder = "" })
