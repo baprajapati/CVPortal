@@ -29,6 +29,11 @@
 
                         if (response.status) {
                             toastr.success("OTP sent successfully, please check your email inbox.", "Login");
+
+                            if (response.roles && response.roles.length > 0) {
+                                $(".js-rolename").removeClass("hide");
+                            }
+
                             $(".js-otp").removeClass("hide");
                             $(".js-send-otp").addClass("hide");
                             $("#txtEmail").attr("disabled", "disabled");
@@ -117,7 +122,7 @@
                                 </button>
                             </form>
                             <form class="md js-submit-otp-form">
-                                <div data-v-24b04a24="" class="signup-mobile-input su-input-group su-static-label js-otp hide" data-v-69ce196a="">
+                                <div data-v-24b04a24="" class="signup-mobile-input su-input-group su-static-label js-rolename hide" data-v-69ce196a="">
                                     <label data-v-24b04a24="" class="su-input-label su-visible">Role</label>
                                     @Html.DropDownListFor(model => model.RoleName, new List<SelectListItem>(), new { @class = "form-control mb-0" })
                                     <div>
