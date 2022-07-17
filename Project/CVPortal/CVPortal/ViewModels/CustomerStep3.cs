@@ -10,10 +10,8 @@ namespace CVPortal.ViewModels
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Please enter security deposit")]
         public decimal? Seucirty_Deposit { get; set; }
 
-        [Required(ErrorMessage = "Please enter DD/UTR no")]
         public string DDNo_UTRNo { get; set; }
 
         [Required(ErrorMessage = "Please enter benificiary name")]
@@ -23,7 +21,6 @@ namespace CVPortal.ViewModels
         public string Bank_name { get; set; }
 
         public HttpPostedFileBase BankFile { get; set; }
-        [Required(ErrorMessage = "Please upload bank related file")]
         public string BankFileName { get; set; }
 
         [Required(ErrorMessage = "Please enter branch name/address")]

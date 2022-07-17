@@ -54,13 +54,10 @@ namespace CVPortal.ViewModels
         public HttpPostedFileBase GSTFile { get; set; }
         public string GSTFileName { get; set; }
 
-        [Required(ErrorMessage = "Please enter item description")]
         public string Item_Desc { get; set; }
 
-        [Required(ErrorMessage = "Please enter HSN/SAC code")]
         public string HSN_SAC_code { get; set; }
 
-        [Required(ErrorMessage = "Please enter MSME no")]
         public string MSME_no { get; set; }
 
         public HttpPostedFileBase MSMEFile { get; set; }

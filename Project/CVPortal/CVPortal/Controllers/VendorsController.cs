@@ -227,21 +227,20 @@ namespace CVPortal.Controllers
                             {
                                 var roleName = string.IsNullOrEmpty(vendor.CIN_No) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
                                 var role = dataContext.webpages_Roles.First(x => x.RoleName == roleName);
-                                model.IsApprover = role.tbl_Users.Any(x => x.Id == Utility.UserId);
+                                model.IsApprover = role.tbl_Users.Any(x => x.Id == Utility.UserId) && Session["Role"].ToString() == roleName;
                             }
                         }
                         else
                         {
-                            var roles = dataContext.webpages_Roles.ToList();
                             if (vendorApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
-                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                                model.IsApprover = dataContext.webpages_Roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId) && Session["Role"].ToString() == ApprovarRoleEnum.FinanceDepartment.ToString();
                             }
                             else if (vendorApprover.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.ITDepartment.ToString())
-                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                                model.IsApprover = dataContext.webpages_Roles.Where(x => x.RoleName == ApprovarRoleEnum.ITDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId) && Session["Role"].ToString() == ApprovarRoleEnum.ITDepartment.ToString();
                             }
                             else
                             {
@@ -252,7 +251,7 @@ namespace CVPortal.Controllers
                     else
                     {
                         var user = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == vendor.NextApprover);
-                        model.IsApprover = user?.Id == Utility.UserId;
+                        model.IsApprover = user?.Id == Utility.UserId && Session["Role"].ToString() == "Initiator";
                     }
                 }
 
@@ -865,6 +864,8 @@ namespace CVPortal.Controllers
                         vendor.FinanceDepartmentApproval = "P";
                         vendor.ITDepartmentApproval = "P";
                         vendor.NextApprover = vendor.tbl_Users.HAUSER;
+                        vendor.NextApproverRole = "Initiator";
+
                         dataContext.SaveChanges();
 
                         string mailTo = vendor.tbl_Users.EmailAddress;
@@ -1233,6 +1234,12 @@ namespace CVPortal.Controllers
 
                 data.ForEach(item =>
                 {
+                    var documents = new List<string>();
+                    foreach (var document in item.VendorFiles)
+                    {
+                        documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                    }
+
                     vendors.Add(new VendorListModel()
                     {
                         Id = item.ID,
@@ -1242,6 +1249,7 @@ namespace CVPortal.Controllers
                         VendorCode = item.VendorCode?.ToString(),
                         Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
+                        Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
                         PreviousApprover = $"{vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         LegalDepartment = string.IsNullOrEmpty(item.CIN_No) || !item.IsNewVendor ? "Legal Department not required" : $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",

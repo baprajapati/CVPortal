@@ -34,8 +34,12 @@
             });
 
             $('#Date').datepicker({
-                format: 'yyyymmdd'
+                "format": 'yyyymmdd'
             });
+
+            if (!$('#Date').val()) {
+                $('#Date').datepicker('update', new Date());
+            }
         });
     </script>
 }

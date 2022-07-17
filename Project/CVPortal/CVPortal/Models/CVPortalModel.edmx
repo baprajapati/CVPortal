@@ -74,6 +74,7 @@
           <Property Name="ITR_ReturnTDSDeduct" Type="bit" />
           <Property Name="DealerType" Type="nvarchar" MaxLength="50" />
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
+          <Property Name="NextApproverRole" Type="nvarchar" MaxLength="50" />
           <Property Name="NextApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="OTP" Type="nvarchar" MaxLength="20" />
           <Property Name="InitiatorApproval" Type="nvarchar" MaxLength="50" />
@@ -111,6 +112,7 @@
           <Property Name="Company" Type="nvarchar" MaxLength="50" />
           <Property Name="CustomerTypeId" Type="int" />
           <Property Name="PaymentTypeId" Type="int" />
+          <Property Name="CurrencyCodeId" Type="int" />
           <Property Name="TermsCodeId" Type="int" />
           <Property Name="AgentSalesId" Type="int" />
           <Property Name="TaxCodeId" Type="int" />
@@ -212,6 +214,7 @@
           <Property Name="Currency_Code" Type="nvarchar" MaxLength="3" Nullable="false" />
           <Property Name="Vendor_Add1" Type="nvarchar" MaxLength="50" />
           <Property Name="Vendor_Add2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Vendor_StateCode" Type="nvarchar" MaxLength="3" />
           <Property Name="Vendor_Pincode" Type="nvarchar" MaxLength="9" />
           <Property Name="Vendor_Type" Type="nvarchar" MaxLength="4" />
           <Property Name="Vendor_ContactName" Type="nvarchar" MaxLength="30" />
@@ -231,6 +234,7 @@
           <Property Name="CustAdd1" Type="nvarchar" MaxLength="50" />
           <Property Name="CustAdd2" Type="nvarchar" MaxLength="50" />
           <Property Name="CustAdd3" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustStateCode" Type="nvarchar" MaxLength="3" />
           <Property Name="CustPincode" Type="nvarchar" MaxLength="6" />
           <Property Name="CustConuntryCode" Type="nvarchar" MaxLength="4" />
           <Property Name="CustType" Type="nvarchar" MaxLength="4" />
@@ -375,6 +379,7 @@
           <Property Name="IFSC_RTGS_code" Type="nvarchar" MaxLength="11" />
           <Property Name="Date" Type="numeric" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="nvarchar" MaxLength="1" />
+          <Property Name="NextApproverRole" Type="nvarchar" MaxLength="50" />
           <Property Name="NextApprover" Type="nvarchar" MaxLength="50" />
           <Property Name="TermsCode" Type="nvarchar" MaxLength="50" />
           <Property Name="BankCode" Type="nvarchar" MaxLength="50" />
@@ -892,6 +897,7 @@
           <Property Name="ITR_ReturnTDSDeduct" Type="Boolean" />
           <Property Name="DealerType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
+          <Property Name="NextApproverRole" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="NextApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="OTP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="InitiatorApproval" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -932,6 +938,7 @@
           <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CustomerTypeId" Type="Int32" />
           <Property Name="PaymentTypeId" Type="Int32" />
+          <Property Name="CurrencyCodeId" Type="Int32" />
           <Property Name="TermsCodeId" Type="Int32" />
           <Property Name="AgentSalesId" Type="Int32" />
           <Property Name="TaxCodeId" Type="Int32" />
@@ -1036,6 +1043,7 @@
           <Property Name="Currency_Code" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Add1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Add2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Vendor_StateCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Pincode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_Type" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Vendor_ContactName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -1055,6 +1063,7 @@
           <Property Name="CustAdd1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CustAdd2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CustAdd3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustStateCode" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="CustPincode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
           <Property Name="CustConuntryCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="CustType" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
@@ -1207,6 +1216,7 @@
           <Property Name="IFSC_RTGS_code" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="Decimal" Precision="8" Scale="0" />
           <Property Name="Type_of_Vend" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="NextApproverRole" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="NextApprover" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TermsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BankCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1521,6 +1531,7 @@
                 <ScalarProperty Name="InitiatorApproval" ColumnName="InitiatorApproval" />
                 <ScalarProperty Name="OTP" ColumnName="OTP" />
                 <ScalarProperty Name="NextApprover" ColumnName="NextApprover" />
+                <ScalarProperty Name="NextApproverRole" ColumnName="NextApproverRole" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="DealerType" ColumnName="DealerType" />
                 <ScalarProperty Name="ITR_ReturnTDSDeduct" ColumnName="ITR_ReturnTDSDeduct" />
@@ -1580,6 +1591,7 @@
                 <ScalarProperty Name="TaxCodeId" ColumnName="TaxCodeId" />
                 <ScalarProperty Name="AgentSalesId" ColumnName="AgentSalesId" />
                 <ScalarProperty Name="TermsCodeId" ColumnName="TermsCodeId" />
+                <ScalarProperty Name="CurrencyCodeId" ColumnName="CurrencyCodeId" />
                 <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
                 <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
@@ -1690,6 +1702,7 @@
                 <ScalarProperty Name="Vendor_ContactName" ColumnName="Vendor_ContactName" />
                 <ScalarProperty Name="Vendor_Type" ColumnName="Vendor_Type" />
                 <ScalarProperty Name="Vendor_Pincode" ColumnName="Vendor_Pincode" />
+                <ScalarProperty Name="Vendor_StateCode" ColumnName="Vendor_StateCode" />
                 <ScalarProperty Name="Vendor_Add2" ColumnName="Vendor_Add2" />
                 <ScalarProperty Name="Vendor_Add1" ColumnName="Vendor_Add1" />
                 <ScalarProperty Name="Currency_Code" ColumnName="Currency_Code" />
@@ -1712,6 +1725,7 @@
                 <ScalarProperty Name="CustType" ColumnName="CustType" />
                 <ScalarProperty Name="CustConuntryCode" ColumnName="CustConuntryCode" />
                 <ScalarProperty Name="CustPincode" ColumnName="CustPincode" />
+                <ScalarProperty Name="CustStateCode" ColumnName="CustStateCode" />
                 <ScalarProperty Name="CustAdd3" ColumnName="CustAdd3" />
                 <ScalarProperty Name="CustAdd2" ColumnName="CustAdd2" />
                 <ScalarProperty Name="CustAdd1" ColumnName="CustAdd1" />
@@ -1833,6 +1847,7 @@
                 <ScalarProperty Name="BankCode" ColumnName="BankCode" />
                 <ScalarProperty Name="TermsCode" ColumnName="TermsCode" />
                 <ScalarProperty Name="NextApprover" ColumnName="NextApprover" />
+                <ScalarProperty Name="NextApproverRole" ColumnName="NextApproverRole" />
                 <ScalarProperty Name="Type_of_Vend" ColumnName="Type_of_Vend" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="IFSC_RTGS_code" ColumnName="IFSC_RTGS_code" />

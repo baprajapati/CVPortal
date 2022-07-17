@@ -1,14 +1,31 @@
 <html>
 <head>
+    <style>
+        input {
+            width: 100%;
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 1px black dotted;
+        }
+
+        table {
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1 style="text-align:center;">Domestic Vendor Registration Form</h1>
-    </header>
     <table width="100%" style="border-style: double;">
         <tbody>
             <tr>
-                <td><h3>Customer Information </h3></td>
+                <td style="width:100%; text-align: center;" colspan="4">
+                    <img src="[LogoPath]" style="height: 50px; float: left;" />
+                    <h1 style="margin-top:5px;">Domestic Customer Registration Form</h1>
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td><h3 style="text-decoration:underline;">Customer Information </h3></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Organization Status </strong></td>
@@ -45,7 +62,8 @@
                 <td colspan="3"><input type="text" style="width:100%;" value="[CONTACT_NO]" /></td>
             </tr>
             <tr>
-                <td colspan="4" style="text-align:center;"><strong>Accounts Contact </strong></td>
+                <td></td>
+                <td colspan="3" style="text-align:center;"><strong>Accounts Contact </strong></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Designation </strong></td>
@@ -89,7 +107,7 @@
                 <td colspan="3"><input type="text" style="width:100%;" value="[GST_REG_NO]" /></td>
             </tr>
             <tr>
-                <td><h3>Remittance/Payments </h3> </td>
+                <td><h3 style="text-decoration: underline; margin-top: 30px;">Remittance/Payments </h3> </td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Seucirty Deposit </strong></td>
@@ -128,20 +146,35 @@
                 <td colspan="3"><input type="text" style="width:100%;" value="[SWIFT_CODE]" /></td>
             </tr>
             <tr>
-                <td colspan="1"><strong>ITR Return filling status last two Assessment Year </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ITR_RETURNSTS]" /></td>
+                <td colspan="2"><strong>ITR Return filling status last two Assessment Year </strong></td>
+                <td colspan="2"><input type="text" style="width:100%;" value="[ITR_RETURNSTS]" /></td>
             </tr>
             <tr>
-                <td colspan="1"><strong>Turnover in more than 10 Crore for FY </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ITR_RETURNSTSTURNOVER]" /></td>
+                <td colspan="2"><strong>Turnover in more than 10 Crore for FY </strong></td>
+                <td colspan="2"><input type="text" style="width:100%;" value="[ITR_RETURNSTSTURNOVER]" /></td>
             </tr>
             <tr>
-                <td colspan="1"><strong>Is aggregated TDS deduction more than 50000 in last two years </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ITR_RETURNTDSDEDUCT]" /></td>
+                <td colspan="2"><strong>Is aggregated TDS deduction more than 50000 in last two years </strong></td>
+                <td colspan="2"><input type="text" style="width:100%;" value="[ITR_RETURNTDSDEDUCT]" /></td>
             </tr>
             <tr>
-                <td colspan="1"><strong>Date </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[DATE]" /></td>
+                <td colspan="1"></td>
+                <td colspan="2" style="text-align: center; padding-top: 3%;"><strong>Dealer Signature</strong></td>
+                <td colspan="1"></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="text-align:right;padding-right:30px;"><strong>Signatures & Stamp</strong></td>
+                <td colspan="2"><div style="height: 50px;border: 1px solid;"></div></td>
+                <td colspan="1"></td>
+            </tr>
+            <tr>
+                <td colspan="1" width="25%"></td>
+                <td colspan="2" width="50%"><label>(I/We hereby declare that all information provided is true to the best of my/our knowledge)</label></td>
+                <td colspan="1" width="25%"></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="text-align: right; padding-top: 2%; padding-right: 30px;"><strong>Date </strong></td>
+                <td colspan="3" style="padding-top: 2%;"><input type="text" value="[DATE]" /></td>
             </tr>
         </tbody>
     </table>

@@ -66,6 +66,7 @@ namespace CVPortal.Models
         public Nullable<bool> ITR_ReturnTDSDeduct { get; set; }
         public string DealerType { get; set; }
         public Nullable<decimal> Date { get; set; }
+        public string NextApproverRole { get; set; }
         public string NextApprover { get; set; }
         public string OTP { get; set; }
         public string InitiatorApproval { get; set; }

@@ -23,27 +23,39 @@
                 window.location.href = "/Customers/CustomerStep4/" + $("#Id").val();
             });
 
-            $('#AuditedFile').change(function (e) {
+            $('#WealthCapitalCertificateFile').change(function (e) {
                 var file = e.target.files[0];
 
                 if (file.type != "application/pdf") {
-                    $("#AuditedFile").val("");
+                    $("#WealthCapitalCertificateFile").val("");
                     alert("Only PDF file allowed.");
                 } else if (file.size > 5242880) {
-                    $("#AuditedFile").val("");
-                    toastr.error("Maximum 5 MB size allowed, your uploaded Audited Balance sheet file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
+                    $("#WealthCapitalCertificateFile").val("");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded Wealth/Capital Certificate file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
                 }
             });
 
-            $('#MOAFile').change(function (e) {
+            $('#v').change(function (e) {
                 var file = e.target.files[0];
 
                 if (file.type != "application/pdf") {
-                    $("#MOAFile").val("");
+                    $("#SolvancyCertificateFile").val("");
                     alert("Only PDF file allowed.");
                 } else if (file.size > 5242880) {
-                    $("#MOAFile").val("");
-                    toastr.error("Maximum 5 MB size allowed, your uploaded AOA & MOA file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
+                    $("#SolvancyCertificateFile").val("");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded Solvancy Certifcate file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
+                }
+            });
+
+            $('#InvestmentDeclarationFile').change(function (e) {
+                var file = e.target.files[0];
+
+                if (file.type != "application/pdf") {
+                    $("#InvestmentDeclarationFile").val("");
+                    alert("Only PDF file allowed.");
+                } else if (file.size > 5242880) {
+                    $("#InvestmentDeclarationFile").val("");
+                    toastr.error("Maximum 5 MB size allowed, your uploaded Investment Declaration file size is " + (file.size / 1024 / 1024).toFixed(2) + " MB.", "Customer");
                 }
             });
 
@@ -187,10 +199,11 @@
                     </div>
                 </div>
             </div>
+            <br/>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="col-md-offset-2 col-md-10">
-                        <span>ITR Return filling status last two Assessment Year.</span><span class="color-red"> * </span>
+                    <div class="col-md-12">
+                        &nbsp;&nbsp;<label>I.</label>&nbsp;&nbsp;<span>ITR Return filling status last two Assessment Year.</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -200,8 +213,8 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="col-md-offset-2 col-md-10">
-                        <span>Turnover in more than 10 Crore for FY:  Yes or No.</span><span class="color-red"> * </span>
+                    <div class="col-md-12">
+                        &nbsp;&nbsp;<label>II.</label>&nbsp;<span>Turnover in more than 10 Crore for FY:  Yes or No.</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -212,11 +225,10 @@
                     @Html.ValidationMessageFor(model => model.ITR_ReturnStsTurnover)
                 </div>
             </div>
-            <br />
             <div class="row">
                 <div class="col-md-6">
-                    <div class="col-md-offset-2 col-md-10">
-                        <span>Is aggregated TDS deduction more than 50000 in last two years</span><span class="color-red"> * </span>
+                    <div class="col-md-12">
+                        &nbsp;&nbsp;<label>III.</label>&nbsp;<span>Is aggregated TDS deduction more than 50000 in last two years</span><span class="color-red"> * </span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -225,6 +237,42 @@
                     @Html.RadioButtonFor(model => model.ITR_ReturnTDSDeduct, false, Model.IsMain ? (object)new { @id = "IsITRFiled14" } : new { @id = "IsITRFiled14", @disabled = "disabled" })
                     <label for="IsITRFiled14" style="font-weight: 500; margin-right: 30px;">No</label>
                     @Html.ValidationMessageFor(model => model.ITR_ReturnTDSDeduct)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    Wealth/Capital Certificate issued by a Chartered Accountant
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.WealthCapitalCertificateFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                    <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.WealthCapitalCertificateFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.WealthCapitalCertificateFileName) ? "hidden" : "")">
+                        View File
+                    </a>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    Solvancy Certifcate issued by Bank
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.SolvancyCertificateFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                    <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.SolvancyCertificateFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.SolvancyCertificateFileName) ? "hidden" : "")">
+                        View File
+                    </a>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    Investment Declaration by Dealer
+                </div>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.InvestmentDeclarationFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
+                    <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.InvestmentDeclarationFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.InvestmentDeclarationFileName) ? "hidden" : "")">
+                        View File
+                    </a>
                 </div>
             </div>
             <br /><br />

@@ -13,6 +13,9 @@ namespace CVPortal.App_Code
         MSME = 4,
         Bank = 5,
         Audited = 6,
-        MOA = 7
+        MOA = 7,
+        WealthCapital = 8,
+        Solvancy = 9,
+        Investment = 10
     }
 }

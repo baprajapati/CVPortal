@@ -10,7 +10,6 @@ namespace CVPortal.ViewModels
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Please enter swift code")]
         public string Swift_Code { get; set; }
 
         [Required(ErrorMessage = "Please enter ITS return status")]
@@ -21,6 +20,15 @@ namespace CVPortal.ViewModels
 
         [Required(ErrorMessage = "Please select ITR return TDS deduct status")]
         public bool? ITR_ReturnTDSDeduct { get; set; }
+
+        public HttpPostedFileBase WealthCapitalCertificateFile { get; set; }
+        public string WealthCapitalCertificateFileName { get; set; }
+
+        public HttpPostedFileBase SolvancyCertificateFile { get; set; }
+        public string SolvancyCertificateFileName { get; set; }
+
+        public HttpPostedFileBase InvestmentDeclarationFile { get; set; }
+        public string InvestmentDeclarationFileName { get; set; }
 
         public bool IsMain { get; set; }
         public bool IsApprover { get; set; }

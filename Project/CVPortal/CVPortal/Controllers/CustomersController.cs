@@ -208,31 +208,22 @@ namespace CVPortal.Controllers
                             }
                             else
                             {
-                                var roles = dataContext.webpages_Roles.ToList();
-                                if (string.IsNullOrEmpty(customer.CINNo_LLPNo))
-                                {
-                                    model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
-                                      .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
-                                }
-                                else
-                                {
-                                    model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.LegalDepartment.ToString())
-                                       .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
-                                }
+                                var roleName = string.IsNullOrEmpty(customer.CINNo_LLPNo) ? ApprovarRoleEnum.FinanceDepartment.ToString() : ApprovarRoleEnum.LegalDepartment.ToString();
+                                var role = dataContext.webpages_Roles.First(x => x.RoleName == roleName);
+                                model.IsApprover = role.tbl_Users.Any(x => x.Id == Utility.UserId) && Session["Role"].ToString() == roleName;
                             }
                         }
                         else
                         {
-                            var roles = dataContext.webpages_Roles.ToList();
                             if (customerApprover.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
-                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                                model.IsApprover = dataContext.webpages_Roles.Where(x => x.RoleName == ApprovarRoleEnum.FinanceDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId) && Session["Role"].ToString() == ApprovarRoleEnum.FinanceDepartment.ToString();
                             }
                             else if (customerApprover.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())
                             {
-                                model.IsApprover = roles.Where(x => x.RoleName == ApprovarRoleEnum.ITDepartment.ToString())
-                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId);
+                                model.IsApprover = dataContext.webpages_Roles.Where(x => x.RoleName == ApprovarRoleEnum.ITDepartment.ToString())
+                                    .SelectMany(x => x.tbl_Users).Any(x => x.Id == Utility.UserId) && Session["Role"].ToString() == ApprovarRoleEnum.ITDepartment.ToString();
                             }
                             else
                             {
@@ -243,8 +234,26 @@ namespace CVPortal.Controllers
                     else
                     {
                         var user = dataContext.tbl_Users.FirstOrDefault(x => x.HAUSER == customer.NextApprover);
-                        model.IsApprover = user?.Id == Utility.UserId;
+                        model.IsApprover = user?.Id == Utility.UserId && Session["Role"].ToString() == "Initiator";
                     }
+                }
+
+                var wealthCapitalFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.WealthCapital.ToString());
+                if (wealthCapitalFile != null)
+                {
+                    model.WealthCapitalCertificateFileName = wealthCapitalFile.Name;
+                }
+
+                var solvancyFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Solvancy.ToString());
+                if (solvancyFile != null)
+                {
+                    model.SolvancyCertificateFileName = solvancyFile.Name;
+                }
+
+                var investmentFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Investment.ToString());
+                if (investmentFile != null)
+                {
+                    model.InvestmentDeclarationFileName = investmentFile.Name;
                 }
             }
             else
@@ -727,6 +736,129 @@ namespace CVPortal.Controllers
                 var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                 if (customer != null)
                 {
+                    if (model.WealthCapitalCertificateFile != null && model.WealthCapitalCertificateFile.ContentLength > 0)
+                    {
+                        var fileName = $"{Path.GetFileNameWithoutExtension(model.WealthCapitalCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.WealthCapitalCertificateFile.FileName)}";
+                        var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                        Directory.CreateDirectory(path);
+
+                        path = Path.Combine(path, fileName);
+                        model.WealthCapitalCertificateFile.SaveAs(path);
+
+                        string contentType = model.WealthCapitalCertificateFile.ContentType;
+                        using (Stream fileStream = model.WealthCapitalCertificateFile.InputStream)
+                        {
+                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                            {
+                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                                var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.WealthCapital.ToString());
+                                if (vendorFile != null)
+                                {
+                                    vendorFile.ContentType = contentType;
+                                    vendorFile.Data = bytes;
+                                    vendorFile.FileUploadType = FileUploadEnum.WealthCapital.ToString();
+                                    vendorFile.Name = fileName;
+                                    vendorFile.CustomerId = model.Id;
+                                }
+                                else
+                                {
+                                    customer.CustomerFiles.Add(new CustomerFile()
+                                    {
+                                        ContentType = contentType,
+                                        Data = bytes,
+                                        FileUploadType = FileUploadEnum.WealthCapital.ToString(),
+                                        Name = fileName,
+                                        CustomerId = model.Id
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    if (model.SolvancyCertificateFile != null && model.SolvancyCertificateFile.ContentLength > 0)
+                    {
+                        var fileName = $"{Path.GetFileNameWithoutExtension(model.SolvancyCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.SolvancyCertificateFile.FileName)}";
+                        var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                        Directory.CreateDirectory(path);
+
+                        path = Path.Combine(path, fileName);
+                        model.SolvancyCertificateFile.SaveAs(path);
+
+                        string contentType = model.SolvancyCertificateFile.ContentType;
+                        using (Stream fileStream = model.SolvancyCertificateFile.InputStream)
+                        {
+                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                            {
+                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                                var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Solvancy.ToString());
+                                if (vendorFile != null)
+                                {
+                                    vendorFile.ContentType = contentType;
+                                    vendorFile.Data = bytes;
+                                    vendorFile.FileUploadType = FileUploadEnum.Solvancy.ToString();
+                                    vendorFile.Name = fileName;
+                                    vendorFile.CustomerId = model.Id;
+                                }
+                                else
+                                {
+                                    customer.CustomerFiles.Add(new CustomerFile()
+                                    {
+                                        ContentType = contentType,
+                                        Data = bytes,
+                                        FileUploadType = FileUploadEnum.Solvancy.ToString(),
+                                        Name = fileName,
+                                        CustomerId = model.Id
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    if (model.InvestmentDeclarationFile != null && model.InvestmentDeclarationFile.ContentLength > 0)
+                    {
+                        var fileName = $"{Path.GetFileNameWithoutExtension(model.InvestmentDeclarationFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.InvestmentDeclarationFile.FileName)}";
+                        var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                        Directory.CreateDirectory(path);
+
+                        path = Path.Combine(path, fileName);
+                        model.InvestmentDeclarationFile.SaveAs(path);
+
+                        string contentType = model.InvestmentDeclarationFile.ContentType;
+                        using (Stream fileStream = model.InvestmentDeclarationFile.InputStream)
+                        {
+                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                            {
+                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                                var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Investment.ToString());
+                                if (vendorFile != null)
+                                {
+                                    vendorFile.ContentType = contentType;
+                                    vendorFile.Data = bytes;
+                                    vendorFile.FileUploadType = FileUploadEnum.Investment.ToString();
+                                    vendorFile.Name = fileName;
+                                    vendorFile.CustomerId = model.Id;
+                                }
+                                else
+                                {
+                                    customer.CustomerFiles.Add(new CustomerFile()
+                                    {
+                                        ContentType = contentType,
+                                        Data = bytes,
+                                        FileUploadType = FileUploadEnum.Investment.ToString(),
+                                        Name = fileName,
+                                        CustomerId = model.Id
+                                    });
+                                }
+                            }
+                        }
+                    }
+
                     customer.Swift_Code = model.Swift_Code;
                     customer.ITR_ReturnSts = model.ITR_ReturnSts;
                     customer.ITR_ReturnStsTurnover = model.ITR_ReturnStsTurnover;
@@ -1082,6 +1214,12 @@ namespace CVPortal.Controllers
 
                 data.ForEach(item =>
                 {
+                    var documents = new List<string>();
+                    foreach (var document in item.CustomerFiles)
+                    {
+                        documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                    }
+
                     customers.Add(new CustomerListModel()
                     {
                         Id = item.ID,
@@ -1090,6 +1228,7 @@ namespace CVPortal.Controllers
                         CustomerCode = item.CustomerCode?.ToString(),
                         Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
+                        Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
                         PreviousApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         LegalDepartment = string.IsNullOrEmpty(item.CINNo_LLPNo) ? "Legal Department not required" : $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",

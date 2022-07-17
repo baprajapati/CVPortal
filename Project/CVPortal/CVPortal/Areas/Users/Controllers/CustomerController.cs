@@ -201,6 +201,12 @@ namespace CVPortal.Areas.Users.Controllers
 
                 data.ForEach(item =>
                 {
+                    var documents = new List<string>();
+                    foreach (var document in item.CustomerFiles)
+                    {
+                        documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                    }
+
                     customers.Add(new CustomerListModel()
                     {
                         Id = item.ID,
@@ -210,6 +216,7 @@ namespace CVPortal.Areas.Users.Controllers
                         Step4 = item.Step4 ?? false,
                         Status = item.IsFinalApproved ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
+                        Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
                         PreviousApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         LegalDepartment = string.IsNullOrEmpty(item.CINNo_LLPNo) ? "Legal Department not required" : $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
@@ -304,6 +311,12 @@ namespace CVPortal.Areas.Users.Controllers
 
                 data.ForEach(item =>
                 {
+                    var documents = new List<string>();
+                    foreach (var document in item.CustomerFiles)
+                    {
+                        documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                    }
+
                     customers.Add(new CustomerListModel()
                     {
                         Id = item.ID,
@@ -313,6 +326,7 @@ namespace CVPortal.Areas.Users.Controllers
                         Step4 = item.Step4 ?? false,
                         Status = item.IsFinalApproved ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
+                        Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
                         PreviousApprover = $"{customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({customerApprovers.Where(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         LegalDepartment = string.IsNullOrEmpty(item.CINNo_LLPNo) ? "Legal Department not required" : $"{customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({customerApprovers.FirstOrDefault(x => x.CustomerId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
@@ -371,6 +385,8 @@ namespace CVPortal.Areas.Users.Controllers
                 htmlToPdf.PageFooterHtml = pageNumberHtml;
 
                 var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\Documents\\Customer.html"));
+                htmlContent = htmlContent.Replace("[LogoPath]", System.Web.HttpContext.Current.Request.Url.Scheme + "://" + System.Web.HttpContext.Current.Request.Url.Authority + "/Content/img/main-logo.jpg");
+
                 var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
                 if (customer != null)
                 {
@@ -407,7 +423,7 @@ namespace CVPortal.Areas.Users.Controllers
                     htmlContent = htmlContent.Replace("[ITR_RETURNSTS]", customer.ITR_ReturnSts);
                     htmlContent = htmlContent.Replace("[ITR_RETURNSTSTURNOVER]", customer.ITR_ReturnStsTurnover ?? false ? "Yes" : "No");
                     htmlContent = htmlContent.Replace("[ITR_RETURNTDSDEDUCT]", customer.ITR_ReturnTDSDeduct ?? false ? "Yes" : "No");
-                    htmlContent = htmlContent.Replace("[DATE]", customer.Date.ToString());
+                    htmlContent = htmlContent.Replace("[DATE]", $"{customer.Date.ToString().Substring(6, 2)}/{customer.Date.ToString().Substring(4, 2)}/{customer.Date.ToString().Substring(0, 4)}");
                 }
 
                 return Json(htmlToPdf.GeneratePdf(htmlContent, null), JsonRequestBehavior.AllowGet);

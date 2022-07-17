@@ -1,68 +1,86 @@
 <html>
 <head>
+    <style>
+        input {
+            width: 100%;
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 1px black dotted;
+        }
+
+        table {
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1 style="text-align:center;">Domestic Vendor Registration Form</h1>
-    </header>
     <table width="100%" style="border-style: double;">
         <tbody>
             <tr>
-                <td><h3>Vendor Information </h3></td>
+                <td style="width:100%; text-align: center;" colspan="4">
+                    <img src="[LogoPath]" style="height: 50px; float: left;" />
+                    <h1 style="margin-top:5px;">Domestic Vendor Registration Form</h1>
+                    <hr />
+                </td>
+            </tr>
+            <tr>
+                <td><h3 style="text-decoration:underline;">Vendor Information </h3></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Organization Status </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ORG_STS]" /></td>
+                <td colspan="3"><input type="text" value="[ORG_STS]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Vendor Name </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[VEND_NAME]" /></td>
+                <td colspan="3"><input type="text" value="[VEND_NAME]" /></td>
             </tr>
             <tr>
                 <td><strong>CEO Name </strong></td>
-                <td><input type="text" style="width:100%;" value="[CEO_NAME]" /></td>
+                <td><input type="text" value="[CEO_NAME]" /></td>
                 <td><strong>Designation </strong></td>
-                <td><input type="text" style="width:100%;" value="[DESIGNATION]" /></td>
+                <td><input type="text" value="[DESIGNATION]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Contact Number </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[CONTACT_NO]" /></td>
+                <td colspan="3"><input type="text" value="[CONTACT_NO]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Email Addresss </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[EMAIL]" /></td>
+                <td colspan="3"><input type="text" value="[EMAIL]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Address </strong>(Registered / Corporate Office)</td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ADDRESS1]" /></td>
+                <td colspan="3"><input type="text" value="[ADDRESS1]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Address </strong>(PO/Supplies/Mfg/Trd.)</td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ADDRESS2]" /></td>
+                <td colspan="3"><input type="text" value="[ADDRESS2]" /></td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align:center;"><strong>Accounts Contact </strong></td>
+                <td></td>
+                <td colspan="1" style="text-align:center;"><strong>Accounts Contact </strong></td>
                 <td colspan="2" style="text-align:center;"><strong>Supply Chain Contact </strong></td>
             </tr>
             <tr>
                 <td><strong>Designation </strong></td>
-                <td><input type="text" style="width:100%;" value="[AC_CONTACT_DESIG]" /></td>
-                <td colspan="2"><input type="text" style="width:100%;" value="[SPY_CONTACT_DESIG]" /></td>
+                <td><input type="text" value="[AC_CONTACT_DESIG]" /></td>
+                <td colspan="2"><input type="text" value="[SPY_CONTACT_DESIG]" /></td>
             </tr>
             <tr>
                 <td><strong>Contact Name </strong></td>
-                <td><input type="text" style="width:100%;" value="[AC_CONTACT_NAME]" /></td>
-                <td colspan="2"><input type="text" style="width:100%;" value="[SPY_CONTACT_NAME]" /></td>
+                <td><input type="text" value="[AC_CONTACT_NAME]" /></td>
+                <td colspan="2"><input type="text" value="[SPY_CONTACT_NAME]" /></td>
             </tr>
             <tr>
                 <td><strong>Contact Ph No. </strong></td>
-                <td><input type="text" style="width:100%;" value="[AC_CONTACT_PHNO]" /></td>
-                <td colspan="2"><input type="text" style="width:100%;" value="[SPY_CONTACT_PHNO]" /></td>
+                <td><input type="text" value="[AC_CONTACT_PHNO]" /></td>
+                <td colspan="2"><input type="text" value="[SPY_CONTACT_PHNO]" /></td>
             </tr>
             <tr>
                 <td><strong>Email Address </strong></td>
-                <td><input type="text" style="width:100%;" value="[AC_CONTACT_EMAIL]" /></td>
-                <td colspan="2"><input type="text" style="width:100%;" value="[SPY_CONTACT_EMAIL]" /></td>
+                <td><input type="text" value="[AC_CONTACT_EMAIL]" /></td>
+                <td colspan="2"><input type="text" value="[SPY_CONTACT_EMAIL]" /></td>
             </tr>
             <tr>
                 <td colspan="4">
@@ -71,80 +89,98 @@
             </tr>
             <tr>
                 <td colspan="1"><strong>CIN No </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[CIN_NO]" /></td>
+                <td colspan="3"><input type="text" value="[CIN_NO]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>PAN No </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[PAN_NO]" /></td>
+                <td colspan="3"><input type="text" value="[PAN_NO]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Type of Vendor Under GST </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[TYPE_VEND_GST]" /></td>
+                <td colspan="3"><input type="text" value="[TYPE_VEND_GST]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>GST Reg No </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[GST_REG_NO]" /></td>
+                <td colspan="3"><input type="text" value="[GST_REG_NO]" /></td>
             </tr>
             <tr>
                 <td><strong>Item Discription </strong></td>
-                <td><input type="text" style="width:100%;" value="[ITEM_DESC]" /></td>
+                <td><input type="text" value="[ITEM_DESC]" /></td>
                 <td><strong>HSN Code / SAC Code </strong></td>
-                <td><input type="text" style="width:100%;" value="[HSN_SAC_CODE]" /></td>
+                <td><input type="text" value="[HSN_SAC_CODE]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>MSME No. </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[MSME_NO]" /></td>
+                <td colspan="3"><input type="text" value="[MSME_NO]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Annual Turnover (Rs Crores) </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ANNU_TURNOVER]" /></td>
+                <td colspan="3"><input type="text" value="[ANNU_TURNOVER]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Nature of service/purchase </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[NATURE_OF_SERVICE]" /></td>
+                <td colspan="3"><input type="text" value="[NATURE_OF_SERVICE]" /></td>
             </tr>
             <tr>
                 <td><strong>ITR Filed Details </strong></td>
-                <td><input type="text" style="width:100%;" value="[FINANCIALYEAR1]" /></td>
-                <td><input type="text" style="width:100%;" value="[ISITRFILED1]" /></td>
-                <td><input type="text" style="width:100%;" value="[ACKNOWLEDGENO1]" /></td>
+                <td><input type="text" value="[FINANCIALYEAR1]" /></td>
+                <td><input type="text" value="[ISITRFILED1]" /></td>
+                <td><input type="text" value="[ACKNOWLEDGENO1]" /></td>
             </tr>
             <tr>
                 <td></td>
-                <td><input type="text" style="width:100%;" value="[FINANCIALYEAR2]" /></td>
-                <td><input type="text" style="width:100%;" value="[ISITRFILED2]" /></td>
-                <td><input type="text" style="width:100%;" value="[ACKNOWLEDGENO2]" /></td>
+                <td><input type="text" value="[FINANCIALYEAR2]" /></td>
+                <td><input type="text" value="[ISITRFILED2]" /></td>
+                <td><input type="text" value="[ACKNOWLEDGENO2]" /></td>
             </tr>
             <tr>
-                <td><h3>Remittance/Payments </h3> </td>
+                <td><h3 style="text-decoration:underline;margin-top:30px;">Remittance/Payments </h3> </td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Benificiary Name </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[BENIFICIARY_NAME]" /></td>
+                <td colspan="3"><input type="text" value="[BENIFICIARY_NAME]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Bank Name </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[BANK_NAME]" /></td>
+                <td colspan="3"><input type="text" value="[BANK_NAME]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Branch Name/Address </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[BRANCH_NAME_ADD]" /></td>
+                <td colspan="3"><input type="text" value="[BRANCH_NAME_ADD]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>Account No </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[ACCOUNT_NO]" /></td>
+                <td colspan="3"><input type="text" value="[ACCOUNT_NO]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>MICR Code </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[MICR_CODE]" /></td>
+                <td colspan="3"><input type="text" value="[MICR_CODE]" /></td>
             </tr>
             <tr>
                 <td colspan="1"><strong>IFSC/RTGS Code </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[IFSC_RTGS_CODE]" /></td>
+                <td colspan="3"><input type="text" value="[IFSC_RTGS_CODE]" /></td>
             </tr>
             <tr>
-                <td colspan="1"><strong>Date </strong></td>
-                <td colspan="3"><input type="text" style="width:100%;" value="[DATE]" /></td>
+                <td colspan="1"></td>
+                <td colspan="1" style="text-align: center; padding-top: 3%;"><strong>Vendor</strong></td>
+                <td colspan="1" style="text-align: center; padding-top: 3%;"><strong>Finance</strong></td>
+                <td colspan="1"></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="text-align:right;padding-right:30px;"><strong>Signatures & Stamp</strong></td>
+                <td colspan="1"><div style="height: 50px;border: 1px solid;"></div></td>
+                <td colspan="1"><div style="height: 50px;border: 1px solid;"></div></td>
+                <td colspan="1"></td>
+            </tr>
+            <tr>
+                <td colspan="1" width="25%"></td>
+                <td colspan="1" width="25%"><label>(I/We hereby declare that all information provided is true to the best of my/our knowledge)</label></td>
+                <td colspan="1" width="25%"><label>(I/we verify that all provided statutory no's have been checked and found valid)</label></td>
+                <td colspan="1" width="25%"></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="text-align: right; padding-top: 2%; padding-right: 30px;"><strong>Date </strong></td>
+                <td colspan="3" style="padding-top: 2%;"><input type="text" value="[DATE]" /></td>
             </tr>
         </tbody>
     </table>

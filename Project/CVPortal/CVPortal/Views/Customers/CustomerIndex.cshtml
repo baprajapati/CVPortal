@@ -80,6 +80,9 @@
                             }
                         },
                         {
+                            "data": "Documents", "name": "Documents"
+                        },
+                        {
                             "render": function (data, type, row, meta) {
                                 return "<a href='@Url.Action("CustomerStep1", new { area = "", controller = "Customers" })/" + row.Id + "' class='icon-eye' title='View'>View</a>"
                             }, "targets": 'no-sort', "orderable": false
@@ -113,7 +116,8 @@
                                     <th>Finance</th>
                                     <th>IT</th>
                                     <th>Status</th>
-                                    <th></th>
+                                    <th>Documents</th>
+                                    <th>View</th>
                                 </tr>
                             </thead>
                         </table>

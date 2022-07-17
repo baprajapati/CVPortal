@@ -7,9 +7,9 @@
       <Diagram DiagramId="3e37f5a1473a4cdab194dd258e42b88f" Name="Diagram1">
         <EntityTypeShape EntityType="CVPortalModel.AgentSale" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="CVPortalModel.CurrencyCodeMaster" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="CVPortalModel.Cust_reg_tbl" Width="1.5" PointX="5.25" PointY="2.5" />
-        <EntityTypeShape EntityType="CVPortalModel.CustomerApproval" Width="1.5" PointX="7.5" PointY="8.25" />
-        <EntityTypeShape EntityType="CVPortalModel.CustomerFile" Width="1.5" PointX="7.5" PointY="14.5" />
+        <EntityTypeShape EntityType="CVPortalModel.Cust_reg_tbl" Width="1.5" PointX="5.25" PointY="2.375" />
+        <EntityTypeShape EntityType="CVPortalModel.CustomerApproval" Width="1.5" PointX="7.5" PointY="7.875" />
+        <EntityTypeShape EntityType="CVPortalModel.CustomerFile" Width="1.5" PointX="7.5" PointY="14.375" />
         <EntityTypeShape EntityType="CVPortalModel.CustomerTypeMaster" Width="1.5" PointX="0.75" PointY="6.75" />
         <EntityTypeShape EntityType="CVPortalModel.DocumentSequencePrefix" Width="1.5" PointX="7.75" PointY="0.75" />
         <EntityTypeShape EntityType="CVPortalModel.EmailHistory" Width="1.5" PointX="7.75" PointY="3.75" />
@@ -19,19 +19,19 @@
         <EntityTypeShape EntityType="CVPortalModel.Lx_AVM" Width="1.5" PointX="9.75" PointY="7.75" />
         <EntityTypeShape EntityType="CVPortalModel.Lx_CustomerMaster" Width="1.5" PointX="11.75" PointY="0.75" />
         <EntityTypeShape EntityType="CVPortalModel.Lx_GSV" Width="1.5" PointX="11.75" PointY="6.75" />
-        <EntityTypeShape EntityType="CVPortalModel.LX_TaxCode" Width="1.5" PointX="5.25" PointY="42.75" />
+        <EntityTypeShape EntityType="CVPortalModel.LX_TaxCode" Width="1.5" PointX="5.25" PointY="41.875" />
         <EntityTypeShape EntityType="CVPortalModel.Orginzation_StatusMaster" Width="1.5" PointX="11.75" PointY="10.75" />
         <EntityTypeShape EntityType="CVPortalModel.ParameterConfiguration" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="CVPortalModel.PaymentTermsMaster" Width="1.5" PointX="5.25" PointY="45.25" />
-        <EntityTypeShape EntityType="CVPortalModel.PayTypeMaster" Width="1.5" PointX="5.25" PointY="36.5" />
-        <EntityTypeShape EntityType="CVPortalModel.tbl_Users" Width="1.5" PointX="3" PointY="16.75" />
-        <EntityTypeShape EntityType="CVPortalModel.Vend_reg_tbl" Width="1.5" PointX="5.25" PointY="18.5" />
-        <EntityTypeShape EntityType="CVPortalModel.VendorApproval" Width="1.5" PointX="7.5" PointY="23.25" />
-        <EntityTypeShape EntityType="CVPortalModel.VendorFile" Width="1.5" PointX="7.5" PointY="31.875" />
-        <EntityTypeShape EntityType="CVPortalModel.VendorTypeMaster" Width="1.5" PointX="5.25" PointY="39.375" />
+        <EntityTypeShape EntityType="CVPortalModel.PaymentTermsMaster" Width="1.5" PointX="5.25" PointY="44.375" />
+        <EntityTypeShape EntityType="CVPortalModel.PayTypeMaster" Width="1.5" PointX="5.25" PointY="38.875" />
+        <EntityTypeShape EntityType="CVPortalModel.tbl_Users" Width="1.5" PointX="3" PointY="16.125" />
+        <EntityTypeShape EntityType="CVPortalModel.Vend_reg_tbl" Width="1.5" PointX="5.25" PointY="17.875" />
+        <EntityTypeShape EntityType="CVPortalModel.VendorApproval" Width="1.5" PointX="7.5" PointY="22.375" />
+        <EntityTypeShape EntityType="CVPortalModel.VendorFile" Width="1.5" PointX="7.5" PointY="31" />
+        <EntityTypeShape EntityType="CVPortalModel.VendorTypeMaster" Width="1.5" PointX="5.25" PointY="35.625" />
         <EntityTypeShape EntityType="CVPortalModel.webpages_Membership" Width="1.5" PointX="13.75" PointY="0.75" />
         <EntityTypeShape EntityType="CVPortalModel.webpages_OAuthMembership" Width="1.5" PointX="13.75" PointY="4.75" />
-        <EntityTypeShape EntityType="CVPortalModel.webpages_Roles" Width="1.5" PointX="0.75" PointY="18" />
+        <EntityTypeShape EntityType="CVPortalModel.webpages_Roles" Width="1.5" PointX="0.75" PointY="17.375" />
         <AssociationConnector Association="CVPortalModel.FK_Cust_reg_tbl_tbl_Users" />
         <AssociationConnector Association="CVPortalModel.FK_CustomerApproval_Cust_reg_tbl" />
         <AssociationConnector Association="CVPortalModel.FK_CustomerFiles_Cust_reg_tbl" />

@@ -15,6 +15,7 @@ namespace CVPortal.ViewModels
         public string VendorCode { get; set; }
         public string NewExistingVendor { get; set; }
         public string Owner { get; set; }
+        public string Documents { get; set; }
         public string NextApprover { get; set; }
         public string PreviousApprover { get; set; }
         public string LegalDepartment { get; set; }

@@ -73,6 +73,7 @@ namespace CVPortal.Models
         public string IFSC_RTGS_code { get; set; }
         public Nullable<decimal> Date { get; set; }
         public string Type_of_Vend { get; set; }
+        public string NextApproverRole { get; set; }
         public string NextApprover { get; set; }
         public string TermsCode { get; set; }
         public string BankCode { get; set; }

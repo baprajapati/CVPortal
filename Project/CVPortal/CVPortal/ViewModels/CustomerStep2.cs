@@ -19,7 +19,6 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "Please enter contact no")]
         public string AC_contact_Phno { get; set; }
 
-        [Required(ErrorMessage = "Please enter mobile no")]
         public string AC_contact_Mob { get; set; }
 
         [Required(ErrorMessage = "Please enter email")]
@@ -34,8 +33,6 @@ namespace CVPortal.ViewModels
         public string PAN_No { get; set; }
 
         public HttpPostedFileBase PANFile { get; set; }
-
-        [Required(ErrorMessage = "Please upload pan file")]
         public string PANFileName { get; set; }
 
         [Required(ErrorMessage = "Please select type of customer under GST")]

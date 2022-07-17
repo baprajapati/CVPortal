@@ -34,10 +34,12 @@
             });
 
             $('#Date').datepicker({
-                "setDate": new Date(),
-                "autoclose": true,
                 format: 'yyyymmdd'
             });
+
+            if (!$('#Date').val()) {
+                $('#Date').datepicker('update', new Date());
+            }
         });
     </script>
 }
