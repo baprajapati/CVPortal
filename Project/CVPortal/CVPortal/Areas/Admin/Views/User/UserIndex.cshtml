@@ -73,11 +73,6 @@
                             "render": function (data, type, row, meta) {
                                 return "<a href='@Url.Action("EditUser", new { area = "Admin", controller = "User" })/" + row.Id + "' class='icon-pencil' title='Edit'>Edit</a>"
                             }, "targets": 'no-sort', "orderable": false
-                        },
-                        {
-                            "render": function (data, type, row, meta) {
-                                return "<a  href='javascript:void(0);' data-userid=" + row.Id + " title='Delete' class='icon-remove btn-cross-red deleteUser'>Delete</a>"
-                            }, "targets": 'no-sort', "orderable": false
                         }
                     ]
                 });
@@ -265,7 +260,6 @@
                                     <th>Status</th>
                                     <th></th>
                                     <th>Edit</th>
-                                    <th>Delete</th>
                                 </tr>
                             </thead>
                         </table>
