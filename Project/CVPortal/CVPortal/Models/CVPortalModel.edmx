@@ -271,6 +271,7 @@
           </Key>
           <Property Name="OrgZ_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Orginzation_Status" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="OrgCode" Type="nvarchar" MaxLength="8" />
           <Property Name="Orginzation_StsDesc" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="bit" />
           <Property Name="CreatedOn" Type="datetime" />
@@ -305,6 +306,17 @@
           <Property Name="PayType_Desc" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="bit" />
           <Property Name="Create_On" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="StateCodeMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StateCode" Type="numeric" Precision="2" Scale="0" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="tbl_Users">
           <Key>
@@ -436,6 +448,16 @@
           <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="ContentType" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Data" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VendorNatureServices">
+          <Key>
+            <PropertyRef Name="NService" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NService" Type="int" Nullable="false" />
+          <Property Name="NCode" Type="nvarchar" MaxLength="5" />
+          <Property Name="NatureDesc" Type="nvarchar" MaxLength="30" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="VendorTypeMaster">
           <Key>
@@ -681,11 +703,20 @@
           <EntitySet Name="Vend_reg_tbl" EntityType="Self.Vend_reg_tbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorApproval" EntityType="Self.VendorApproval" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorFiles" EntityType="Self.VendorFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VendorNatureServices" EntityType="Self.VendorNatureServices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VendorTypeMaster" EntityType="Self.VendorTypeMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_Membership" EntityType="Self.webpages_Membership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_OAuthMembership" EntityType="Self.webpages_OAuthMembership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="webpages_UsersInRoles" EntityType="Self.webpages_UsersInRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StateCodeMaster" EntityType="Self.StateCodeMaster" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [StateCodeMaster].[ID] AS [ID], 
+    [StateCodeMaster].[StateCode] AS [StateCode], 
+    [StateCodeMaster].[StateName] AS [StateName], 
+    [StateCodeMaster].[CreatedOn] AS [CreatedOn]
+    FROM [dbo].[StateCodeMaster] AS [StateCodeMaster]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Cust_reg_tbl_tbl_Users" Association="Self.FK_Cust_reg_tbl_tbl_Users">
             <End Role="tbl_Users" EntitySet="tbl_Users" />
             <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
@@ -771,10 +802,12 @@
           <EntitySet Name="Vend_reg_tbl" EntityType="CVPortalModel.Vend_reg_tbl" />
           <EntitySet Name="VendorApprovals" EntityType="CVPortalModel.VendorApproval" />
           <EntitySet Name="VendorFiles" EntityType="CVPortalModel.VendorFile" />
+          <EntitySet Name="VendorNatureServices" EntityType="CVPortalModel.VendorNatureService" />
           <EntitySet Name="VendorTypeMasters" EntityType="CVPortalModel.VendorTypeMaster" />
           <EntitySet Name="webpages_Membership" EntityType="CVPortalModel.webpages_Membership" />
           <EntitySet Name="webpages_OAuthMembership" EntityType="CVPortalModel.webpages_OAuthMembership" />
           <EntitySet Name="webpages_Roles" EntityType="CVPortalModel.webpages_Roles" />
+          <EntitySet Name="StateCodeMasters" EntityType="CVPortalModel.StateCodeMaster" />
           <AssociationSet Name="FK_Cust_reg_tbl_tbl_Users" Association="CVPortalModel.FK_Cust_reg_tbl_tbl_Users">
             <End Role="tbl_Users" EntitySet="tbl_Users" />
             <End Role="Cust_reg_tbl" EntitySet="Cust_reg_tbl" />
@@ -1101,6 +1134,7 @@
           </Key>
           <Property Name="OrgZ_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Orginzation_Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="OrgCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
           <Property Name="Orginzation_StsDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
@@ -1284,6 +1318,16 @@
           <Property Name="Data" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Vend_reg_tbl" Relationship="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" FromRole="VendorFile" ToRole="Vend_reg_tbl" />
         </EntityType>
+        <EntityType Name="VendorNatureService">
+          <Key>
+            <PropertyRef Name="NService" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NService" Type="Int32" Nullable="false" />
+          <Property Name="NCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="NatureDesc" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="VendorTypeMaster">
           <Key>
             <PropertyRef Name="VT_ID" />
@@ -1329,6 +1373,15 @@
           <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="tbl_Users" />
+        </EntityType>
+        <EntityType Name="StateCodeMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StateCode" Type="Decimal" Precision="2" Scale="0" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_Cust_reg_tbl_tbl_Users">
           <End Type="CVPortalModel.tbl_Users" Role="tbl_Users" Multiplicity="1" />
@@ -1764,6 +1817,7 @@
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Orginzation_StsDesc" ColumnName="Orginzation_StsDesc" />
+                <ScalarProperty Name="OrgCode" ColumnName="OrgCode" />
                 <ScalarProperty Name="Orginzation_Status" ColumnName="Orginzation_Status" />
                 <ScalarProperty Name="OrgZ_ID" ColumnName="OrgZ_ID" />
               </MappingFragment>
@@ -1938,6 +1992,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="VendorNatureServices">
+            <EntityTypeMapping TypeName="CVPortalModel.VendorNatureService">
+              <MappingFragment StoreEntitySet="VendorNatureServices">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="NatureDesc" ColumnName="NatureDesc" />
+                <ScalarProperty Name="NCode" ColumnName="NCode" />
+                <ScalarProperty Name="NService" ColumnName="NService" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="VendorTypeMasters">
             <EntityTypeMapping TypeName="CVPortalModel.VendorTypeMaster">
               <MappingFragment StoreEntitySet="VendorTypeMaster">
@@ -1982,6 +2047,16 @@
               <MappingFragment StoreEntitySet="webpages_Roles">
                 <ScalarProperty Name="RoleName" ColumnName="RoleName" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StateCodeMasters">
+            <EntityTypeMapping TypeName="CVPortalModel.StateCodeMaster">
+              <MappingFragment StoreEntitySet="StateCodeMaster">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="StateCode" ColumnName="StateCode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

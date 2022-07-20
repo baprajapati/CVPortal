@@ -48,9 +48,11 @@ namespace CVPortal.Models
         public virtual DbSet<Vend_reg_tbl> Vend_reg_tbl { get; set; }
         public virtual DbSet<VendorApproval> VendorApprovals { get; set; }
         public virtual DbSet<VendorFile> VendorFiles { get; set; }
+        public virtual DbSet<VendorNatureService> VendorNatureServices { get; set; }
         public virtual DbSet<VendorTypeMaster> VendorTypeMasters { get; set; }
         public virtual DbSet<webpages_Membership> webpages_Membership { get; set; }
         public virtual DbSet<webpages_OAuthMembership> webpages_OAuthMembership { get; set; }
         public virtual DbSet<webpages_Roles> webpages_Roles { get; set; }
+        public virtual DbSet<StateCodeMaster> StateCodeMasters { get; set; }
     }
 }

@@ -997,19 +997,19 @@ namespace CVPortal.Controllers
                         {
                             if (vendor.Nature_of_service == "1")
                             {
-                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 53001001 + 1000;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 53001001) + 1000;
                             }
                             else if (vendor.Nature_of_service == "2" || vendor.Nature_of_service == "3")
                             {
-                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 12001001 + 1000;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 12001001) + 1000;
                             }
                             else if (vendor.Nature_of_service == "4")
                             {
-                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 21001001 + 1000;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 21001001) + 1000;
                             }
                             else if (vendor.Nature_of_service == "5")
                             {
-                                vendor.VendorCode = dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 91001001 + 1000;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 91001001) + 1000;
                             }
                         }
 
@@ -1235,9 +1235,12 @@ namespace CVPortal.Controllers
                 data.ForEach(item =>
                 {
                     var documents = new List<string>();
-                    foreach (var document in item.VendorFiles)
+                    if (item.Step4 == true)
                     {
-                        documents.Add($"<a href='/Vendors/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                        foreach (var document in item.VendorFiles)
+                        {
+                            documents.Add($"<a href='/Vendors/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                        }
                     }
 
                     vendors.Add(new VendorListModel()
@@ -1252,7 +1255,7 @@ namespace CVPortal.Controllers
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
                         PreviousApprover = $"{vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.tbl_Users.HANAME} ({vendorApprovers.Where(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.NextApprover.ToString()).OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
-                        LegalDepartment = string.IsNullOrEmpty(item.CIN_No) || !item.IsNewVendor ? "Legal Department not required" : $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
+                        LegalDepartment = string.IsNullOrEmpty(item.CIN_No) || !item.IsNewVendor ? (item.Step4 == true ? "Legal Department not required" : "") : $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.LegalDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         FinanceDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.FinanceDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})",
                         ITDepartment = $"{vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.tbl_Users.HANAME} ({vendorApprovers.FirstOrDefault(x => x.VendorId == item.ID && x.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())?.CreatedByDate.ToString("dd-MM-yyyy hh:mm tt")})"
                     });

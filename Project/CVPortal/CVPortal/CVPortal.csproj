@@ -310,6 +310,9 @@
     <Compile Include="Models\PayTypeMaster.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StateCodeMaster.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_Users.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
@@ -317,6 +320,9 @@
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VendorFile.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VendorNatureService.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\VendorTypeMaster.cs">

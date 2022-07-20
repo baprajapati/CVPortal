@@ -12,13 +12,11 @@ namespace CVPortal.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Orginzation_StatusMaster
+    public partial class StateCodeMaster
     {
-        public int OrgZ_ID { get; set; }
-        public string Orginzation_Status { get; set; }
-        public string OrgCode { get; set; }
-        public string Orginzation_StsDesc { get; set; }
-        public Nullable<bool> Status { get; set; }
+        public int ID { get; set; }
+        public Nullable<decimal> StateCode { get; set; }
+        public string StateName { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
     }
 }
