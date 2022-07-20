@@ -18,6 +18,8 @@ namespace CVPortal.ViewModels
         public string Password { get; set; }
 
         [Required]
+        public string[] RoleNames { get; set; } = { };
+
         public string RoleName { get; set; }
 
         [Required]

@@ -3,6 +3,7 @@
     ViewBag.Title = "Edit User";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -29,11 +30,12 @@
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(model => model.Id)
                             @Html.HiddenFor(model => model.Password)
+                            @Html.HiddenFor(model => model.RoleName)
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="RoleName">Role</label>
-                                    @Html.DropDownListFor(model => model.RoleName, ViewBag.RoleList as SelectList, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.RoleName, "")
+                                    <label for="RoleName">Roles</label>
+                                    @Html.DropDownListFor(model => model.RoleNames, ViewBag.RoleList as SelectList, new { @class = "form-control selectpicker", @multiple = "multiple" })
+                                    @Html.ValidationMessageFor(model => model.RoleNames, "")
                                 </div>
                                 <div class="form-group">
                                     <label for="Email">User Code</label>
@@ -73,4 +75,11 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#RoleNames').selectpicker('val', $("#RoleName").val().split(","));
+        });
+    </script>
 }

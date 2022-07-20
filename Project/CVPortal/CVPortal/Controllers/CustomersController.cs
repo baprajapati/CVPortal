@@ -975,19 +975,19 @@ namespace CVPortal.Controllers
                     {
                         if (model.DealerType == "Scrap")
                         {
-                            customer.Cust_CodeVehicles = dataContext.Cust_reg_tbl.Where(x => x.DealerType == "Scrap").Max(x => x.Cust_CodeSpares) ?? 0 + 1;
+                            customer.Cust_CodeVehicles = (dataContext.Cust_reg_tbl.Where(x => x.DealerType == "Scrap").Max(x => x.Cust_CodeSpares) ?? 0) + 1;
                         }
                         else
                         {
                             if (model.DealerType == "Domestic")
                             {
-                                customer.Cust_CodeSpares = dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSpares) ?? 0 + 1;
+                                customer.Cust_CodeSpares = (dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSpares) ?? 0) + 1;
                             }
 
                             customer.Cust_CodeVehicles = model.Code;
                         }
 
-                        customer.Cust_CodeSecurity = dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSecurity) ?? 0 + 1;
+                        customer.Cust_CodeSecurity = (dataContext.Cust_reg_tbl.Max(x => x.Cust_CodeSecurity) ?? 0) + 1;
                     }
 
                     if (model.ApproverRole == ApprovarRoleEnum.ITDepartment.ToString())

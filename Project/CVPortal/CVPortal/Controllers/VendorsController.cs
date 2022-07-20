@@ -1237,7 +1237,7 @@ namespace CVPortal.Controllers
                     var documents = new List<string>();
                     foreach (var document in item.VendorFiles)
                     {
-                        documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                        documents.Add($"<a href='/Vendors/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
                     }
 
                     vendors.Add(new VendorListModel()

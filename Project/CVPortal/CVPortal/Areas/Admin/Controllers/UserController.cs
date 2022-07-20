@@ -101,7 +101,7 @@ namespace CVPortal.Areas.Admin.Controllers
                 ViewBag.DepartmentList = GetDepartments(null);
                 ViewBag.UserList = GetUsers(null, null);
 
-                return View(new UserViewModel() { RoleName = "Initiator" });
+                return View(new UserViewModel());
             }
             catch (Exception)
             {
@@ -124,17 +124,16 @@ namespace CVPortal.Areas.Admin.Controllers
                     var data = dataContext.tbl_Users.FirstOrDefault(x => x.Id == id);
                     if (data != null)
                     {
-                        var roleName = Roles.GetRolesForUser(data.EmailAddress).First().ToString();
-
                         ViewBag.UserList = GetUsers(new string[] { data.HANEXT }, data.HAUSER);
-                        ViewBag.RoleList = GetRoles(new string[] { roleName });
+                        ViewBag.RoleList = GetRoles(Roles.GetRolesForUser(data.EmailAddress));
                         ViewBag.DepartmentList = GetDepartments(new string[] { data.Dept_Code });
 
                         user = new UserViewModel()
                         {
                             Email = data.EmailAddress,
                             Password = data.Password,
-                            RoleName = roleName,
+                            RoleNames = Roles.GetRolesForUser(data.EmailAddress),
+                            RoleName = string.Join(",", Roles.GetRolesForUser(data.EmailAddress)),
                             HAUSER = data.HAUSER,
                             HANAME = data.HANAME,
                             Dept_Code = data.Dept_Code,
@@ -178,7 +177,7 @@ namespace CVPortal.Areas.Admin.Controllers
         {
             try
             {
-                ViewBag.RoleList = GetRoles(new string[] { user.RoleName });
+                ViewBag.RoleList = GetRoles(new string[] { });
                 ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, null);
                 ViewBag.DepartmentList = GetDepartments(new string[] { user.Dept_Code });
 
@@ -213,7 +212,7 @@ namespace CVPortal.Areas.Admin.Controllers
                         Password = user.Password,
                         Dept_Code = user.Dept_Code
                     });
-                    Roles.AddUserToRole(user.Email, user.RoleName);
+                    Roles.AddUserToRoles(user.Email, user.RoleNames.ToArray());
 
                     string mailTo = user.Email;
                     string CC = string.Empty;
@@ -309,8 +308,9 @@ namespace CVPortal.Areas.Admin.Controllers
                     }
                 }
 
+                var roleNames = string.Join(",", model.RoleNames);
                 if (string.IsNullOrEmpty(model.Email) && string.IsNullOrEmpty(model.HANAME)
-                    && string.IsNullOrEmpty(model.HAUSER) && string.IsNullOrEmpty(model.RoleName)
+                    && string.IsNullOrEmpty(model.HAUSER) && string.IsNullOrEmpty(roleNames)
                      && string.IsNullOrEmpty(model.Dept_Code) && string.IsNullOrEmpty(model.Status))
                 {
                     data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId).ToList();
@@ -324,7 +324,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     {
                         Id = item.Id,
                         Email = item.EmailAddress,
-                        RoleName = Roles.GetRolesForUser(item.EmailAddress).First().ToString(),
+                        RoleName = string.Join(",", Roles.GetRolesForUser(item.EmailAddress)),
                         HAUSER = item.HAUSER,
                         HANAME = item.HANAME,
                         Dept_Code = item.Dept_Code,
@@ -333,9 +333,9 @@ namespace CVPortal.Areas.Admin.Controllers
                     });
                 });
 
-                if (!string.IsNullOrEmpty(model.RoleName))
+                if (!string.IsNullOrEmpty(roleNames))
                 {
-                    users = users.Where(x => x.RoleName != null && x.RoleName.ToLower().Contains(model.RoleName.ToLower())).ToList();
+                    users = users.Where(x => x.RoleName != null && x.RoleName.Contains(roleNames.ToLower())).ToList();
                 }
 
                 result = this.Json(new
@@ -366,7 +366,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     }
 
                     ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(objUser.EmailAddress); // deletes record from webpages_Membership table
-                    Roles.RemoveUserFromRole(objUser.EmailAddress, Roles.GetRolesForUser(objUser.EmailAddress).First().ToString());
+                    Roles.RemoveUserFromRoles(objUser.EmailAddress, Roles.GetRolesForUser(objUser.EmailAddress));
                     ((SimpleMembershipProvider)Membership.Provider).DeleteUser(objUser.EmailAddress, true); // deletes record from UserProfile table
                 }
 
@@ -405,7 +405,7 @@ namespace CVPortal.Areas.Admin.Controllers
             try
             {
                 ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, user.HAUSER);
-                ViewBag.RoleList = GetRoles(new string[] { user.RoleName });
+                ViewBag.RoleList = GetRoles(new string[] { });
                 ViewBag.DepartmentList = GetDepartments(new string[] { user.Dept_Code });
 
                 if (ModelState.IsValid)
@@ -420,12 +420,9 @@ namespace CVPortal.Areas.Admin.Controllers
                     var data = dataContext.tbl_Users.FirstOrDefault(x => x.Id == user.Id);
                     if (data != null)
                     {
-                        var roleName = Roles.GetRolesForUser(data.EmailAddress).First().ToString();
-                        if (roleName != user.RoleName)
-                        {
-                            Roles.RemoveUserFromRole(data.EmailAddress, roleName);
-                            Roles.AddUserToRole(data.EmailAddress, user.RoleName);
-                        }
+                        var roleNames = Roles.GetRolesForUser(data.EmailAddress);
+                        Roles.RemoveUserFromRoles(data.EmailAddress, roleNames);
+                        Roles.AddUserToRoles(data.EmailAddress, user.RoleNames);
 
                         data.EmailAddress = user.Email;
                         data.HANEXT = user.HANEXT;

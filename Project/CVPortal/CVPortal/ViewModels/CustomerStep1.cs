@@ -19,7 +19,6 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "Please enter CEO name")]
         public string CEO_name { get; set; }
 
-        [Required(ErrorMessage = "Please enter designation")]
         public string CEO_Designation { get; set; }
 
         [Required(ErrorMessage = "Please enter contact no")]
