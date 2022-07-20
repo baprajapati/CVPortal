@@ -308,9 +308,8 @@ namespace CVPortal.Areas.Admin.Controllers
                     }
                 }
 
-                var roleNames = string.Join(",", model.RoleNames);
                 if (string.IsNullOrEmpty(model.Email) && string.IsNullOrEmpty(model.HANAME)
-                    && string.IsNullOrEmpty(model.HAUSER) && string.IsNullOrEmpty(roleNames)
+                    && string.IsNullOrEmpty(model.HAUSER)
                      && string.IsNullOrEmpty(model.Dept_Code) && string.IsNullOrEmpty(model.Status))
                 {
                     data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId).ToList();
@@ -333,9 +332,9 @@ namespace CVPortal.Areas.Admin.Controllers
                     });
                 });
 
-                if (!string.IsNullOrEmpty(roleNames))
+                if (!string.IsNullOrEmpty(model.RoleName))
                 {
-                    users = users.Where(x => x.RoleName != null && x.RoleName.Contains(roleNames.ToLower())).ToList();
+                    users = users.Where(x => x.RoleName != null && x.RoleName.ToLower().Contains(model.RoleName.ToLower())).ToList();
                 }
 
                 result = this.Json(new
