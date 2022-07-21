@@ -188,7 +188,7 @@
                     @Html.ValidationMessageFor(model => model.CEO_name)
                 </div>
                 <div class="col-md-1" style="padding-right:0;padding-left:0;">
-                    <span>Designation</span><span class="color-red"> * </span>
+                    <span>Designation</span>
                 </div>
                 <div class="col-md-5">
                     @Html.TextBoxFor(model => model.Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })

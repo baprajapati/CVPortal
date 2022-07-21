@@ -76,7 +76,7 @@
                 $("#Org_Sts").val("4");
             });
 
-            $("#IsSameAsDlr_Address").click(function () {
+            $("#IsSameAsAddress1").click(function () {
                 if ($(this).is(':checked')) {
                     $("#Supp_Address").val($("#Dlr_Address").val());
                     $("#Supp_Add_Pincode").val($("#Dlr_Add_Pincode").val());
@@ -180,7 +180,7 @@
                     @Html.ValidationMessageFor(model => model.CEO_name)
                 </div>
                 <div class="col-md-1" style="padding-right:0;padding-left:0;">
-                    <span>Designation</span><span class="color-red"> * </span>
+                    <span>Designation</span>
                 </div>
                 <div class="col-md-5">
                     @Html.TextBoxFor(model => model.CEO_Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
@@ -244,7 +244,7 @@
             </div><br />
             <div class="row">
                 <div class="col-md-offset-3 col-md-9">
-                    @Html.CheckBoxFor(model => model.IsSameAsDlr_Address, Model.IsMain ? (object)new { } : new { @disabled = "disabled" })
+                    @Html.CheckBoxFor(model => model.IsSameAsDlr_Address, Model.IsMain ? (object)new { @id = "IsSameAsAddress1" } : new { @id = "IsSameAsAddress1", @disabled = "disabled" })
                     <label for="IsSameAsAddress1" style="font-weight: 500;">Same as Dealer Address (Registered / Corporate Office)</label>
                 </div>
             </div>
