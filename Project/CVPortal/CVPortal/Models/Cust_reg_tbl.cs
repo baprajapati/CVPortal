@@ -26,6 +26,7 @@ namespace CVPortal.Models
         public Nullable<decimal> Cust_CodeSpares { get; set; }
         public Nullable<decimal> Cust_CodeSecurity { get; set; }
         public string Org_Sts { get; set; }
+        public string OrgCode { get; set; }
         public string Cust_name { get; set; }
         public string CEO_name { get; set; }
         public string CEO_Designation { get; set; }
@@ -36,12 +37,14 @@ namespace CVPortal.Models
         public string Dlr_Add_State { get; set; }
         public string Dlr_Add_City { get; set; }
         public string Dlr_Add_Pincode { get; set; }
+        public string Dlr_Add_StateCode { get; set; }
         public Nullable<bool> IsSameAsDlr_Address { get; set; }
         public string Supp_Address { get; set; }
         public string Supp_Add_Country { get; set; }
         public string Supp_Add_State { get; set; }
         public string Supp_Add_City { get; set; }
         public string Supp_Add_Pincode { get; set; }
+        public string Supp_Add_StateCode { get; set; }
         public string Contact_no { get; set; }
         public string AC_contact_Desig { get; set; }
         public string AC_contact_name { get; set; }

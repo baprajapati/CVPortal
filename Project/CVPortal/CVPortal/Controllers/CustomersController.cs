@@ -54,7 +54,6 @@ namespace CVPortal.Controllers
                 model.Supp_Add_State = customer.Supp_Add_State;
                 model.Supp_Add_City = customer.Supp_Add_City;
                 model.Supp_Add_Pincode = customer.Supp_Add_Pincode;
-                model.Contact_no = customer.Contact_no;
                 model.IsMain = Utility.UserCode.Equals(customer.Email);
             }
             else
@@ -87,6 +86,7 @@ namespace CVPortal.Controllers
                 model.AC_contact_Desig = customer.AC_contact_Desig;
                 model.AC_contact_name = customer.AC_contact_name;
                 model.AC_contact_Phno = customer.AC_contact_Phno;
+                model.AC_contact_Mob = customer.AC_contact_Mob;
                 model.AC_contact_Email = customer.AC_contact_Email;
                 model.CINNo_LLPNo = customer.CINNo_LLPNo;
                 model.PAN_No = customer.PAN_No;
@@ -449,22 +449,33 @@ namespace CVPortal.Controllers
                     if (customer != null)
                     {
                         customer.Org_Sts = model.Org_Sts;
+                        customer.OrgCode = model.Org_Sts;
                         customer.Cust_name = model.Cust_name;
                         customer.CEO_name = model.CEO_name;
                         customer.CEO_Designation = model.CEO_Designation;
+
+                        model.Contact_no = model.Contact_no.Substring(0, 1) == "0" ? model.Contact_no.Substring(1, model.Contact_no.Length - 1) : model.Contact_no;
+
+                        if (model.Contact_no.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.Contact_no), "Please add proper contact no.");
+                            return View(model);
+                        }
+
                         customer.Contact_no = model.Contact_no;
                         customer.Dlr_Address = model.Dlr_Address;
                         customer.Dlr_Add_Country = model.Dlr_Add_Country;
                         customer.Dlr_Add_State = model.Dlr_Add_State;
+                        customer.Dlr_Add_StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Dlr_Add_State)?.StateCode.ToString();
                         customer.Dlr_Add_City = model.Dlr_Add_City;
                         customer.Dlr_Add_Pincode = model.Dlr_Add_Pincode;
                         customer.IsSameAsDlr_Address = model.IsSameAsDlr_Address;
                         customer.Supp_Address = model.Supp_Address;
                         customer.Supp_Add_Country = model.Supp_Add_Country;
                         customer.Supp_Add_State = model.Supp_Add_State;
+                        customer.Supp_Add_StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Supp_Add_State)?.StateCode.ToString();
                         customer.Supp_Add_City = model.Supp_Add_City;
                         customer.Supp_Add_Pincode = model.Supp_Add_Pincode;
-                        customer.Contact_no = model.Contact_no;
                         customer.Step1 = true;
 
                         dataContext.SaveChanges();
@@ -632,7 +643,27 @@ namespace CVPortal.Controllers
 
                         customer.AC_contact_Desig = model.AC_contact_Desig;
                         customer.AC_contact_name = model.AC_contact_name;
+
+                        model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
+
+                        if (model.AC_contact_Phno.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
+                            return View(model);
+                        }
+
                         customer.AC_contact_Phno = model.AC_contact_Phno;
+
+                        model.AC_contact_Mob = model.AC_contact_Mob.Substring(0, 1) == "0" ? model.AC_contact_Mob.Substring(1, model.AC_contact_Mob.Length - 1) : model.AC_contact_Mob;
+
+                        if (model.AC_contact_Mob.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.AC_contact_Mob), "Please add proper contact no.");
+                            return View(model);
+                        }
+
+                        customer.AC_contact_Mob = model.AC_contact_Mob;
+
                         customer.AC_contact_Email = model.AC_contact_Email;
                         customer.CINNo_LLPNo = model.CINNo_LLPNo;
                         customer.PAN_No = model.PAN_No;

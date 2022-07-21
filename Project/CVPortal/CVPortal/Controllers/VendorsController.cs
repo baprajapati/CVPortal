@@ -422,9 +422,18 @@ namespace CVPortal.Controllers
                         if (!model.IsExistingUpdate)
                         {
                             vendor.Org_Sts = model.Org_Sts;
+                            vendor.OrgCode = model.Org_Sts;
                             vendor.vend_name = model.vend_name;
                             vendor.CEO_name = model.CEO_name;
                             vendor.Designation = model.Designation;
+                            model.Contact_no = model.Contact_no.Substring(0, 1) == "0" ? model.Contact_no.Substring(1, model.Contact_no.Length - 1) : model.Contact_no;
+                       
+                            if (model.Contact_no.Length != 10)
+                            {
+                                ModelState.AddModelError(nameof(model.Contact_no), "Please add proper contact no.");
+                                return View(model);
+                            }
+
                             vendor.Contact_no = model.Contact_no;
                         }
                         else
@@ -436,12 +445,14 @@ namespace CVPortal.Controllers
                         vendor.Address1 = model.Address1;
                         vendor.Address1Country = model.Address1Country;
                         vendor.Address1State = model.Address1State;
+                        vendor.Address1StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Address1State)?.StateCode.ToString();
                         vendor.Address1City = model.Address1City;
                         vendor.Address1Pincode = model.Address1Pincode;
                         vendor.IsSameAsAddress1 = model.IsSameAsAddress1;
                         vendor.Address2 = model.Address2;
                         vendor.Address2Country = model.Address2Country;
                         vendor.Address2State = model.Address2State;
+                        vendor.Address2StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Address2State)?.StateCode.ToString();
                         vendor.Address2City = model.Address2City;
                         vendor.Address2Pincode = model.Address2Pincode;
                         vendor.Step1 = true;
@@ -656,6 +667,22 @@ namespace CVPortal.Controllers
                         vendor.Spy_contact_name = model.Spy_contact_name;
                         vendor.AC_contact_Phno = model.AC_contact_Phno;
                         vendor.Spy_contact_Phno = model.Spy_contact_Phno;
+                        model.Spy_contact_Phno = model.Spy_contact_Phno.Substring(0, 1) == "0" ? model.Spy_contact_Phno.Substring(1, model.Spy_contact_Phno.Length - 1) : model.Spy_contact_Phno;
+
+                        if (model.Spy_contact_Phno.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.Spy_contact_Phno), "Please add proper contact no.");
+                            return View(model);
+                        }
+
+                        model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
+
+                        if (model.AC_contact_Phno.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
+                            return View(model);
+                        }
+
                         vendor.AC_contact_Email = model.AC_contact_Email;
                         vendor.Spy_contact_Email = model.Spy_contact_Email;
                         vendor.CIN_No = model.CIN_No;
@@ -667,6 +694,7 @@ namespace CVPortal.Controllers
                         vendor.MSME_no = model.MSME_no;
                         vendor.Annu_TurnOver = model.Annu_TurnOver;
                         vendor.Nature_of_service = model.Nature_of_service;
+                        vendor.NCode = model.Nature_of_service;
                         vendor.ITR_Field_dtl = model.ITR_Field_dtl;
                         vendor.FinancialYear1 = model.FinancialYear1;
                         vendor.FinancialYear2 = model.FinancialYear2;

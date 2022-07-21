@@ -144,6 +144,7 @@ namespace CVPortal.Areas.Users.Controllers
                         objVendor = dataContext.Vend_reg_tbl.Where(x => x.VendorCode == vendorCode).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
                         data = objVendor;
                         data.IsFinalApproved = false;
+                        data.ExistingReasonCode = vendor.ExistingReason == VendorExistingOptionEnum.VendorBankDetails.ToString() ? "1" : "2";
 
                         if (vendor.ExistingReason == VendorExistingOptionEnum.VendorBankDetails.ToString())
                         {
@@ -717,6 +718,12 @@ namespace CVPortal.Areas.Users.Controllers
             Response.End();
 
             return View("MyView");
+        }
+
+        public JsonResult VendorCode(string term)
+        {
+            var result = dataContext.Vend_reg_tbl.Where(c => c.VendorCode != null && c.VendorCode.ToString().ToLower().Contains(term)).Select(a => new { label = a.VendorCode }).Distinct().ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

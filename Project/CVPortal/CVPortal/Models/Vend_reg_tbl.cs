@@ -35,12 +35,14 @@ namespace CVPortal.Models
         public string Address1State { get; set; }
         public string Address1City { get; set; }
         public string Address1Pincode { get; set; }
+        public string Address1StateCode { get; set; }
         public Nullable<bool> IsSameAsAddress1 { get; set; }
         public string Address2 { get; set; }
         public string Address2Country { get; set; }
         public string Address2State { get; set; }
         public string Address2City { get; set; }
         public string Address2Pincode { get; set; }
+        public string Address2StateCode { get; set; }
         public string AC_contact_Desig { get; set; }
         public string AC_contact_name { get; set; }
         public string AC_contact_Phno { get; set; }
@@ -88,6 +90,9 @@ namespace CVPortal.Models
         public string LegalDepartmentApproval { get; set; }
         public string FinanceDepartmentApproval { get; set; }
         public string ITDepartmentApproval { get; set; }
+        public string ExistingReasonCode { get; set; }
+        public string OrgCode { get; set; }
+        public string NCode { get; set; }
         public string OTP { get; set; }
         public Nullable<int> VendorCode { get; set; }
         public Nullable<bool> Step1 { get; set; }
