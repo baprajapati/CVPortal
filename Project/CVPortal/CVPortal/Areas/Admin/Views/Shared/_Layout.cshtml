@@ -49,10 +49,12 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="~/Content/img/user.jpg" class="img-circle elevation-2" alt="User Image">
+                        <a href="@Url.Action("UserIndex","User")">
+                            <img src="~/Content/img/user.jpg" class="img-circle elevation-2" alt="User Image">
+                        </a>
                     </div>
                     <div class="info">
-                        <a href="javascript:void(0);" class="d-block">Admin</a>
+                        <a href="@Url.Action("UserIndex","User")" class="d-block">Admin</a>
                     </div>
                 </div>
                 <nav class="mt-2">

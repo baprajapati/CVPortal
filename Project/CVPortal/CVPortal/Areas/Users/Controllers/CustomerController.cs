@@ -509,7 +509,7 @@ namespace CVPortal.Areas.Users.Controllers
 
             Response.ClearContent();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
+            Response.AddHeader("content-disposition", "attachment; filename=Customer_" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
             Response.ContentType = "application/ms-excel";
 
             Response.Charset = "";
@@ -594,7 +594,7 @@ namespace CVPortal.Areas.Users.Controllers
 
             Response.ClearContent();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
+            Response.AddHeader("content-disposition", "attachment; filename=Customer_" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
             Response.ContentType = "application/ms-excel";
 
             Response.Charset = "";

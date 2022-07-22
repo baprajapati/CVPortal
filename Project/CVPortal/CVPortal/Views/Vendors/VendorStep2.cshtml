@@ -210,6 +210,7 @@
                 </div>
                 <div class="col-md-4">
                     @Html.TextBoxFor(model => model.CIN_No, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.CIN_No)
                 </div>
                 <div class="col-md-5">
                     @Html.HiddenFor(model => model.CINFileName)

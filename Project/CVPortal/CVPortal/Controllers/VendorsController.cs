@@ -422,7 +422,7 @@ namespace CVPortal.Controllers
                         if (!model.IsExistingUpdate)
                         {
                             vendor.Org_Sts = model.Org_Sts;
-                            vendor.OrgCode = model.Org_Sts;
+                            vendor.OrgCode = dataContext.Orginzation_StatusMaster.FirstOrDefault(x => x.Orginzation_Status.ToString() == model.Org_Sts)?.OrgCode.ToString();
                             vendor.vend_name = model.vend_name;
                             vendor.CEO_name = model.CEO_name;
                             vendor.Designation = model.Designation;
@@ -713,7 +713,7 @@ namespace CVPortal.Controllers
                         vendor.Item_Desc = model.Item_Desc;
                         vendor.HSN_SAC_code = model.HSN_SAC_code;
 
-                        if (model.MSME_no.Length != 9)
+                        if (model.MSME_no.Length != 12)
                         {
                             ModelState.AddModelError(nameof(model.MSME_no), "Please add proper MSME no.");
                             return View(model);
@@ -722,9 +722,23 @@ namespace CVPortal.Controllers
                         vendor.MSME_no = model.MSME_no;
                         vendor.Annu_TurnOver = model.Annu_TurnOver;
                         vendor.Nature_of_service = model.Nature_of_service;
-                        vendor.NCode = model.Nature_of_service;
+                        vendor.NCode = dataContext.VendorNatureServices.FirstOrDefault(x => x.NService.ToString() == model.Nature_of_service)?.NCode.ToString();
                         vendor.ITR_Field_dtl = model.ITR_Field_dtl;
+
+                        if (model.FinancialYear1.ToString().Length != 4)
+                        {
+                            ModelState.AddModelError(nameof(model.FinancialYear1), "Please add proper year (yyyy).");
+                            return View(model);
+                        }
+
                         vendor.FinancialYear1 = model.FinancialYear1;
+
+                        if (model.FinancialYear2.ToString().Length != 4)
+                        {
+                            ModelState.AddModelError(nameof(model.FinancialYear2), "Please add proper year (yyyy).");
+                            return View(model);
+                        }
+
                         vendor.FinancialYear2 = model.FinancialYear2;
                         vendor.IsITRFiled1 = model.IsITRFiled1;
                         vendor.IsITRFiled2 = model.IsITRFiled2;
