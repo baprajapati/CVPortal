@@ -665,9 +665,30 @@ namespace CVPortal.Controllers
                         customer.AC_contact_Mob = model.AC_contact_Mob;
 
                         customer.AC_contact_Email = model.AC_contact_Email;
+
+                        if (model.CINNo_LLPNo.Length != 21)
+                        {
+                            ModelState.AddModelError(nameof(model.CINNo_LLPNo), "Please add proper CIN/LLP no.");
+                            return View(model);
+                        }
+
                         customer.CINNo_LLPNo = model.CINNo_LLPNo;
+
+                        if (model.PAN_No.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
+                            return View(model);
+                        }
+
                         customer.PAN_No = model.PAN_No;
                         customer.Type_Cust_gst = model.Type_Cust_gst;
+
+                        if (model.GST_Reg_no.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
+                            return View(model);
+                        }
+
                         customer.GST_Reg_no = model.GST_Reg_no;
                         customer.Step2 = true;
                         dataContext.SaveChanges();

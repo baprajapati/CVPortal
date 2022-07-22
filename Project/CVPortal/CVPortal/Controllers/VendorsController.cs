@@ -685,12 +685,40 @@ namespace CVPortal.Controllers
 
                         vendor.AC_contact_Email = model.AC_contact_Email;
                         vendor.Spy_contact_Email = model.Spy_contact_Email;
+
+                        if (model.CIN_No.Length != 21)
+                        {
+                            ModelState.AddModelError(nameof(model.CIN_No), "Please add proper CIN no.");
+                            return View(model);
+                        }
+
                         vendor.CIN_No = model.CIN_No;
+
+                        if (model.PAN_No.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
+                            return View(model);
+                        }
+
                         vendor.PAN_No = model.PAN_No;
                         vendor.Type_vend_gst = model.Type_vend_gst;
+
+                        if (model.GST_Reg_no.Length != 15)
+                        {
+                            ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
+                            return View(model);
+                        }
+
                         vendor.GST_Reg_no = model.GST_Reg_no;
                         vendor.Item_Desc = model.Item_Desc;
                         vendor.HSN_SAC_code = model.HSN_SAC_code;
+
+                        if (model.MSME_no.Length != 9)
+                        {
+                            ModelState.AddModelError(nameof(model.MSME_no), "Please add proper MSME no.");
+                            return View(model);
+                        }
+
                         vendor.MSME_no = model.MSME_no;
                         vendor.Annu_TurnOver = model.Annu_TurnOver;
                         vendor.Nature_of_service = model.Nature_of_service;
