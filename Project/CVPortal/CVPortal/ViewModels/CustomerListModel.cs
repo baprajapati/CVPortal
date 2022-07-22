@@ -13,6 +13,9 @@ namespace CVPortal.ViewModels
         public string Email { get; set; }
         public string Status { get; set; }
         public string CustomerCode { get; set; }
+        public string Cust_CodeVehicles { get; set; }
+        public string Cust_CodeSpares { get; set; }
+        public string Cust_CodeSecurity { get; set; }
         public string Owner { get; set; }
         public string NextApprover { get; set; }
         public string PreviousApprover { get; set; }

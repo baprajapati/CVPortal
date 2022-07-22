@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Department";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
@@ -119,6 +118,10 @@
                     }
                 });
             });
+
+            $(".export-button").click(function () {
+                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Department" })';
+            });
         });
     </script>
 }
@@ -131,6 +134,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form_group text-right">
+                        <input type="button" value="Export" class="btn btn-primary export-button" />
                         @Html.ActionLink("Add New Department", "AddDepartment", new { controller = "Department" }, new { @class = "btn btn-primary" })
                     </div>
                 </div>

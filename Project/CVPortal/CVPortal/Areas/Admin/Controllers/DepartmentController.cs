@@ -3,10 +3,14 @@ using CVPortal.Models;
 using CVPortal.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using WebMatrix.WebData;
 
 namespace CVPortal.Areas.Admin.Controllers
@@ -42,7 +46,7 @@ namespace CVPortal.Areas.Admin.Controllers
                 return RedirectToAction("../../Account/Login");
 
             var department = new DepartmentViewModel();
-            
+
             try
             {
                 if (id != null)
@@ -151,6 +155,44 @@ namespace CVPortal.Areas.Admin.Controllers
             }
 
             return result;
+        }
+
+        public ActionResult DownloadExcel()
+        {
+            var data = dataContext.Lx_GSV.ToList();
+
+            DataTable dt = new DataTable("XlsGrid");
+            dt.Columns.AddRange(new DataColumn[4] { new DataColumn("Seg Code"),
+                                            new DataColumn("Dept Code"),
+                                            new DataColumn("Description"),
+                                            new DataColumn("Status")
+            });
+
+            foreach (var item in data)
+            {
+                dt.Rows.Add(item.Seg_ID, item.Dept_Code, item.Dept_Desc, item.IsActive ? "Active" : "Inactive");
+            }
+
+            var grid = new GridView();
+            grid.DataSource = dt;
+            grid.DataBind();
+
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
+            Response.ContentType = "application/ms-excel";
+
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+            grid.RenderControl(htw);
+
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return View("MyView");
         }
 
         [HttpGet]

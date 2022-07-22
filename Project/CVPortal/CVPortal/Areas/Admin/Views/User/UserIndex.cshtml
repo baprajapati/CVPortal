@@ -174,6 +174,12 @@
                 if (!$(this).val().trim())
                     $(this).keydown();
             });
+
+            $(".export-button").click(function () {
+               window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "User" })' + '?email=' + $("#Email").val()
+                    + "&haName=" + $("#Name").val() + "&roleName=" + $("#Role").val() + "&haUser=" + $("#UserCode").val() + "&dept_Code=" + $("#DepartmentCode").val()
+                    + "&status=" + $("#Status").val();
+            });
         });
     </script>
 }
@@ -186,6 +192,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form_group text-right">
+                        <input type="button" value="Export" class="btn btn-primary export-button" />
                         @Html.ActionLink("Add New User", "AddUser", new { controller = "User" }, new { @class = "btn btn-primary" })
                     </div>
                 </div>

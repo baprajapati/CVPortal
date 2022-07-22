@@ -4,10 +4,14 @@ using CVPortal.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using WebMatrix.WebData;
 
 namespace CVPortal.Areas.Admin.Controllers
@@ -350,6 +354,137 @@ namespace CVPortal.Areas.Admin.Controllers
             }
 
             return result;
+        }
+
+        public ActionResult DownloadExcel(string email, string haName, string roleName, string haUser, string dept_Code, string status)
+        {
+            var data = new List<tbl_Users>();
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                data = dataContext.tbl_Users.Where(x => x.EmailAddress != null && x.EmailAddress.ToLower().Contains(email.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(haName))
+            {
+                data = (!string.IsNullOrEmpty(email))
+                    ? data.Where(x => x.HANAME != null && x.HANAME.ToLower().Contains(haName.ToLower())).ToList()
+                    : dataContext.tbl_Users.Where(x => x.HANAME != null && x.HANAME.ToLower().Contains(haName.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(haUser))
+            {
+                data = (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(haName))
+                    ? data.Where(x => x.HAUSER != null && x.HAUSER.ToLower().Contains(haUser.ToLower())).ToList()
+                    : dataContext.tbl_Users.Where(x => x.HAUSER != null && x.HAUSER.ToLower().Contains(haUser.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(dept_Code))
+            {
+                data = (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(haName)) || (!string.IsNullOrEmpty(haUser))
+                    ? data.Where(x => x.Dept_Code != null && x.Dept_Code.ToLower().Contains(dept_Code.ToLower())).ToList()
+                    : dataContext.tbl_Users.Where(x => x.Dept_Code != null && x.Dept_Code.ToLower().Contains(dept_Code.ToLower()) && x.Id != WebSecurity.CurrentUserId).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                if ((!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(haName))
+                    || (!string.IsNullOrEmpty(haUser)) || (!string.IsNullOrEmpty(dept_Code)))
+                {
+                    if ("Active".Contains(status))
+                    {
+                        data = data.Where(x => x.IsActive).ToList();
+                    }
+                    else if ("Inactive".Contains(status))
+                    {
+                        data = data.Where(x => !x.IsActive).ToList();
+                    }
+                    else
+                    {
+                        data = new List<tbl_Users>();
+                    }
+                }
+                else
+                {
+                    if ("Active".Contains(status))
+                    {
+                        data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId && x.IsActive).ToList();
+                    }
+                    else if ("Inactive".Contains(status))
+                    {
+                        data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId && !x.IsActive).ToList();
+                    }
+                    else
+                    {
+                        data = new List<tbl_Users>();
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(email) && string.IsNullOrEmpty(haName)
+                && string.IsNullOrEmpty(haUser)
+                 && string.IsNullOrEmpty(dept_Code) && string.IsNullOrEmpty(status))
+            {
+                data = dataContext.tbl_Users.Where(x => x.Id != WebSecurity.CurrentUserId).ToList();
+            }
+
+            var users = new List<UserViewModel>();
+
+            data.ForEach(item =>
+            {
+                users.Add(new UserViewModel()
+                {
+                    Id = item.Id,
+                    Email = item.EmailAddress,
+                    RoleName = string.Join(",", Roles.GetRolesForUser(item.EmailAddress)),
+                    HAUSER = item.HAUSER,
+                    HANAME = item.HANAME,
+                    Dept_Code = item.Dept_Code,
+                    HANEXT = item.HANEXT,
+                    Status = item.IsActive ? "Active" : "Inactive"
+                });
+            });
+
+            if (!string.IsNullOrEmpty(roleName))
+            {
+                users = users.Where(x => x.RoleName != null && x.RoleName.ToLower().Contains(roleName.ToLower())).ToList();
+            }
+
+            DataTable dt = new DataTable("XlsGrid");
+            dt.Columns.AddRange(new DataColumn[7] { new DataColumn("Email"),
+                                            new DataColumn("Role Name"),
+                                            new DataColumn("Name"),
+                                            new DataColumn("User Code"),
+                                            new DataColumn("Department Code"),
+                                            new DataColumn("Next User Code"),
+                                            new DataColumn("Status")
+           });
+
+            foreach (var item in users)
+            {
+                dt.Rows.Add(item.Email, item.RoleName, item.HANAME, item.HAUSER, item.Dept_Code, item.HANEXT, item.Status);
+            }
+
+            var grid = new GridView();
+            grid.DataSource = dt;
+            grid.DataBind();
+
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=" + DateTime.Now.ToString("dd MMM yyyy") + ".xls");
+            Response.ContentType = "application/ms-excel";
+
+            Response.Charset = "";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+
+            grid.RenderControl(htw);
+
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+
+            return View("MyView");
         }
 
         public JsonResult DeleteUser(int id)
