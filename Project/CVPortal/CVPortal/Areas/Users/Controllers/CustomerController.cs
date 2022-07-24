@@ -5,6 +5,7 @@ using NReco.PdfGenerator;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -156,9 +157,17 @@ namespace CVPortal.Areas.Users.Controllers
                         : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
                 }
 
+                if (!string.IsNullOrEmpty(model.Cust_CodeVehicles))
+                {
+                    data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name))
+                        ? data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList()
+                        : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList();
+                }
+
                 if (!string.IsNullOrEmpty(model.Status))
                 {
-                    if ((!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name)))
+                    if ((!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name))
+                        || !string.IsNullOrEmpty(model.Cust_CodeVehicles))
                     {
                         if ("Approved".Contains(model.Status))
                         {
@@ -191,7 +200,7 @@ namespace CVPortal.Areas.Users.Controllers
                 }
 
                 if (string.IsNullOrEmpty(model.CustomerCode) && string.IsNullOrEmpty(model.Email)
-                    && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status))
+                    && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status) && string.IsNullOrEmpty(model.Cust_CodeVehicles))
                 {
                     data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
                 }
@@ -216,6 +225,9 @@ namespace CVPortal.Areas.Users.Controllers
                         Email = item.Email,
                         Cust_name = item.Cust_name,
                         CustomerCode = item.CustomerCode?.ToString(),
+                        Cust_CodeVehicles = item.Cust_CodeVehicles?.ToString(),
+                        Cust_CodeSpares = item.Cust_CodeSpares?.ToString(),
+                        Cust_CodeSecurity = item.Cust_CodeSecurity?.ToString(),
                         Step4 = item.Step4 ?? false,
                         Status = item.IsFinalApproved ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
@@ -269,9 +281,17 @@ namespace CVPortal.Areas.Users.Controllers
                         : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
                 }
 
+                if (!string.IsNullOrEmpty(model.Cust_CodeVehicles))
+                {
+                    data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name))
+                        ? data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList()
+                        : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList();
+                }
+
                 if (!string.IsNullOrEmpty(model.Status))
                 {
-                    if ((!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name)))
+                    if ((!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name))
+                        || !string.IsNullOrEmpty(model.Cust_CodeVehicles))
                     {
                         if ("Approved".Contains(model.Status))
                         {
@@ -304,7 +324,8 @@ namespace CVPortal.Areas.Users.Controllers
                 }
 
                 if (string.IsNullOrEmpty(model.CustomerCode) && string.IsNullOrEmpty(model.Email)
-                    && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status))
+                      && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status)
+                      && string.IsNullOrEmpty(model.Cust_CodeVehicles))
                 {
                     data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
                 }
@@ -329,6 +350,9 @@ namespace CVPortal.Areas.Users.Controllers
                         Email = item.Email,
                         Cust_name = item.Cust_name,
                         CustomerCode = item.CustomerCode?.ToString(),
+                        Cust_CodeVehicles = item.Cust_CodeVehicles?.ToString(),
+                        Cust_CodeSpares = item.Cust_CodeSpares?.ToString(),
+                        Cust_CodeSecurity = item.Cust_CodeSecurity?.ToString(),
                         Step4 = item.Step4 ?? false,
                         Status = item.IsFinalApproved ? "Approved" : "Pending",
                         Owner = item.tbl_Users.HANAME,
@@ -440,32 +464,32 @@ namespace CVPortal.Areas.Users.Controllers
             }
         }
 
-        public ActionResult DownloadExcel(string customerCode, string email, string customerName, string status)
+        public ActionResult DownloadExcel(string code, string email, string customerName, string status)
         {
             var data = new List<Cust_reg_tbl>();
 
-            if (!string.IsNullOrEmpty(customerCode))
+            if (!string.IsNullOrEmpty(code))
             {
-                data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(customerCode.ToLower())).ToList();
+                data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().Contains(code.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(email))
             {
-                data = (!string.IsNullOrEmpty(customerCode))
+                data = (!string.IsNullOrEmpty(code))
                     ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
                     : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(customerName))
             {
-                data = (!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email))
+                data = (!string.IsNullOrEmpty(code)) || (!string.IsNullOrEmpty(email))
                     ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList()
                     : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(status))
             {
-                if ((!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(customerName)))
+                if ((!string.IsNullOrEmpty(code)) || (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(customerName)))
                 {
                     if ("Approved".Contains(status))
                     {
@@ -497,14 +521,92 @@ namespace CVPortal.Areas.Users.Controllers
                 }
             }
 
-            if (string.IsNullOrEmpty(customerCode) && string.IsNullOrEmpty(email)
+            if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(email)
                 && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(status))
             {
                 data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
             }
 
+            DataTable dt = new DataTable("XlsGrid");
+            dt.Columns.AddRange(new DataColumn[62] { new DataColumn("Main Code"),
+                                            new DataColumn("Spare Code"),
+                                            new DataColumn("Security Code"),
+                                            new DataColumn("Org Status"),
+                                            new DataColumn("Customer Name"),
+                                            new DataColumn("CEO Name"),
+                                            new DataColumn("Designation"),
+                                            new DataColumn("CEO Contact No"),
+                                            new DataColumn("Email"),
+                                            new DataColumn("Contact No"),
+                                            new DataColumn("Dlr Address"),
+                                            new DataColumn("Dlr Country"),
+                                            new DataColumn("Dlr State"),
+                                            new DataColumn("Dlr City"),
+                                            new DataColumn("Dlr Pincode"),
+                                            new DataColumn("Dlr StateCode"),
+                                            new DataColumn("Is Same Address"),
+                                            new DataColumn("Supp Address"),
+                                            new DataColumn("Supp Country"),
+                                            new DataColumn("Supp State"),
+                                            new DataColumn("Supp City"),
+                                            new DataColumn("Supp Pincode"),
+                                            new DataColumn("Supp StateCode"),
+                                            new DataColumn("AC Contact Designation"),
+                                            new DataColumn("AC Contact Name"),
+                                            new DataColumn("AC Contact PhNo"),
+                                            new DataColumn("AC Contact MobNo"),
+                                            new DataColumn("AC Contact Email"),
+                                            new DataColumn("CIN No"),
+                                            new DataColumn("PAN No"),
+                                            new DataColumn("Customer GST Type"),
+                                            new DataColumn("GST Reg No"),
+                                            new DataColumn("Security Code"),
+                                            new DataColumn("DD/UTR No"),
+                                            new DataColumn("Benificiary Name"),
+                                            new DataColumn("Bank Name"),
+                                            new DataColumn("Branch Address"),
+                                            new DataColumn("Acc No"),
+                                            new DataColumn("MICR Code"),
+                                            new DataColumn("IFSC_RTGS Code"),
+                                            new DataColumn("Swift Code"),
+                                            new DataColumn("ITR Return Status"),
+                                            new DataColumn("ITR Return Status Turnover"),
+                                            new DataColumn("ITR Return TDS Deduct"),
+                                            new DataColumn("Dealer Type"),
+                                            new DataColumn("Date"),
+                                            new DataColumn("Next Approver Role"),
+                                            new DataColumn("Next Approver"),
+                                            new DataColumn("Initiator Approval"),
+                                            new DataColumn("Legal Department Approval"),
+                                            new DataColumn("Finance Department Approval"),
+                                            new DataColumn("IT Department Approval"),
+                                            new DataColumn("Company"),
+                                            new DataColumn("Customer Type"),
+                                            new DataColumn("Payment Type"),
+                                            new DataColumn("Terms Code"),
+                                            new DataColumn("Currency"),
+                                            new DataColumn("Agent/Sales"),
+                                            new DataColumn("Tax Code"),
+                                            new DataColumn("Document Sequence Prefix"),
+                                            new DataColumn("Is Final Approved"),
+                                            new DataColumn("Created Date")
+            });
+
+            foreach (var item in data)
+            {
+                dt.Rows.Add(item.Cust_CodeVehicles, item.Cust_CodeSpares, item.Cust_CodeSecurity, item.Org_Sts, item.Cust_name, item.CEO_name, item.CEO_Designation, item.CEO_Contact_no,
+                    item.Email, item.Contact_no, item.Dlr_Address, item.Dlr_Add_Country, item.Dlr_Add_State, item.Dlr_Add_City, item.Dlr_Add_Pincode, item.Dlr_Add_StateCode, item.IsSameAsDlr_Address == true ? "Yes" : "No", item.Supp_Address,
+                    item.Supp_Add_Country, item.Supp_Add_State, item.Supp_Add_City, item.Supp_Add_Pincode, item.Supp_Add_StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Mob, item.AC_contact_Email,
+                    item.CINNo_LLPNo, item.PAN_No, item.Type_Cust_gst, item.GST_Reg_no, item.Seucirty_Deposit, item.DDNo_UTRNo, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Swift_Code,
+                    item.ITR_ReturnSts, item.ITR_ReturnStsTurnover == true ? "Yes" : "No", item.ITR_ReturnTDSDeduct == true ? "Yes" : "No", item.DealerType, item.Date?.ToString("dd MMM yyyy"),
+                    item.NextApproverRole, item.NextApprover,
+                    item.InitiatorApproval, item.LegalDepartmentApproval, item.FinanceDepartmentApproval, item.ITDepartmentApproval, item.Company, item.CustomerType,
+                    item.PaymentType, item.TermsCode, item.CurrencyCode, item.AgentSales, item.TaxCode, item.DocumentSequencePrefix,
+                    item.IsFinalApproved == true ? "Yes" : "No", item.CreatedByDate.ToString("dd MMM yyyy HH:mm"));
+            }
+
             var grid = new GridView();
-            grid.DataSource = data;
+            grid.DataSource = dt;
             grid.DataBind();
 
             Response.ClearContent();
@@ -525,32 +627,32 @@ namespace CVPortal.Areas.Users.Controllers
             return View("MyView");
         }
 
-        public ActionResult DownloadExcelApproved(string customerCode, string email, string customerName, string status)
+        public ActionResult DownloadExcelApproved(string code, string email, string customerName, string status)
         {
             var data = new List<Cust_reg_tbl>();
 
-            if (!string.IsNullOrEmpty(customerCode))
+            if (!string.IsNullOrEmpty(code))
             {
-                data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(customerCode.ToLower())).ToList();
+                data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().Contains(code.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(email))
             {
-                data = (!string.IsNullOrEmpty(customerCode))
+                data = (!string.IsNullOrEmpty(code))
                     ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
                     : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(customerName))
             {
-                data = (!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email))
+                data = (!string.IsNullOrEmpty(code)) || (!string.IsNullOrEmpty(email))
                     ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList()
                     : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(status))
             {
-                if ((!string.IsNullOrEmpty(customerCode)) || (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(customerName)))
+                if ((!string.IsNullOrEmpty(code)) || (!string.IsNullOrEmpty(email)) || (!string.IsNullOrEmpty(customerName)))
                 {
                     if ("Approved".Contains(status))
                     {
@@ -582,14 +684,92 @@ namespace CVPortal.Areas.Users.Controllers
                 }
             }
 
-            if (string.IsNullOrEmpty(customerCode) && string.IsNullOrEmpty(email)
+            if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(email)
                 && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(status))
             {
                 data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
             }
 
+            DataTable dt = new DataTable("XlsGrid");
+            dt.Columns.AddRange(new DataColumn[62] { new DataColumn("Main Code"),
+                                            new DataColumn("Spare Code"),
+                                            new DataColumn("Security Code"),
+                                            new DataColumn("Org Status"),
+                                            new DataColumn("Customer Name"),
+                                            new DataColumn("CEO Name"),
+                                            new DataColumn("Designation"),
+                                            new DataColumn("CEO Contact No"),
+                                            new DataColumn("Email"),
+                                            new DataColumn("Contact No"),
+                                            new DataColumn("Dlr Address"),
+                                            new DataColumn("Dlr Country"),
+                                            new DataColumn("Dlr State"),
+                                            new DataColumn("Dlr City"),
+                                            new DataColumn("Dlr Pincode"),
+                                            new DataColumn("Dlr StateCode"),
+                                            new DataColumn("Is Same Address"),
+                                            new DataColumn("Supp Address"),
+                                            new DataColumn("Supp Country"),
+                                            new DataColumn("Supp State"),
+                                            new DataColumn("Supp City"),
+                                            new DataColumn("Supp Pincode"),
+                                            new DataColumn("Supp StateCode"),
+                                            new DataColumn("AC Contact Designation"),
+                                            new DataColumn("AC Contact Name"),
+                                            new DataColumn("AC Contact PhNo"),
+                                            new DataColumn("AC Contact MobNo"),
+                                            new DataColumn("AC Contact Email"),
+                                            new DataColumn("CIN No"),
+                                            new DataColumn("PAN No"),
+                                            new DataColumn("Customer GST Type"),
+                                            new DataColumn("GST Reg No"),
+                                            new DataColumn("Security Code"),
+                                            new DataColumn("DD/UTR No"),
+                                            new DataColumn("Benificiary Name"),
+                                            new DataColumn("Bank Name"),
+                                            new DataColumn("Branch Address"),
+                                            new DataColumn("Acc No"),
+                                            new DataColumn("MICR Code"),
+                                            new DataColumn("IFSC_RTGS Code"),
+                                            new DataColumn("Swift Code"),
+                                            new DataColumn("ITR Return Status"),
+                                            new DataColumn("ITR Return Status Turnover"),
+                                            new DataColumn("ITR Return TDS Deduct"),
+                                            new DataColumn("Dealer Type"),
+                                            new DataColumn("Date"),
+                                            new DataColumn("Next Approver Role"),
+                                            new DataColumn("Next Approver"),
+                                            new DataColumn("Initiator Approval"),
+                                            new DataColumn("Legal Department Approval"),
+                                            new DataColumn("Finance Department Approval"),
+                                            new DataColumn("IT Department Approval"),
+                                            new DataColumn("Company"),
+                                            new DataColumn("Customer Type"),
+                                            new DataColumn("Payment Type"),
+                                            new DataColumn("Terms Code"),
+                                            new DataColumn("Currency"),
+                                            new DataColumn("Agent/Sales"),
+                                            new DataColumn("Tax Code"),
+                                            new DataColumn("Document Sequence Prefix"),
+                                            new DataColumn("Is Final Approved"),
+                                            new DataColumn("Created Date")
+            });
+
+            foreach (var item in data)
+            {
+                dt.Rows.Add(item.Cust_CodeVehicles, item.Cust_CodeSpares, item.Cust_CodeSecurity, item.Org_Sts, item.Cust_name, item.CEO_name, item.CEO_Designation, item.CEO_Contact_no,
+                    item.Email, item.Contact_no, item.Dlr_Address, item.Dlr_Add_Country, item.Dlr_Add_State, item.Dlr_Add_City, item.Dlr_Add_Pincode, item.Dlr_Add_StateCode, item.IsSameAsDlr_Address == true ? "Yes" : "No", item.Supp_Address,
+                    item.Supp_Add_Country, item.Supp_Add_State, item.Supp_Add_City, item.Supp_Add_Pincode, item.Supp_Add_StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Mob, item.AC_contact_Email,
+                    item.CINNo_LLPNo, item.PAN_No, item.Type_Cust_gst, item.GST_Reg_no, item.Seucirty_Deposit, item.DDNo_UTRNo, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Swift_Code,
+                    item.ITR_ReturnSts, item.ITR_ReturnStsTurnover == true ? "Yes" : "No", item.ITR_ReturnTDSDeduct == true ? "Yes" : "No", item.DealerType, item.Date?.ToString("dd MMM yyyy"),
+                    item.NextApproverRole, item.NextApprover,
+                    item.InitiatorApproval, item.LegalDepartmentApproval, item.FinanceDepartmentApproval, item.ITDepartmentApproval, item.Company, item.CustomerType,
+                    item.PaymentType, item.TermsCode, item.CurrencyCode, item.AgentSales, item.TaxCode, item.DocumentSequencePrefix,
+                    item.IsFinalApproved == true ? "Yes" : "No", item.CreatedByDate.ToString("dd MMM yyyy HH:mm"));
+            }
+
             var grid = new GridView();
-            grid.DataSource = data;
+            grid.DataSource = dt;
             grid.DataBind();
 
             Response.ClearContent();

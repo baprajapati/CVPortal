@@ -5,6 +5,7 @@ using NReco.PdfGenerator;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -613,8 +614,95 @@ namespace CVPortal.Areas.Users.Controllers
                 data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
             }
 
+            DataTable dt = new DataTable("XlsGrid");
+            dt.Columns.AddRange(new DataColumn[71] { new DataColumn("Is New Vendor"),
+                                            new DataColumn("Existing Reason"),
+                                            new DataColumn("Org Sts"),
+                                            new DataColumn("Vendor Name"),
+                                            new DataColumn("CEO Name"),
+                                            new DataColumn("Designation"),
+                                            new DataColumn("Contact No"),
+                                            new DataColumn("Email"),
+                                            new DataColumn("Reg Address"),
+                                            new DataColumn("Reg Country"),
+                                            new DataColumn("Reg State"),
+                                            new DataColumn("Reg City"),
+                                            new DataColumn("Reg Pincode"),
+                                            new DataColumn("Reg StateCode"),
+                                            new DataColumn("Is Same Address"),
+                                            new DataColumn("PO Address"),
+                                            new DataColumn("PO Country"),
+                                            new DataColumn("PO State"),
+                                            new DataColumn("PO City"),
+                                            new DataColumn("PO Pincode"),
+                                            new DataColumn("PO StateCode"),
+                                            new DataColumn("AC Contact Designation"),
+                                            new DataColumn("AC Contact Name"),
+                                            new DataColumn("AC Contact PhNo"),
+                                            new DataColumn("AC Contact Email"),
+                                            new DataColumn("Spy Contact Designation"),
+                                            new DataColumn("Spy Contact Name"),
+                                            new DataColumn("Spy Contact PhNo"),
+                                            new DataColumn("Spy Contact Email"),
+                                            new DataColumn("CIN No"),
+                                            new DataColumn("PAN No"),
+                                            new DataColumn("Vendor GST Type"),
+                                            new DataColumn("GST Reg No"),
+                                            new DataColumn("Item Desc"),
+                                            new DataColumn("HSN/SAC Code"),
+                                            new DataColumn("MSME No"),
+                                            new DataColumn("Annual Turnover"),
+                                            new DataColumn("Nature of Service"),
+                                            new DataColumn("Fin Year 1"),
+                                            new DataColumn("Is ITR Field 1"),
+                                            new DataColumn("Ack No 1"),
+                                            new DataColumn("Fin Year 2"),
+                                            new DataColumn("Is ITR Field 2"),
+                                            new DataColumn("Ack No 2"),
+                                            new DataColumn("Benificiary Name"),
+                                            new DataColumn("Bank Name"),
+                                            new DataColumn("Branch Address"),
+                                            new DataColumn("Acc No"),
+                                            new DataColumn("MICR Code"),
+                                            new DataColumn("IFSC_RTGS Code"),
+                                            new DataColumn("Date"),
+                                            new DataColumn("Vendor Type"),
+                                            new DataColumn("Next Approver Role"),
+                                            new DataColumn("Next Approver"),
+                                            new DataColumn("Terms Code"),
+                                            new DataColumn("Bank Code"),
+                                            new DataColumn("Bank Branch"),
+                                            new DataColumn("Payment Type"),
+                                            new DataColumn("Tax Code"),
+                                            new DataColumn("Company"),
+                                            new DataColumn("Document Pfx"),
+                                            new DataColumn("Currency"),
+                                            new DataColumn("Initiator Approval"),
+                                            new DataColumn("Legal Department Approval"),
+                                            new DataColumn("Finance Department Approval"),
+                                            new DataColumn("IT Department Approval"),
+                                            new DataColumn("Org Code"),
+                                            new DataColumn("NCode"),
+                                            new DataColumn("Vendor Code"),
+                                            new DataColumn("Is Final Approved"),
+                                            new DataColumn("Created Date")
+            });
+
+            foreach (var item in data)
+            {
+                dt.Rows.Add(item.IsNewVendor ? "New" : "Existing", item.ExistingReason, item.Org_Sts, item.vend_name, item.CEO_name, item.Designation, item.Contact_no,
+                    item.Email, item.Address1, item.Address1Country, item.Address1State, item.Address1City, item.Address1Pincode, item.Address1StateCode, item.IsSameAsAddress1 == true ? "Yes" : "No", item.Address2,
+                    item.Address2Country, item.Address2State, item.Address2City, item.Address2Pincode, item.Address2StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Email,
+                    item.Spy_contact_Desig, item.Spy_contact_name, item.Spy_contact_Phno, item.Spy_contact_Email, item.CIN_No, item.PAN_No, item.Type_vend_gst, item.GST_Reg_no, item.Item_Desc,
+                    item.HSN_SAC_code, item.MSME_no, item.Annu_TurnOver, item.Nature_of_service, item.FinancialYear1, item.IsITRFiled1 == true ? "Yes" : "No", item.AcknowledgeNo1, item.FinancialYear2, item.IsITRFiled2 == true ? "Yes" : "No",
+                    item.AcknowledgeNo2, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Date?.ToString("dd MMM yyyy"), item.Type_of_Vend,
+                    item.NextApproverRole, item.NextApprover, item.TermsCode, item.BankCode, item.BankBranch, item.PaymentType, item.TaxCode, item.Company, item.DocumentPfx,
+                    item.Currency, item.InitiatorApproval, item.LegalDepartmentApproval, item.FinanceDepartmentApproval, item.ITDepartmentApproval, item.OrgCode, item.NCode, item.VendorCode,
+                    item.IsFinalApproved == true ? "Yes" : "No", item.CreatedByDate.ToString("dd MMM yyyy HH:mm"));
+            }
+
             var grid = new GridView();
-            grid.DataSource = data;
+            grid.DataSource = dt;
             grid.DataBind();
 
             Response.ClearContent();
@@ -698,8 +786,95 @@ namespace CVPortal.Areas.Users.Controllers
                 data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved).ToList();
             }
 
+            DataTable dt = new DataTable("XlsGrid");
+            dt.Columns.AddRange(new DataColumn[71] { new DataColumn("Is New Vendor"),
+                                            new DataColumn("Existing Reason"),
+                                            new DataColumn("Org Sts"),
+                                            new DataColumn("Vendor Name"),
+                                            new DataColumn("CEO Name"),
+                                            new DataColumn("Designation"),
+                                            new DataColumn("Contact No"),
+                                            new DataColumn("Email"),
+                                            new DataColumn("Reg Address"),
+                                            new DataColumn("Reg Country"),
+                                            new DataColumn("Reg State"),
+                                            new DataColumn("Reg City"),
+                                            new DataColumn("Reg Pincode"),
+                                            new DataColumn("Reg StateCode"),
+                                            new DataColumn("Is Same Address"),
+                                            new DataColumn("PO Address"),
+                                            new DataColumn("PO Country"),
+                                            new DataColumn("PO State"),
+                                            new DataColumn("PO City"),
+                                            new DataColumn("PO Pincode"),
+                                            new DataColumn("PO StateCode"),
+                                            new DataColumn("AC Contact Designation"),
+                                            new DataColumn("AC Contact Name"),
+                                            new DataColumn("AC Contact PhNo"),
+                                            new DataColumn("AC Contact Email"),
+                                            new DataColumn("Spy Contact Designation"),
+                                            new DataColumn("Spy Contact Name"),
+                                            new DataColumn("Spy Contact PhNo"),
+                                            new DataColumn("Spy Contact Email"),
+                                            new DataColumn("CIN No"),
+                                            new DataColumn("PAN No"),
+                                            new DataColumn("Vendor GST Type"),
+                                            new DataColumn("GST Reg No"),
+                                            new DataColumn("Item Desc"),
+                                            new DataColumn("HSN/SAC Code"),
+                                            new DataColumn("MSME No"),
+                                            new DataColumn("Annual Turnover"),
+                                            new DataColumn("Nature of Service"),
+                                            new DataColumn("Fin Year 1"),
+                                            new DataColumn("Is ITR Field 1"),
+                                            new DataColumn("Ack No 1"),
+                                            new DataColumn("Fin Year 2"),
+                                            new DataColumn("Is ITR Field 2"),
+                                            new DataColumn("Ack No 2"),
+                                            new DataColumn("Benificiary Name"),
+                                            new DataColumn("Bank Name"),
+                                            new DataColumn("Branch Address"),
+                                            new DataColumn("Acc No"),
+                                            new DataColumn("MICR Code"),
+                                            new DataColumn("IFSC_RTGS Code"),
+                                            new DataColumn("Date"),
+                                            new DataColumn("Vendor Type"),
+                                            new DataColumn("Next Approver Role"),
+                                            new DataColumn("Next Approver"),
+                                            new DataColumn("Terms Code"),
+                                            new DataColumn("Bank Code"),
+                                            new DataColumn("Bank Branch"),
+                                            new DataColumn("Payment Type"),
+                                            new DataColumn("Tax Code"),
+                                            new DataColumn("Company"),
+                                            new DataColumn("Document Pfx"),
+                                            new DataColumn("Currency"),
+                                            new DataColumn("Initiator Approval"),
+                                            new DataColumn("Legal Department Approval"),
+                                            new DataColumn("Finance Department Approval"),
+                                            new DataColumn("IT Department Approval"),
+                                            new DataColumn("Org Code"),
+                                            new DataColumn("NCode"),
+                                            new DataColumn("Vendor Code"),
+                                            new DataColumn("Is Final Approved"),
+                                            new DataColumn("Created Date")
+            });
+
+            foreach (var item in data)
+            {
+                dt.Rows.Add(item.IsNewVendor ? "New" : "Existing", item.ExistingReason, item.Org_Sts, item.vend_name, item.CEO_name, item.Designation, item.Contact_no,
+                    item.Email, item.Address1, item.Address1Country, item.Address1State, item.Address1City, item.Address1Pincode, item.Address1StateCode, item.IsSameAsAddress1 == true ? "Yes" : "No", item.Address2,
+                    item.Address2Country, item.Address2State, item.Address2City, item.Address2Pincode, item.Address2StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Email,
+                    item.Spy_contact_Desig, item.Spy_contact_name, item.Spy_contact_Phno, item.Spy_contact_Email, item.CIN_No, item.PAN_No, item.Type_vend_gst, item.GST_Reg_no, item.Item_Desc,
+                    item.HSN_SAC_code, item.MSME_no, item.Annu_TurnOver, item.Nature_of_service, item.FinancialYear1, item.IsITRFiled1 == true ? "Yes" : "No", item.AcknowledgeNo1, item.FinancialYear2, item.IsITRFiled2 == true ? "Yes" : "No",
+                    item.AcknowledgeNo2, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Date?.ToString("dd MMM yyyy"), item.Type_of_Vend,
+                    item.NextApproverRole, item.NextApprover, item.TermsCode, item.BankCode, item.BankBranch, item.PaymentType, item.TaxCode, item.Company, item.DocumentPfx,
+                    item.Currency, item.InitiatorApproval, item.LegalDepartmentApproval, item.FinanceDepartmentApproval, item.ITDepartmentApproval, item.OrgCode, item.NCode, item.VendorCode,
+                    item.IsFinalApproved == true ? "Yes" : "No", item.CreatedByDate.ToString("dd MMM yyyy HH:mm"));
+            }
+
             var grid = new GridView();
-            grid.DataSource = data;
+            grid.DataSource = dt;
             grid.DataBind();
 
             Response.ClearContent();

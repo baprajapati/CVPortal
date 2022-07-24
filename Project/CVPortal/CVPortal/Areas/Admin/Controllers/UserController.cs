@@ -458,7 +458,7 @@ namespace CVPortal.Areas.Admin.Controllers
                                             new DataColumn("Department Code"),
                                             new DataColumn("Next User Code"),
                                             new DataColumn("Status")
-           });
+            });
 
             foreach (var item in users)
             {

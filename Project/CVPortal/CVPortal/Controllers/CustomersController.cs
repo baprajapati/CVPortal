@@ -666,7 +666,7 @@ namespace CVPortal.Controllers
 
                         customer.AC_contact_Email = model.AC_contact_Email;
 
-                        if (model.CINNo_LLPNo.Length != 21)
+                        if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && model.CINNo_LLPNo.Length != 21)
                         {
                             ModelState.AddModelError(nameof(model.CINNo_LLPNo), "Please add proper CIN/LLP no.");
                             return View(model);
@@ -683,7 +683,7 @@ namespace CVPortal.Controllers
                         customer.PAN_No = model.PAN_No;
                         customer.Type_Cust_gst = model.Type_Cust_gst;
 
-                        if (model.GST_Reg_no.Length != 10)
+                        if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
                         {
                             ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
                             return View(model);

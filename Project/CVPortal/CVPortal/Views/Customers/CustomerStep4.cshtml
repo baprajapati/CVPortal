@@ -63,7 +63,12 @@
                 e.preventDefault();
 
                 if ($("#DealerType").val() != "Scrap" && $("#Code").val() == "") {
-                    toastr.error("Code is required.", "Customer");
+                    toastr.error("Customer Main Code is required.", "Customer");
+                    return;
+                }
+
+                if ($("#DealerType").val() != "Scrap" && $("#Code").val().length != 8) {
+                    toastr.error("Customer Main Code length must be 8.", "Customer");
                     return;
                 }
 
@@ -319,8 +324,8 @@
                         </select>
                     </div>
                     <div class="form-group approve-code">
-                        <label for="BankBranch">Code</label>
-                        @Html.TextBox("Code", "", new { @class = "form-control", placeholder = "Code" })
+                        <label for="BankBranch">Customer Main Code</label>
+                        @Html.TextBox("Code", "", new { @class = "form-control", placeholder = "Customer Main Code" })
                     </div>
                 </div>
             }

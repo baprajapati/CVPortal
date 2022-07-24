@@ -29,7 +29,6 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "Please enter account no")]
         public string Account_no { get; set; }
 
-        [Required(ErrorMessage = "Please enter MICR code")]
         public decimal? MICR_code { get; set; }
 
         [Required(ErrorMessage = "Please enter IFSC/RTGS code")]
