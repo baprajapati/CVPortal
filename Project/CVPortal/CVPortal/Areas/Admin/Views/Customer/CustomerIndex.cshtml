@@ -120,7 +120,7 @@
             });
 
             $(".export-button").click(function () {
-                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Customer" })' + -'?code=' + $("#Code").val() + '&email=' + $("#Email").val() + " & customerName=" + $("#CustomerName").val() + " & status=" + $("#Status").val();
+                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Customer" })' + '?code=' + $("#Code").val() + '&email=' + $("#Email").val() + " & customerName=" + $("#CustomerName").val() + " & status=" + $("#Status").val();
             });
 
             $('#lstUsers').on('click', '.printCustomer', function () {

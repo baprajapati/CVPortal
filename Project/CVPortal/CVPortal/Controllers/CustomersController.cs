@@ -445,6 +445,14 @@ namespace CVPortal.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    model.Contact_no = model.Contact_no.Substring(0, 1) == "0" ? model.Contact_no.Substring(1, model.Contact_no.Length - 1) : model.Contact_no;
+
+                    if (model.Contact_no.Length != 10)
+                    {
+                        ModelState.AddModelError(nameof(model.Contact_no), "Please add proper contact no.");
+                        return View(model);
+                    }
+
                     var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (customer != null)
                     {
@@ -453,15 +461,6 @@ namespace CVPortal.Controllers
                         customer.Cust_name = model.Cust_name;
                         customer.CEO_name = model.CEO_name;
                         customer.CEO_Designation = model.CEO_Designation;
-
-                        model.Contact_no = model.Contact_no.Substring(0, 1) == "0" ? model.Contact_no.Substring(1, model.Contact_no.Length - 1) : model.Contact_no;
-
-                        if (model.Contact_no.Length != 10)
-                        {
-                            ModelState.AddModelError(nameof(model.Contact_no), "Please add proper contact no.");
-                            return View(model);
-                        }
-
                         customer.Contact_no = model.Contact_no;
                         customer.Dlr_Address = model.Dlr_Address;
                         customer.Dlr_Add_Country = model.Dlr_Add_Country;
@@ -514,6 +513,41 @@ namespace CVPortal.Controllers
                     if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
                     {
                         ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
+                        return View(model);
+                    }
+
+                    model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
+
+                    if (model.AC_contact_Phno.Length != 10)
+                    {
+                        ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
+                        return View(model);
+                    }
+
+
+                    model.AC_contact_Mob = model.AC_contact_Mob.Substring(0, 1) == "0" ? model.AC_contact_Mob.Substring(1, model.AC_contact_Mob.Length - 1) : model.AC_contact_Mob;
+
+                    if (model.AC_contact_Mob.Length != 10)
+                    {
+                        ModelState.AddModelError(nameof(model.AC_contact_Mob), "Please add proper contact no.");
+                        return View(model);
+                    }
+
+                    if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && model.CINNo_LLPNo.Length != 21)
+                    {
+                        ModelState.AddModelError(nameof(model.CINNo_LLPNo), "Please add proper CIN/LLP no.");
+                        return View(model);
+                    }
+
+                    if (model.PAN_No.Length != 10)
+                    {
+                        ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
+                        return View(model);
+                    }
+
+                    if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
+                    {
+                        ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
                         return View(model);
                     }
 
@@ -643,52 +677,12 @@ namespace CVPortal.Controllers
 
                         customer.AC_contact_Desig = model.AC_contact_Desig;
                         customer.AC_contact_name = model.AC_contact_name;
-
-                        model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
-
-                        if (model.AC_contact_Phno.Length != 10)
-                        {
-                            ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
-                            return View(model);
-                        }
-
                         customer.AC_contact_Phno = model.AC_contact_Phno;
-
-                        model.AC_contact_Mob = model.AC_contact_Mob.Substring(0, 1) == "0" ? model.AC_contact_Mob.Substring(1, model.AC_contact_Mob.Length - 1) : model.AC_contact_Mob;
-
-                        if (model.AC_contact_Mob.Length != 10)
-                        {
-                            ModelState.AddModelError(nameof(model.AC_contact_Mob), "Please add proper contact no.");
-                            return View(model);
-                        }
-
                         customer.AC_contact_Mob = model.AC_contact_Mob;
-
                         customer.AC_contact_Email = model.AC_contact_Email;
-
-                        if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && model.CINNo_LLPNo.Length != 21)
-                        {
-                            ModelState.AddModelError(nameof(model.CINNo_LLPNo), "Please add proper CIN/LLP no.");
-                            return View(model);
-                        }
-
                         customer.CINNo_LLPNo = model.CINNo_LLPNo;
-
-                        if (model.PAN_No.Length != 10)
-                        {
-                            ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
-                            return View(model);
-                        }
-
                         customer.PAN_No = model.PAN_No;
                         customer.Type_Cust_gst = model.Type_Cust_gst;
-
-                        if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
-                        {
-                            ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
-                            return View(model);
-                        }
-
                         customer.GST_Reg_no = model.GST_Reg_no;
                         customer.Step2 = true;
                         dataContext.SaveChanges();
