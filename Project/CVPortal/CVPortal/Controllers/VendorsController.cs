@@ -484,70 +484,6 @@ namespace CVPortal.Controllers
                         return View(model);
                     }
 
-                    if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
-                    {
-                        ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
-                        return View(model);
-                    }
-
-                    if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
-                    {
-                        ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
-                        return View(model);
-                    }
-
-                    model.Spy_contact_Phno = model.Spy_contact_Phno.Substring(0, 1) == "0" ? model.Spy_contact_Phno.Substring(1, model.Spy_contact_Phno.Length - 1) : model.Spy_contact_Phno;
-
-                    if (model.Spy_contact_Phno.Length != 10)
-                    {
-                        ModelState.AddModelError(nameof(model.Spy_contact_Phno), "Please add proper contact no.");
-                        return View(model);
-                    }
-
-                    model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
-
-                    if (model.AC_contact_Phno.Length != 10)
-                    {
-                        ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
-                        return View(model);
-                    }
-
-                    if (!string.IsNullOrEmpty(model.CIN_No) && model.CIN_No.Length != 21)
-                    {
-                        ModelState.AddModelError(nameof(model.CIN_No), "Please add proper CIN no.");
-                        return View(model);
-                    }
-
-                    if (model.PAN_No.Length != 10)
-                    {
-                        ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
-                        return View(model);
-                    }
-
-                    if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
-                    {
-                        ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
-                        return View(model);
-                    }
-
-                    if (!string.IsNullOrEmpty(model.MSME_no) && model.MSME_no.Length != 12)
-                    {
-                        ModelState.AddModelError(nameof(model.MSME_no), "Please add proper MSME no.");
-                        return View(model);
-                    }
-
-                    if (model.FinancialYear1.ToString().Length != 4)
-                    {
-                        ModelState.AddModelError(nameof(model.FinancialYear1), "Please add proper year (yyyy).");
-                        return View(model);
-                    }
-
-                    if (model.FinancialYear2.ToString().Length != 4)
-                    {
-                        ModelState.AddModelError(nameof(model.FinancialYear2), "Please add proper year (yyyy).");
-                        return View(model);
-                    }
-
                     var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (vendor != null)
                     {
@@ -592,6 +528,8 @@ namespace CVPortal.Controllers
                             }
                         }
 
+                        dataContext.SaveChanges();
+
                         if (model.PANFile != null && model.PANFile.ContentLength > 0)
                         {
                             var fileName = $"{Path.GetFileNameWithoutExtension(model.PANFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.PANFile.FileName)}";
@@ -629,6 +567,20 @@ namespace CVPortal.Controllers
                                     }
                                 }
                             }
+                        }
+
+                        dataContext.SaveChanges();
+
+                        if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
+                        {
+                            ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
+                            return View(model);
+                        }
+
+                        if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
+                        {
+                            ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
+                            return View(model);
                         }
 
                         if (model.GSTFile != null && model.GSTFile.ContentLength > 0)
@@ -672,6 +624,8 @@ namespace CVPortal.Controllers
                             }
                         }
 
+                        dataContext.SaveChanges();
+
                         if (model.MSMEFile != null && model.MSMEFile.ContentLength > 0)
                         {
                             var fileName = $"{Path.GetFileNameWithoutExtension(model.MSMEFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MSMEFile.FileName)}";
@@ -711,6 +665,60 @@ namespace CVPortal.Controllers
                                     }
                                 }
                             }
+                        }
+
+                        dataContext.SaveChanges();
+
+                        model.Spy_contact_Phno = model.Spy_contact_Phno.Substring(0, 1) == "0" ? model.Spy_contact_Phno.Substring(1, model.Spy_contact_Phno.Length - 1) : model.Spy_contact_Phno;
+
+                        if (model.Spy_contact_Phno.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.Spy_contact_Phno), "Please add proper contact no.");
+                            return View(model);
+                        }
+
+                        model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
+
+                        if (model.AC_contact_Phno.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
+                            return View(model);
+                        }
+
+                        if (!string.IsNullOrEmpty(model.CIN_No) && model.CIN_No.Length != 21)
+                        {
+                            ModelState.AddModelError(nameof(model.CIN_No), "Please add proper CIN no.");
+                            return View(model);
+                        }
+
+                        if (model.PAN_No.Length != 10)
+                        {
+                            ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
+                            return View(model);
+                        }
+
+                        if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
+                        {
+                            ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
+                            return View(model);
+                        }
+
+                        if (!string.IsNullOrEmpty(model.MSME_no) && model.MSME_no.Length != 12)
+                        {
+                            ModelState.AddModelError(nameof(model.MSME_no), "Please add proper MSME no.");
+                            return View(model);
+                        }
+
+                        if (model.FinancialYear1.ToString().Length != 4)
+                        {
+                            ModelState.AddModelError(nameof(model.FinancialYear1), "Please add proper year (yyyy).");
+                            return View(model);
+                        }
+
+                        if (model.FinancialYear2.ToString().Length != 4)
+                        {
+                            ModelState.AddModelError(nameof(model.FinancialYear2), "Please add proper year (yyyy).");
+                            return View(model);
                         }
 
                         vendor.AC_contact_Desig = model.AC_contact_Desig;
