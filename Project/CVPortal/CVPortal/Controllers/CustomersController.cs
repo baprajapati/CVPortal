@@ -528,6 +528,7 @@ namespace CVPortal.Controllers
 
                             path = Path.Combine(path, fileName);
                             model.CINFile.SaveAs(path);
+                            model.CINFileName = fileName;
 
                             string contentType = model.CINFile.ContentType;
                             using (Stream fileStream = model.CINFile.InputStream)
@@ -569,7 +570,10 @@ namespace CVPortal.Controllers
 
                             Directory.CreateDirectory(path);
 
-                            path = Path.Combine(path, fileName); model.PANFile.SaveAs(path);
+                            path = Path.Combine(path, fileName); 
+                            model.PANFile.SaveAs(path);
+                            model.PANFileName = fileName;
+
                             string contentType = model.PANFile.ContentType;
                             using (Stream fileStream = model.PANFile.InputStream)
                             {
@@ -624,6 +628,7 @@ namespace CVPortal.Controllers
 
                             path = Path.Combine(path, fileName);
                             model.GSTFile.SaveAs(path);
+                            model.GSTFileName = fileName;
 
                             string contentType = model.GSTFile.ContentType;
                             using (Stream fileStream = model.GSTFile.InputStream)
@@ -735,6 +740,7 @@ namespace CVPortal.Controllers
 
                             path = Path.Combine(path, fileName);
                             model.BankFile.SaveAs(path);
+                            model.BankFileName = fileName;
 
                             string contentType = model.BankFile.ContentType;
                             using (Stream fileStream = model.BankFile.InputStream)
