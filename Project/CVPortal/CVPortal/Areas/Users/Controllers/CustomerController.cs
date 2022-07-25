@@ -215,7 +215,7 @@ namespace CVPortal.Areas.Users.Controllers
                     {
                         foreach (var document in item.CustomerFiles)
                         {
-                            documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                            documents.Add($"<a href='/Customers/Download/{item.ID}?fileType={document.FileUploadType}' target='_blank'>{document.FileUploadType}</a>");
                         }
                     }
 
@@ -340,7 +340,7 @@ namespace CVPortal.Areas.Users.Controllers
                     {
                         foreach (var document in item.CustomerFiles)
                         {
-                            documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                            documents.Add($"<a href='/Customers/Download/{item.ID}?fileType={document.FileUploadType}' target='_blank'>{document.FileUploadType}</a>");
                         }
                     }
 

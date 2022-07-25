@@ -188,7 +188,7 @@
                 @Html.HiddenFor(model => model.CINFileName)
                 @Html.TextBoxFor(model => model.CINFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
                 @Html.ValidationMessageFor(model => model.CINFileName)
-                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.CINFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.CINFileName) ? "hidden" : "")">
+                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileType = "CIN" })" target="_blank" class="@(string.IsNullOrEmpty(Model.CINFileName) ? "hidden" : "")">
                     View File
                 </a>
             </div>
@@ -217,7 +217,7 @@
                 @Html.HiddenFor(model => model.PANFileName)
                 @Html.TextBoxFor(model => model.PANFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
                 @Html.ValidationMessageFor(model => model.PANFileName)
-                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.PANFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.PANFileName) ? "hidden" : "")">
+                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileType = "Pan" })" target="_blank" class="@(string.IsNullOrEmpty(Model.PANFileName) ? "hidden" : "")">
                     View File
                 </a>
             </div>
@@ -261,7 +261,7 @@
                 @Html.HiddenFor(model => model.GSTFileName)
                 @Html.TextBoxFor(model => model.GSTFile, Model.IsMain ? (object)new { type = "file", @class = "form-control", accept = "application/pdf" } : new { type = "file", @class = "form-control", accept = "application/pdf", @disabled = "disabled" })
                 @Html.ValidationMessageFor(model => model.GSTFileName)
-                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileName = Model.GSTFileName })" target="_blank" class="@(string.IsNullOrEmpty(Model.GSTFileName) ? "hidden" : "")">
+                <a href="@Url.Action("Download", "Customers", new { id = Model.Id, fileType = "GST" })" target="_blank" class="@(string.IsNullOrEmpty(Model.GSTFileName) ? "hidden" : "")">
                     View File
                 </a>
             </div>

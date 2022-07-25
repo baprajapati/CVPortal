@@ -570,7 +570,7 @@ namespace CVPortal.Controllers
 
                             Directory.CreateDirectory(path);
 
-                            path = Path.Combine(path, fileName); 
+                            path = Path.Combine(path, fileName);
                             model.PANFile.SaveAs(path);
                             model.PANFileName = fileName;
 
@@ -971,9 +971,10 @@ namespace CVPortal.Controllers
         }
 
         [HttpGet]
-        public FileResult Download(int id, string fileName)
+        public FileResult Download(int id, string fileType)
         {
-            return File(Server.MapPath($"~/Content/FileUpload/Customer/{id}/{fileName}"), "application/pdf");
+            var customerFile = dataContext.CustomerFiles.OrderByDescending(x => x.Id).FirstOrDefault(x => x.CustomerId == id && x.FileUploadType == fileType);
+            return File(Server.MapPath($"~/Content/FileUpload/Customer/{id}/{customerFile?.Name}"), "application/pdf");
         }
 
         public JsonResult ApproveCustomerDetails(CustomerApproval model)
@@ -1289,7 +1290,7 @@ namespace CVPortal.Controllers
                     {
                         foreach (var document in item.CustomerFiles)
                         {
-                            documents.Add($"<a href='/Customers/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                            documents.Add($"<a href='/Customers/Download/{item.ID}?fileType={document.FileUploadType}' target='_blank'>{document.FileUploadType}</a>");
                         }
                     }
 

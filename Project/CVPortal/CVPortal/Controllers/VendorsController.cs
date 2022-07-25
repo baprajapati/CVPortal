@@ -1013,9 +1013,10 @@ namespace CVPortal.Controllers
         }
 
         [HttpGet]
-        public FileResult Download(int id, string fileName)
+        public FileResult Download(int id, string fileType)
         {
-            return File(Server.MapPath($"~/Content/FileUpload/Vendor/{id}/{fileName}"), "application/pdf");
+            var vendorFile = dataContext.VendorFiles.FirstOrDefault(x => x.VendorId == id && x.FileUploadType == fileType);
+            return File(Server.MapPath($"~/Content/FileUpload/Vendor/{id}/{vendorFile?.Name}"), "application/pdf");
         }
 
         public JsonResult ApproveVendorDetails(VendorApproval model)
@@ -1330,7 +1331,7 @@ namespace CVPortal.Controllers
                     {
                         foreach (var document in item.VendorFiles)
                         {
-                            documents.Add($"<a href='/Vendors/Download/{item.ID}?fileName={document.Name}' target='_blank'>{document.FileUploadType}</a>");
+                            documents.Add($"<a href='/Vendors/Download/{item.ID}?fileType={document.FileUploadType}' target='_blank'>{document.FileUploadType}</a>");
                         }
                     }
 
