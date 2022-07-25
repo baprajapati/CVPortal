@@ -424,6 +424,18 @@ namespace CVPortal.Controllers
                         return View(model);
                     }
 
+                    if (model.Address1.Length > 50)
+                    {
+                        ModelState.AddModelError(nameof(model.Address1), "Please add address less than 50 character.");
+                        return View(model);
+                    }
+
+                    if (model.Address2.Length > 50)
+                    {
+                        ModelState.AddModelError(nameof(model.Address2), "Please add address less than 50 character.");
+                        return View(model);
+                    }
+
                     var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (vendor != null)
                     {

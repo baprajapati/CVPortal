@@ -453,6 +453,18 @@ namespace CVPortal.Controllers
                         return View(model);
                     }
 
+                    if (model.Dlr_Address.Length > 50)
+                    {
+                        ModelState.AddModelError(nameof(model.Dlr_Address), "Please add address less than 50 character.");
+                        return View(model);
+                    }
+
+                    if (model.Supp_Address.Length > 50)
+                    {
+                        ModelState.AddModelError(nameof(model.Supp_Address), "Please add address less than 50 character.");
+                        return View(model);
+                    }
+
                     var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (customer != null)
                     {
