@@ -500,18 +500,27 @@ namespace CVPortal.Controllers
                 {
                     if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && string.IsNullOrEmpty(model.CINFileName))
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.CINFileName), "Please upload CIN file");
                         return View(model);
                     }
 
                     if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
                         return View(model);
                     }
 
                     if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
                         return View(model);
                     }
@@ -520,6 +529,9 @@ namespace CVPortal.Controllers
 
                     if (model.AC_contact_Phno.Length != 10)
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
                         return View(model);
                     }
@@ -529,24 +541,36 @@ namespace CVPortal.Controllers
 
                     if (model.AC_contact_Mob.Length != 10)
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.AC_contact_Mob), "Please add proper contact no.");
                         return View(model);
                     }
 
                     if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && model.CINNo_LLPNo.Length != 21)
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.CINNo_LLPNo), "Please add proper CIN/LLP no.");
                         return View(model);
                     }
 
                     if (model.PAN_No.Length != 10)
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
                         return View(model);
                     }
 
                     if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
                     {
+                        model.CINFileName = null;
+                        model.PANFileName = null;
+                        model.GSTFileName = null;
                         ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
                         return View(model);
                     }
