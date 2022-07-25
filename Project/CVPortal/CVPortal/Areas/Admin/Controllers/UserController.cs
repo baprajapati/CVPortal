@@ -578,13 +578,7 @@ namespace CVPortal.Areas.Admin.Controllers
 
         public JsonResult UserCode(string term)
         {
-            var result = dataContext.tbl_Users.Where(c => c.Id != WebSecurity.CurrentUserId && c.HAUSER.ToString().ToLower().Contains(term)).Select(a => new { label = a.HAUSER }).ToList();
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult UserStatus(string term)
-        {
-            var result = new List<string> { "Active", "Inactive" }.Where(c => c.ToString().ToLower().Contains(term)).Select(a => new { label = a }).ToList();
+            var result = dataContext.tbl_Users.Where(c => c.Id != WebSecurity.CurrentUserId && c.HAUSER.ToString().ToLower().Contains(term)).Select(a => new { label = a.HAUSER }).Distinct().ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

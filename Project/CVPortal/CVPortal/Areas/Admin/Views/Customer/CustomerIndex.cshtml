@@ -134,6 +134,20 @@
                     printCustomer(id);
                 }
             });
+
+            $("#Code").autocomplete({
+                source: '/Admin/Customer/Code', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
+
+            $("#CustomerName").autocomplete({
+                source: '/Admin/Customer/CustomerName', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
         });
 
         function printCustomer(id) {

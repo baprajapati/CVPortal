@@ -900,5 +900,11 @@ namespace CVPortal.Areas.Users.Controllers
             var result = dataContext.Vend_reg_tbl.Where(c => c.VendorCode != null && c.VendorCode.ToString().ToLower().Contains(term)).Select(a => new { label = a.VendorCode }).Distinct().ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult VendorName(string term)
+        {
+            var result = dataContext.Vend_reg_tbl.Where(c => c.vend_name != null && c.vend_name.ToString().ToLower().Contains(term)).Select(a => new { label = a.vend_name }).Distinct().ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

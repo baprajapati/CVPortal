@@ -133,6 +133,20 @@
                     printCustomer(id);
                 }
             });
+
+            $("#Code").autocomplete({
+                source: '/Users/Customer/Code', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
+
+            $("#CustomerName").autocomplete({
+                source: '/Users/Customer/CustomerName', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
         });
 
         function printCustomer(id) {

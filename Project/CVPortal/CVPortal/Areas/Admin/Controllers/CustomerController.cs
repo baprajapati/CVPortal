@@ -692,5 +692,17 @@ namespace CVPortal.Areas.Admin.Controllers
 
             return View("MyView");
         }
+
+        public JsonResult Code(string term)
+        {
+            var result = dataContext.Cust_reg_tbl.Where(c => c.Cust_CodeVehicles != null && c.Cust_CodeVehicles.ToString().ToLower().Contains(term)).Select(a => new { label = a.Cust_CodeVehicles }).Distinct().ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CustomerName(string term)
+        {
+            var result = dataContext.Cust_reg_tbl.Where(c => c.Cust_name != null && c.Cust_name.ToString().ToLower().Contains(term)).Select(a => new { label = a.Cust_name }).Distinct().ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

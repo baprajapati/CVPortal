@@ -132,6 +132,20 @@
                     printVendor(id);
                 }
             });
+
+            $("#VendorCode").autocomplete({
+                source: '/Users/Vendor/VendorCode', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
+
+            $("#VendorName").autocomplete({
+                source: '/Users/Vendor/VendorName', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
         });
 
         function printVendor(id) {
