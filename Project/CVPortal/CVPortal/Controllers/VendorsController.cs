@@ -1015,7 +1015,7 @@ namespace CVPortal.Controllers
         [HttpGet]
         public FileResult Download(int id, string fileType)
         {
-            var vendorFile = dataContext.VendorFiles.FirstOrDefault(x => x.VendorId == id && x.FileUploadType == fileType);
+            var vendorFile = dataContext.VendorFiles.OrderByDescending(x => x.Id).FirstOrDefault(x => x.VendorId == id && x.FileUploadType == fileType);
             return File(Server.MapPath($"~/Content/FileUpload/Vendor/{id}/{vendorFile?.Name}"), "application/pdf");
         }
 
