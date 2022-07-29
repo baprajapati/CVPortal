@@ -1279,7 +1279,17 @@ namespace CVPortal.Controllers
             var result = new JsonResult();
             try
             {
-                var data = dataContext.Cust_reg_tbl.ToList();
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
+                var userCode = user?.HAUSER;
+                var deptCode = user?.Dept_Code;
+
+                var userIds = new List<int> { Utility.UserId };
+                userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+                var customerIds = dataContext.Cust_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode).Select(x => x.ID).ToList();
+                customerIds.AddRange(dataContext.CustomerApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.CustomerId).ToList());
+
+                var data = dataContext.Cust_reg_tbl.Where(x => customerIds.Contains(x.ID)).ToList();
                 var customerApprovers = dataContext.CustomerApprovals.Where(x => !x.IsDeleted).ToList();
                 var customers = new List<CustomerListModel>();
 

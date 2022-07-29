@@ -136,32 +136,35 @@ namespace CVPortal.Areas.Users.Controllers
             var result = new JsonResult();
             try
             {
-                var data = new List<Cust_reg_tbl>();
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
+                var userCode = user?.HAUSER;
+                var deptCode = user?.Dept_Code;
 
+                var userIds = new List<int> { Utility.UserId };
+                userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+                var customerIds = dataContext.Cust_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode).Select(x => x.ID).ToList();
+                customerIds.AddRange(dataContext.CustomerApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.CustomerId).ToList());
+
+                var data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && customerIds.Contains(x.ID)).ToList();
                 if (!string.IsNullOrEmpty(model.CustomerCode))
                 {
-                    data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(model.CustomerCode.ToLower())).ToList();
+                    data = data.Where(x => x.CustomerCode != null && x.CustomerCode.ToString().Contains(model.CustomerCode.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Email))
                 {
-                    data = (!string.IsNullOrEmpty(model.CustomerCode))
-                        ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
+                    data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Cust_name))
                 {
-                    data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email))
-                        ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
+                    data = data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Cust_CodeVehicles))
                 {
-                    data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name))
-                        ? data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList();
+                    data = data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Status))
@@ -197,12 +200,6 @@ namespace CVPortal.Areas.Users.Controllers
                             data = new List<Cust_reg_tbl>();
                         }
                     }
-                }
-
-                if (string.IsNullOrEmpty(model.CustomerCode) && string.IsNullOrEmpty(model.Email)
-                    && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status) && string.IsNullOrEmpty(model.Cust_CodeVehicles))
-                {
-                    data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
                 }
 
                 var customerApprovers = dataContext.CustomerApprovals.Where(x => !x.IsDeleted).ToList();
@@ -260,32 +257,35 @@ namespace CVPortal.Areas.Users.Controllers
             var result = new JsonResult();
             try
             {
-                var data = new List<Cust_reg_tbl>();
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
+                var userCode = user?.HAUSER;
+                var deptCode = user?.Dept_Code;
 
+                var userIds = new List<int> { Utility.UserId };
+                userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+                var customerIds = dataContext.Cust_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode).Select(x => x.ID).ToList();
+                customerIds.AddRange(dataContext.CustomerApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.CustomerId).ToList());
+
+                var data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && customerIds.Contains(x.ID)).ToList();
                 if (!string.IsNullOrEmpty(model.CustomerCode))
                 {
-                    data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.CustomerCode != null && x.CustomerCode.ToString().Contains(model.CustomerCode.ToLower())).ToList();
+                    data = data.Where(x => x.CustomerCode != null && x.CustomerCode.ToString().Contains(model.CustomerCode.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Email))
                 {
-                    data = (!string.IsNullOrEmpty(model.CustomerCode))
-                        ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
+                    data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Cust_name))
                 {
-                    data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email))
-                        ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
+                    data = data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(model.Cust_name.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Cust_CodeVehicles))
                 {
-                    data = (!string.IsNullOrEmpty(model.CustomerCode)) || (!string.IsNullOrEmpty(model.Email)) || (!string.IsNullOrEmpty(model.Cust_name))
-                        ? data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList()
-                        : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList();
+                    data = data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().ToLower().Contains(model.Cust_CodeVehicles.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Status))
@@ -321,13 +321,6 @@ namespace CVPortal.Areas.Users.Controllers
                             data = new List<Cust_reg_tbl>();
                         }
                     }
-                }
-
-                if (string.IsNullOrEmpty(model.CustomerCode) && string.IsNullOrEmpty(model.Email)
-                      && string.IsNullOrEmpty(model.Cust_name) && string.IsNullOrEmpty(model.Status)
-                      && string.IsNullOrEmpty(model.Cust_CodeVehicles))
-                {
-                    data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
                 }
 
                 var customerApprovers = dataContext.CustomerApprovals.Where(x => !x.IsDeleted).ToList();
@@ -466,25 +459,30 @@ namespace CVPortal.Areas.Users.Controllers
 
         public ActionResult DownloadExcel(string code, string email, string customerName, string status)
         {
-            var data = new List<Cust_reg_tbl>();
+            var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
+            var userCode = user?.HAUSER;
+            var deptCode = user?.Dept_Code;
 
+            var userIds = new List<int> { Utility.UserId };
+            userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+            var customerIds = dataContext.Cust_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode).Select(x => x.ID).ToList();
+            customerIds.AddRange(dataContext.CustomerApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.CustomerId).ToList());
+
+            var data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && customerIds.Contains(x.ID)).ToList();
             if (!string.IsNullOrEmpty(code))
             {
-                data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().Contains(code.ToLower())).ToList();
+                data = data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().Contains(code.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(email))
             {
-                data = (!string.IsNullOrEmpty(code))
-                    ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
-                    : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+                data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(customerName))
             {
-                data = (!string.IsNullOrEmpty(code)) || (!string.IsNullOrEmpty(email))
-                    ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList()
-                    : dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
+                data = data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(status))
@@ -519,12 +517,6 @@ namespace CVPortal.Areas.Users.Controllers
                         data = new List<Cust_reg_tbl>();
                     }
                 }
-            }
-
-            if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(email)
-                && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(status))
-            {
-                data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
             }
 
             DataTable dt = new DataTable("XlsGrid");
@@ -629,25 +621,30 @@ namespace CVPortal.Areas.Users.Controllers
 
         public ActionResult DownloadExcelApproved(string code, string email, string customerName, string status)
         {
-            var data = new List<Cust_reg_tbl>();
+            var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
+            var userCode = user?.HAUSER;
+            var deptCode = user?.Dept_Code;
 
+            var userIds = new List<int> { Utility.UserId };
+            userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+            var customerIds = dataContext.Cust_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode).Select(x => x.ID).ToList();
+            customerIds.AddRange(dataContext.CustomerApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.CustomerId).ToList());
+
+            var data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && customerIds.Contains(x.ID)).ToList();
             if (!string.IsNullOrEmpty(code))
             {
-                data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().Contains(code.ToLower())).ToList();
+                data = data.Where(x => x.Cust_CodeVehicles != null && x.Cust_CodeVehicles.ToString().Contains(code.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(email))
             {
-                data = (!string.IsNullOrEmpty(code))
-                    ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
-                    : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+                data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(customerName))
             {
-                data = (!string.IsNullOrEmpty(code)) || (!string.IsNullOrEmpty(email))
-                    ? data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList()
-                    : dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved && x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
+                data = data.Where(x => x.Cust_name != null && x.Cust_name.ToLower().Contains(customerName.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(status))
@@ -682,12 +679,6 @@ namespace CVPortal.Areas.Users.Controllers
                         data = new List<Cust_reg_tbl>();
                     }
                 }
-            }
-
-            if (string.IsNullOrEmpty(code) && string.IsNullOrEmpty(email)
-                && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(status))
-            {
-                data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
             }
 
             DataTable dt = new DataTable("XlsGrid");

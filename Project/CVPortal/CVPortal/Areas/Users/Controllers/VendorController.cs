@@ -231,25 +231,30 @@ namespace CVPortal.Areas.Users.Controllers
             var result = new JsonResult();
             try
             {
-                var data = new List<Vend_reg_tbl>();
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == WebSecurity.CurrentUserId);
+                var userCode = user?.HAUSER;
+                var deptCode = user?.Dept_Code;
 
+                var userIds = new List<int> { Utility.UserId };
+                userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+                var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
+                vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+
+                var data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
                 if (!string.IsNullOrEmpty(model.VendorCode))
                 {
-                    data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && x.VendorCode != null && x.VendorCode.ToString().Contains(model.VendorCode.ToLower())).ToList();
+                    data = data.Where(x => x.VendorCode != null && x.VendorCode.ToString().Contains(model.VendorCode.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Email))
                 {
-                    data = (!string.IsNullOrEmpty(model.VendorCode))
-                        ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList()
-                        : dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
+                    data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.vend_name))
                 {
-                    data = (!string.IsNullOrEmpty(model.VendorCode)) || (!string.IsNullOrEmpty(model.Email))
-                        ? data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList()
-                        : dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList();
+                    data = data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Status))
@@ -284,12 +289,6 @@ namespace CVPortal.Areas.Users.Controllers
                             data = new List<Vend_reg_tbl>();
                         }
                     }
-                }
-
-                if (string.IsNullOrEmpty(model.VendorCode) && string.IsNullOrEmpty(model.Email)
-                    && string.IsNullOrEmpty(model.vend_name) && string.IsNullOrEmpty(model.Status))
-                {
-                    data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
                 }
 
                 var vendorApprovers = dataContext.VendorApprovals.Where(x => !x.IsDeleted).ToList();
@@ -345,25 +344,30 @@ namespace CVPortal.Areas.Users.Controllers
             var result = new JsonResult();
             try
             {
-                var data = new List<Vend_reg_tbl>();
+                var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == WebSecurity.CurrentUserId);
+                var userCode = user?.HAUSER;
+                var deptCode = user?.Dept_Code;
 
+                var userIds = new List<int> { Utility.UserId };
+                userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+                var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
+                vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+
+                var data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
                 if (!string.IsNullOrEmpty(model.VendorCode))
                 {
-                    data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && x.VendorCode != null && x.VendorCode.ToString().Contains(model.VendorCode.ToLower())).ToList();
+                    data = data.Where(x => x.VendorCode != null && x.VendorCode.ToString().Contains(model.VendorCode.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Email))
                 {
-                    data = (!string.IsNullOrEmpty(model.VendorCode))
-                        ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList()
-                        : dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
+                    data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(model.Email.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.vend_name))
                 {
-                    data = (!string.IsNullOrEmpty(model.VendorCode)) || (!string.IsNullOrEmpty(model.Email))
-                        ? data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList()
-                        : dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList();
+                    data = data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(model.vend_name.ToLower())).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(model.Status))
@@ -398,12 +402,6 @@ namespace CVPortal.Areas.Users.Controllers
                             data = new List<Vend_reg_tbl>();
                         }
                     }
-                }
-
-                if (string.IsNullOrEmpty(model.VendorCode) && string.IsNullOrEmpty(model.Email)
-                    && string.IsNullOrEmpty(model.vend_name) && string.IsNullOrEmpty(model.Status))
-                {
-                    data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved).ToList();
                 }
 
                 var vendorApprovers = dataContext.VendorApprovals.Where(x => !x.IsDeleted).ToList();
@@ -553,25 +551,30 @@ namespace CVPortal.Areas.Users.Controllers
 
         public ActionResult DownloadExcel(string vendorCode, string email, string vendorName, string status)
         {
-            var data = new List<Vend_reg_tbl>();
+            var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == WebSecurity.CurrentUserId);
+            var userCode = user?.HAUSER;
+            var deptCode = user?.Dept_Code;
 
+            var userIds = new List<int> { Utility.UserId };
+            userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+            var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
+            vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+
+            var data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
             if (!string.IsNullOrEmpty(vendorCode))
             {
-                data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && x.VendorCode != null && x.VendorCode.ToString().Contains(vendorCode.ToLower())).ToList();
+                data = data.Where(x => x.VendorCode != null && x.VendorCode.ToString().Contains(vendorCode.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(email))
             {
-                data = (!string.IsNullOrEmpty(vendorCode))
-                    ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
-                    : dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+                data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(vendorName))
             {
-                data = (!string.IsNullOrEmpty(vendorCode)) || (!string.IsNullOrEmpty(email))
-                    ? data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList()
-                    : dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList();
+                data = data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(status))
@@ -606,12 +609,6 @@ namespace CVPortal.Areas.Users.Controllers
                         data = new List<Vend_reg_tbl>();
                     }
                 }
-            }
-
-            if (string.IsNullOrEmpty(vendorCode) && string.IsNullOrEmpty(email)
-                && string.IsNullOrEmpty(vendorName) && string.IsNullOrEmpty(status))
-            {
-                data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
             }
 
             DataTable dt = new DataTable("XlsGrid");
@@ -725,25 +722,30 @@ namespace CVPortal.Areas.Users.Controllers
 
         public ActionResult DownloadExcelApproved(string vendorCode, string email, string vendorName, string status)
         {
-            var data = new List<Vend_reg_tbl>();
+            var user = dataContext.tbl_Users.FirstOrDefault(x => x.Id == WebSecurity.CurrentUserId);
+            var userCode = user?.HAUSER;
+            var deptCode = user?.Dept_Code;
 
+            var userIds = new List<int> { Utility.UserId };
+            userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+
+            var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
+            vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+
+            var data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
             if (!string.IsNullOrEmpty(vendorCode))
             {
-                data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && x.VendorCode != null && x.VendorCode.ToString().Contains(vendorCode.ToLower())).ToList();
+                data = data.Where(x => x.VendorCode != null && x.VendorCode.ToString().Contains(vendorCode.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(email))
             {
-                data = (!string.IsNullOrEmpty(vendorCode))
-                    ? data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList()
-                    : dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
+                data = data.Where(x => x.Email != null && x.Email.ToLower().Contains(email.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(vendorName))
             {
-                data = (!string.IsNullOrEmpty(vendorCode)) || (!string.IsNullOrEmpty(email))
-                    ? data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList()
-                    : dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList();
+                data = data.Where(x => x.vend_name != null && x.vend_name.ToLower().Contains(vendorName.ToLower())).ToList();
             }
 
             if (!string.IsNullOrEmpty(status))
@@ -778,12 +780,6 @@ namespace CVPortal.Areas.Users.Controllers
                         data = new List<Vend_reg_tbl>();
                     }
                 }
-            }
-
-            if (string.IsNullOrEmpty(vendorCode) && string.IsNullOrEmpty(email)
-                && string.IsNullOrEmpty(vendorName) && string.IsNullOrEmpty(status))
-            {
-                data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved).ToList();
             }
 
             DataTable dt = new DataTable("XlsGrid");
