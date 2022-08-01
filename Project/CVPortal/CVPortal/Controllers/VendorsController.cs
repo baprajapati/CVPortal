@@ -983,6 +983,8 @@ namespace CVPortal.Controllers
                 if (vendor != null)
                 {
                     vendor.Step4 = true;
+                    vendor.NextApprover = vendor.tbl_Users.HAUSER;
+                    vendor.NextApproverRole = "Initiator";
                     dataContext.SaveChanges();
                 }
 

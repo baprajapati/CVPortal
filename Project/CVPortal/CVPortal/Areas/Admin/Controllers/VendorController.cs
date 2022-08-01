@@ -502,7 +502,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     item.Address2Country, item.Address2State, item.Address2City, item.Address2Pincode, item.Address2StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Email,
                     item.Spy_contact_Desig, item.Spy_contact_name, item.Spy_contact_Phno, item.Spy_contact_Email, item.CIN_No, item.PAN_No, item.Type_vend_gst, item.GST_Reg_no, item.Item_Desc,
                     item.HSN_SAC_code, item.MSME_no, item.Annu_TurnOver, item.Nature_of_service, item.FinancialYear1, item.IsITRFiled1 == true ? "Yes":"No", item.AcknowledgeNo1, item.FinancialYear2,item.IsITRFiled2 == true ? "Yes" : "No",
-                    item.AcknowledgeNo2, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Date?.ToString("dd MMM yyyy"), item.Type_of_Vend,
+                    item.AcknowledgeNo2, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, $"{item.Date.ToString().Substring(6, 2)}/{item.Date.ToString().Substring(4, 2)}/{item.Date.ToString().Substring(0, 4)}", item.Type_of_Vend,
                     item.NextApproverRole, item.NextApprover, item.TermsCode, item.BankCode, item.BankBranch, item.PaymentType, item.TaxCode, item.Company, item.DocumentPfx,
                     item.Currency, item.InitiatorApproval, item.LegalDepartmentApproval, item.FinanceDepartmentApproval, item.ITDepartmentApproval, item.OrgCode, item.NCode, item.VendorCode,
                     item.IsFinalApproved == true ? "Yes" : "No", item.CreatedByDate.ToString("dd MMM yyyy HH:mm"));
@@ -674,7 +674,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     item.Address2Country, item.Address2State, item.Address2City, item.Address2Pincode, item.Address2StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Email,
                     item.Spy_contact_Desig, item.Spy_contact_name, item.Spy_contact_Phno, item.Spy_contact_Email, item.CIN_No, item.PAN_No, item.Type_vend_gst, item.GST_Reg_no, item.Item_Desc,
                     item.HSN_SAC_code, item.MSME_no, item.Annu_TurnOver, item.Nature_of_service, item.FinancialYear1, item.IsITRFiled1 == true ? "Yes" : "No", item.AcknowledgeNo1, item.FinancialYear2, item.IsITRFiled2 == true ? "Yes" : "No",
-                    item.AcknowledgeNo2, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Date?.ToString("dd MMM yyyy"), item.Type_of_Vend,
+                    item.AcknowledgeNo2, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, $"{item.Date.ToString().Substring(6, 2)}/{item.Date.ToString().Substring(4, 2)}/{item.Date.ToString().Substring(0, 4)}", item.Type_of_Vend,
                     item.NextApproverRole, item.NextApprover, item.TermsCode, item.BankCode, item.BankBranch, item.PaymentType, item.TaxCode, item.Company, item.DocumentPfx,
                     item.Currency, item.InitiatorApproval, item.LegalDepartmentApproval, item.FinanceDepartmentApproval, item.ITDepartmentApproval, item.OrgCode, item.NCode, item.VendorCode,
                     item.IsFinalApproved == true ? "Yes" : "No", item.CreatedByDate.ToString("dd MMM yyyy HH:mm"));
