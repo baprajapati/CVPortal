@@ -189,7 +189,7 @@ namespace CVPortal.Areas.Users.Controllers
                         var destinationPath = Server.MapPath($"~/Content/FileUpload/Vendor/{newVendorId}");
 
                         Directory.CreateDirectory(destinationPath);
-                        System.IO.File.Copy($"{sourcePath}/{item.Name}", $"{destinationPath}/{item.Name}");
+                        System.IO.File.Copy($"{sourcePath}/{item.Name}", $"{destinationPath}/{item.Name}", true);
 
                         item.VendorId = data.ID;
                         objVendorFiles.Add(item);

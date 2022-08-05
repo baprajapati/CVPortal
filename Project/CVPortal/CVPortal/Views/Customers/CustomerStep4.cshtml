@@ -67,7 +67,7 @@
                     return;
                 }
 
-                if ($("#DealerType").val() != "Scrap" && $("#Code").val().length != 8) {
+                if ($("#DealerType").val() != "Scrap" && $("#Code").val() && $("#Code").val().length != 8) {
                     toastr.error("Customer Main Code length must be 8.", "Customer");
                     return;
                 }
