@@ -235,11 +235,19 @@ namespace CVPortal.Areas.Users.Controllers
                 var userCode = user?.HAUSER;
                 var deptCode = user?.Dept_Code;
 
-                var userIds = new List<int> { Utility.UserId };
-                userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+                var vendorIds = new List<int>();
+                if (Session["Role"].ToString() == "LegalDepartment" || Session["Role"].ToString() == "FinanceDepartment" || Session["Role"].ToString() == "ITDepartment")
+                {
+                    vendorIds = dataContext.Vend_reg_tbl.Select(x => x.ID).ToList();
+                }
+                else
+                {
+                    var userIds = new List<int> { Utility.UserId };
+                    userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
 
-                var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
-                vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+                    vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
+                    vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+                }
 
                 var data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
                 if (!string.IsNullOrEmpty(model.VendorCode))
@@ -348,11 +356,19 @@ namespace CVPortal.Areas.Users.Controllers
                 var userCode = user?.HAUSER;
                 var deptCode = user?.Dept_Code;
 
-                var userIds = new List<int> { Utility.UserId };
-                userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
+                var vendorIds = new List<int>();
+                if (Session["Role"].ToString() == "LegalDepartment" || Session["Role"].ToString() == "FinanceDepartment" || Session["Role"].ToString() == "ITDepartment")
+                {
+                    vendorIds = dataContext.Vend_reg_tbl.Select(x => x.ID).ToList();
+                }
+                else
+                {
+                    var userIds = new List<int> { Utility.UserId };
+                    userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
 
-                var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
-                vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+                    vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
+                    vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+                }
 
                 var data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
                 if (!string.IsNullOrEmpty(model.VendorCode))
