@@ -445,25 +445,29 @@ namespace CVPortal.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    var isError = false;
                     model.Contact_no = model.Contact_no.Substring(0, 1) == "0" ? model.Contact_no.Substring(1, model.Contact_no.Length - 1) : model.Contact_no;
 
                     if (model.Contact_no.Length != 10)
                     {
                         ModelState.AddModelError(nameof(model.Contact_no), "Please add proper contact no.");
-                        return View(model);
+                        isError = true;
                     }
 
                     if (model.Dlr_Address.Length > 50)
                     {
                         ModelState.AddModelError(nameof(model.Dlr_Address), "Please add address less than 50 character.");
-                        return View(model);
+                        isError = true;
                     }
 
                     if (model.Supp_Address.Length > 50)
                     {
                         ModelState.AddModelError(nameof(model.Supp_Address), "Please add address less than 50 character.");
-                        return View(model);
+                        isError = true;
                     }
+
+                    if (isError)
+                        return View(model);
 
                     var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (customer != null)
@@ -508,167 +512,169 @@ namespace CVPortal.Controllers
         {
             if (model.IsMain)
             {
+                var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+
+                if (model.CINFile != null && model.CINFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.CINFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.CINFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.CINFile.SaveAs(path);
+                    model.CINFileName = fileName;
+
+                    string contentType = model.CINFile.ContentType;
+                    using (Stream fileStream = model.CINFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.CIN.ToString());
+                            if (customerFile != null)
+                            {
+                                customerFile.ContentType = contentType;
+                                customerFile.Data = bytes;
+                                customerFile.FileUploadType = FileUploadEnum.CIN.ToString();
+                                customerFile.Name = fileName;
+                                customerFile.CustomerId = model.Id;
+                            }
+                            else
+                            {
+                                customer.CustomerFiles.Add(new CustomerFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.CIN.ToString(),
+                                    Name = fileName,
+                                    CustomerId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
+                if (model.PANFile != null && model.PANFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.PANFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.PANFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.PANFile.SaveAs(path);
+                    model.PANFileName = fileName;
+
+                    string contentType = model.PANFile.ContentType;
+                    using (Stream fileStream = model.PANFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Pan.ToString());
+                            if (customerFile != null)
+                            {
+                                customerFile.ContentType = contentType;
+                                customerFile.Data = bytes;
+                                customerFile.FileUploadType = FileUploadEnum.Pan.ToString();
+                                customerFile.Name = fileName;
+                                customerFile.CustomerId = model.Id;
+                            }
+                            else
+                            {
+                                customer.CustomerFiles.Add(new CustomerFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.Pan.ToString(),
+                                    Name = fileName,
+                                    CustomerId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
+                if (model.GSTFile != null && model.GSTFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.GSTFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.GSTFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.GSTFile.SaveAs(path);
+                    model.GSTFileName = fileName;
+
+                    string contentType = model.GSTFile.ContentType;
+                    using (Stream fileStream = model.GSTFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.GST.ToString());
+                            if (customerFile != null)
+                            {
+                                customerFile.ContentType = contentType;
+                                customerFile.Data = bytes;
+                                customerFile.FileUploadType = FileUploadEnum.GST.ToString();
+                                customerFile.Name = fileName;
+                                customerFile.CustomerId = model.Id;
+                            }
+                            else
+                            {
+                                customer.CustomerFiles.Add(new CustomerFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.GST.ToString(),
+                                    Name = fileName,
+                                    CustomerId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
                 if (ModelState.IsValid)
                 {
-                    if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && string.IsNullOrEmpty(model.CINFileName))
-                    {
-                        ModelState.AddModelError(nameof(model.CINFileName), "Please upload CIN file");
-                        return View(model);
-                    }
-
-                    var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (customer != null)
                     {
-                        if (model.CINFile != null && model.CINFile.ContentLength > 0)
+                        var isError = false;
+                        if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && string.IsNullOrEmpty(model.CINFileName))
                         {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.CINFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.CINFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.CINFile.SaveAs(path);
-                            model.CINFileName = fileName;
-
-                            string contentType = model.CINFile.ContentType;
-                            using (Stream fileStream = model.CINFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.CIN.ToString());
-                                    if (customerFile != null)
-                                    {
-                                        customerFile.ContentType = contentType;
-                                        customerFile.Data = bytes;
-                                        customerFile.FileUploadType = FileUploadEnum.CIN.ToString();
-                                        customerFile.Name = fileName;
-                                        customerFile.CustomerId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        customer.CustomerFiles.Add(new CustomerFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.CIN.ToString(),
-                                            Name = fileName,
-                                            CustomerId = model.Id
-                                        });
-                                    }
-                                }
-                            }
+                            ModelState.AddModelError(nameof(model.CINFileName), "Please upload CIN file");
+                            isError = true;
                         }
-
-                        dataContext.SaveChanges();
-
-                        if (model.PANFile != null && model.PANFile.ContentLength > 0)
-                        {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.PANFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.PANFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.PANFile.SaveAs(path);
-                            model.PANFileName = fileName;
-
-                            string contentType = model.PANFile.ContentType;
-                            using (Stream fileStream = model.PANFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Pan.ToString());
-                                    if (customerFile != null)
-                                    {
-                                        customerFile.ContentType = contentType;
-                                        customerFile.Data = bytes;
-                                        customerFile.FileUploadType = FileUploadEnum.Pan.ToString();
-                                        customerFile.Name = fileName;
-                                        customerFile.CustomerId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        customer.CustomerFiles.Add(new CustomerFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.Pan.ToString(),
-                                            Name = fileName,
-                                            CustomerId = model.Id
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        dataContext.SaveChanges();
 
                         if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
                         {
                             ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
-                            return View(model);
+                            isError = true;
                         }
 
                         if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
                         {
                             ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
-                            return View(model);
+                            isError = true;
                         }
-
-                        if (model.GSTFile != null && model.GSTFile.ContentLength > 0)
-                        {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.GSTFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.GSTFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.GSTFile.SaveAs(path);
-                            model.GSTFileName = fileName;
-
-                            string contentType = model.GSTFile.ContentType;
-                            using (Stream fileStream = model.GSTFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.GST.ToString());
-                                    if (customerFile != null)
-                                    {
-                                        customerFile.ContentType = contentType;
-                                        customerFile.Data = bytes;
-                                        customerFile.FileUploadType = FileUploadEnum.GST.ToString();
-                                        customerFile.Name = fileName;
-                                        customerFile.CustomerId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        customer.CustomerFiles.Add(new CustomerFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.GST.ToString(),
-                                            Name = fileName,
-                                            CustomerId = model.Id
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        dataContext.SaveChanges();
 
                         model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
 
                         if (model.AC_contact_Phno.Length != 10)
                         {
                             ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         model.AC_contact_Mob = model.AC_contact_Mob.Substring(0, 1) == "0" ? model.AC_contact_Mob.Substring(1, model.AC_contact_Mob.Length - 1) : model.AC_contact_Mob;
@@ -676,26 +682,29 @@ namespace CVPortal.Controllers
                         if (model.AC_contact_Mob.Length != 10)
                         {
                             ModelState.AddModelError(nameof(model.AC_contact_Mob), "Please add proper contact no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (!string.IsNullOrEmpty(model.CINNo_LLPNo) && model.CINNo_LLPNo.Length != 21)
                         {
                             ModelState.AddModelError(nameof(model.CINNo_LLPNo), "Please add proper CIN/LLP no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (model.PAN_No.Length != 10)
                         {
                             ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
                         {
                             ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
-                            return View(model);
+                            isError = true;
                         }
+
+                        if (isError)
+                            return View(model);
 
                         customer.AC_contact_Desig = model.AC_contact_Desig;
                         customer.AC_contact_name = model.AC_contact_name;
@@ -726,53 +735,56 @@ namespace CVPortal.Controllers
         {
             if (model.IsMain)
             {
-                if (ModelState.IsValid)
+                var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+
+                if (model.BankFile != null && model.BankFile.ContentLength > 0)
                 {
-                    var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
-                    if (customer != null)
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.BankFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.BankFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.BankFile.SaveAs(path);
+                    model.BankFileName = fileName;
+
+                    string contentType = model.BankFile.ContentType;
+                    using (Stream fileStream = model.BankFile.InputStream)
                     {
-                        if (model.BankFile != null && model.BankFile.ContentLength > 0)
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
                         {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.BankFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.BankFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
 
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.BankFile.SaveAs(path);
-                            model.BankFileName = fileName;
-
-                            string contentType = model.BankFile.ContentType;
-                            using (Stream fileStream = model.BankFile.InputStream)
+                            var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Bank.ToString());
+                            if (customerFile != null)
                             {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                                customerFile.ContentType = contentType;
+                                customerFile.Data = bytes;
+                                customerFile.FileUploadType = FileUploadEnum.Bank.ToString();
+                                customerFile.Name = fileName;
+                                customerFile.CustomerId = model.Id;
+                            }
+                            else
+                            {
+                                customer.CustomerFiles.Add(new CustomerFile()
                                 {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var customerFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Bank.ToString());
-                                    if (customerFile != null)
-                                    {
-                                        customerFile.ContentType = contentType;
-                                        customerFile.Data = bytes;
-                                        customerFile.FileUploadType = FileUploadEnum.Bank.ToString();
-                                        customerFile.Name = fileName;
-                                        customerFile.CustomerId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        customer.CustomerFiles.Add(new CustomerFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.Bank.ToString(),
-                                            Name = fileName,
-                                            CustomerId = model.Id
-                                        });
-                                    }
-                                }
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.Bank.ToString(),
+                                    Name = fileName,
+                                    CustomerId = model.Id
+                                });
                             }
                         }
+                    }
+                }
 
+                dataContext.SaveChanges();
+
+                if (ModelState.IsValid)
+                {
+                    if (customer != null)
+                    {
                         customer.Seucirty_Deposit = model.Seucirty_Deposit;
                         customer.DDNo_UTRNo = model.DDNo_UTRNo;
                         customer.Benificiary_name = model.Benificiary_name;
@@ -800,134 +812,141 @@ namespace CVPortal.Controllers
         [HttpPost]
         public ActionResult CustomerStep4(CustomerStep4 model)
         {
+            var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+
+            if (model.WealthCapitalCertificateFile != null && model.WealthCapitalCertificateFile.ContentLength > 0)
+            {
+                var fileName = $"{Path.GetFileNameWithoutExtension(model.WealthCapitalCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.WealthCapitalCertificateFile.FileName)}";
+                var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                Directory.CreateDirectory(path);
+
+                path = Path.Combine(path, fileName);
+                model.WealthCapitalCertificateFile.SaveAs(path);
+
+                string contentType = model.WealthCapitalCertificateFile.ContentType;
+                using (Stream fileStream = model.WealthCapitalCertificateFile.InputStream)
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                    {
+                        byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                        var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.WealthCapital.ToString());
+                        if (vendorFile != null)
+                        {
+                            vendorFile.ContentType = contentType;
+                            vendorFile.Data = bytes;
+                            vendorFile.FileUploadType = FileUploadEnum.WealthCapital.ToString();
+                            vendorFile.Name = fileName;
+                            vendorFile.CustomerId = model.Id;
+                        }
+                        else
+                        {
+                            customer.CustomerFiles.Add(new CustomerFile()
+                            {
+                                ContentType = contentType,
+                                Data = bytes,
+                                FileUploadType = FileUploadEnum.WealthCapital.ToString(),
+                                Name = fileName,
+                                CustomerId = model.Id
+                            });
+                        }
+                    }
+                }
+            }
+
+            dataContext.SaveChanges();
+
+            if (model.SolvancyCertificateFile != null && model.SolvancyCertificateFile.ContentLength > 0)
+            {
+                var fileName = $"{Path.GetFileNameWithoutExtension(model.SolvancyCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.SolvancyCertificateFile.FileName)}";
+                var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                Directory.CreateDirectory(path);
+
+                path = Path.Combine(path, fileName);
+                model.SolvancyCertificateFile.SaveAs(path);
+
+                string contentType = model.SolvancyCertificateFile.ContentType;
+                using (Stream fileStream = model.SolvancyCertificateFile.InputStream)
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                    {
+                        byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                        var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Solvancy.ToString());
+                        if (vendorFile != null)
+                        {
+                            vendorFile.ContentType = contentType;
+                            vendorFile.Data = bytes;
+                            vendorFile.FileUploadType = FileUploadEnum.Solvancy.ToString();
+                            vendorFile.Name = fileName;
+                            vendorFile.CustomerId = model.Id;
+                        }
+                        else
+                        {
+                            customer.CustomerFiles.Add(new CustomerFile()
+                            {
+                                ContentType = contentType,
+                                Data = bytes,
+                                FileUploadType = FileUploadEnum.Solvancy.ToString(),
+                                Name = fileName,
+                                CustomerId = model.Id
+                            });
+                        }
+                    }
+                }
+            }
+
+            dataContext.SaveChanges();
+
+            if (model.InvestmentDeclarationFile != null && model.InvestmentDeclarationFile.ContentLength > 0)
+            {
+                var fileName = $"{Path.GetFileNameWithoutExtension(model.InvestmentDeclarationFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.InvestmentDeclarationFile.FileName)}";
+                var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
+
+                Directory.CreateDirectory(path);
+
+                path = Path.Combine(path, fileName);
+                model.InvestmentDeclarationFile.SaveAs(path);
+
+                string contentType = model.InvestmentDeclarationFile.ContentType;
+                using (Stream fileStream = model.InvestmentDeclarationFile.InputStream)
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                    {
+                        byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                        var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Investment.ToString());
+                        if (vendorFile != null)
+                        {
+                            vendorFile.ContentType = contentType;
+                            vendorFile.Data = bytes;
+                            vendorFile.FileUploadType = FileUploadEnum.Investment.ToString();
+                            vendorFile.Name = fileName;
+                            vendorFile.CustomerId = model.Id;
+                        }
+                        else
+                        {
+                            customer.CustomerFiles.Add(new CustomerFile()
+                            {
+                                ContentType = contentType,
+                                Data = bytes,
+                                FileUploadType = FileUploadEnum.Investment.ToString(),
+                                Name = fileName,
+                                CustomerId = model.Id
+                            });
+                        }
+                    }
+                }
+            }
+
+            dataContext.SaveChanges();
+
             if (ModelState.IsValid)
             {
-                var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                 if (customer != null)
                 {
-                    if (model.WealthCapitalCertificateFile != null && model.WealthCapitalCertificateFile.ContentLength > 0)
-                    {
-                        var fileName = $"{Path.GetFileNameWithoutExtension(model.WealthCapitalCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.WealthCapitalCertificateFile.FileName)}";
-                        var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
-
-                        Directory.CreateDirectory(path);
-
-                        path = Path.Combine(path, fileName);
-                        model.WealthCapitalCertificateFile.SaveAs(path);
-
-                        string contentType = model.WealthCapitalCertificateFile.ContentType;
-                        using (Stream fileStream = model.WealthCapitalCertificateFile.InputStream)
-                        {
-                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                            {
-                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.WealthCapital.ToString());
-                                if (vendorFile != null)
-                                {
-                                    vendorFile.ContentType = contentType;
-                                    vendorFile.Data = bytes;
-                                    vendorFile.FileUploadType = FileUploadEnum.WealthCapital.ToString();
-                                    vendorFile.Name = fileName;
-                                    vendorFile.CustomerId = model.Id;
-                                }
-                                else
-                                {
-                                    customer.CustomerFiles.Add(new CustomerFile()
-                                    {
-                                        ContentType = contentType,
-                                        Data = bytes,
-                                        FileUploadType = FileUploadEnum.WealthCapital.ToString(),
-                                        Name = fileName,
-                                        CustomerId = model.Id
-                                    });
-                                }
-                            }
-                        }
-                    }
-
-                    if (model.SolvancyCertificateFile != null && model.SolvancyCertificateFile.ContentLength > 0)
-                    {
-                        var fileName = $"{Path.GetFileNameWithoutExtension(model.SolvancyCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.SolvancyCertificateFile.FileName)}";
-                        var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
-
-                        Directory.CreateDirectory(path);
-
-                        path = Path.Combine(path, fileName);
-                        model.SolvancyCertificateFile.SaveAs(path);
-
-                        string contentType = model.SolvancyCertificateFile.ContentType;
-                        using (Stream fileStream = model.SolvancyCertificateFile.InputStream)
-                        {
-                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                            {
-                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Solvancy.ToString());
-                                if (vendorFile != null)
-                                {
-                                    vendorFile.ContentType = contentType;
-                                    vendorFile.Data = bytes;
-                                    vendorFile.FileUploadType = FileUploadEnum.Solvancy.ToString();
-                                    vendorFile.Name = fileName;
-                                    vendorFile.CustomerId = model.Id;
-                                }
-                                else
-                                {
-                                    customer.CustomerFiles.Add(new CustomerFile()
-                                    {
-                                        ContentType = contentType,
-                                        Data = bytes,
-                                        FileUploadType = FileUploadEnum.Solvancy.ToString(),
-                                        Name = fileName,
-                                        CustomerId = model.Id
-                                    });
-                                }
-                            }
-                        }
-                    }
-
-                    if (model.InvestmentDeclarationFile != null && model.InvestmentDeclarationFile.ContentLength > 0)
-                    {
-                        var fileName = $"{Path.GetFileNameWithoutExtension(model.InvestmentDeclarationFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.InvestmentDeclarationFile.FileName)}";
-                        var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
-
-                        Directory.CreateDirectory(path);
-
-                        path = Path.Combine(path, fileName);
-                        model.InvestmentDeclarationFile.SaveAs(path);
-
-                        string contentType = model.InvestmentDeclarationFile.ContentType;
-                        using (Stream fileStream = model.InvestmentDeclarationFile.InputStream)
-                        {
-                            using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                            {
-                                byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                var vendorFile = customer.CustomerFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Investment.ToString());
-                                if (vendorFile != null)
-                                {
-                                    vendorFile.ContentType = contentType;
-                                    vendorFile.Data = bytes;
-                                    vendorFile.FileUploadType = FileUploadEnum.Investment.ToString();
-                                    vendorFile.Name = fileName;
-                                    vendorFile.CustomerId = model.Id;
-                                }
-                                else
-                                {
-                                    customer.CustomerFiles.Add(new CustomerFile()
-                                    {
-                                        ContentType = contentType,
-                                        Data = bytes,
-                                        FileUploadType = FileUploadEnum.Investment.ToString(),
-                                        Name = fileName,
-                                        CustomerId = model.Id
-                                    });
-                                }
-                            }
-                        }
-                    }
-
                     customer.Swift_Code = model.Swift_Code;
                     customer.ITR_ReturnSts = model.ITR_ReturnSts;
                     customer.ITR_ReturnStsTurnover = model.ITR_ReturnStsTurnover;

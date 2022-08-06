@@ -418,23 +418,27 @@ namespace CVPortal.Controllers
                 {
                     model.Contact_no = model.Contact_no.Substring(0, 1) == "0" ? model.Contact_no.Substring(1, model.Contact_no.Length - 1) : model.Contact_no;
 
+                    var isError = false;
                     if (model.Contact_no.Length != 10)
                     {
                         ModelState.AddModelError(nameof(model.Contact_no), "Please add proper contact no.");
-                        return View(model);
+                        isError = true;
                     }
 
                     if (model.Address1.Length > 50)
                     {
                         ModelState.AddModelError(nameof(model.Address1), "Please add address less than 50 character.");
-                        return View(model);
+                        isError = true;
                     }
 
                     if (model.Address2.Length > 50)
                     {
                         ModelState.AddModelError(nameof(model.Address2), "Please add address less than 50 character.");
-                        return View(model);
+                        isError = true;
                     }
+
+                    if (isError)
+                        return View(model);
 
                     var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (vendor != null)
@@ -442,7 +446,7 @@ namespace CVPortal.Controllers
                         if (!model.IsExistingUpdate)
                         {
                             vendor.Org_Sts = model.Org_Sts;
-                            vendor.OrgCode = dataContext.Orginzation_StatusMaster.FirstOrDefault(x => x.Orginzation_Status.ToString() == model.Org_Sts)?.OrgCode.ToString();
+                            vendor.OrgCode = dataContext.Orginzation_StatusMaster.FirstOrDefault(x => x.Orginzation_Status.ToString() == model.Org_Sts)?.OrgCode?.ToString();
                             vendor.vend_name = model.vend_name;
                             vendor.CEO_name = model.CEO_name;
                             vendor.Designation = model.Designation;
@@ -488,211 +492,213 @@ namespace CVPortal.Controllers
         {
             if (model.IsMain)
             {
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+
+                if (model.CINFile != null && model.CINFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.CINFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.CINFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.CINFile.SaveAs(path);
+                    model.CINFileName = fileName;
+
+                    string contentType = model.CINFile.ContentType;
+                    using (Stream fileStream = model.CINFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.CIN.ToString());
+                            if (vendorFile != null)
+                            {
+                                vendorFile.ContentType = contentType;
+                                vendorFile.Data = bytes;
+                                vendorFile.FileUploadType = FileUploadEnum.CIN.ToString();
+                                vendorFile.Name = fileName;
+                                vendorFile.VendorId = model.Id;
+                            }
+                            else
+                            {
+                                vendor.VendorFiles.Add(new VendorFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.CIN.ToString(),
+                                    Name = fileName,
+                                    VendorId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
+                if (model.PANFile != null && model.PANFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.PANFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.PANFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.PANFile.SaveAs(path);
+                    model.PANFileName = fileName;
+
+                    string contentType = model.PANFile.ContentType;
+                    using (Stream fileStream = model.PANFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Pan.ToString());
+                            if (vendorFile != null)
+                            {
+                                vendorFile.ContentType = contentType;
+                                vendorFile.Data = bytes;
+                                vendorFile.FileUploadType = FileUploadEnum.Pan.ToString();
+                                vendorFile.Name = fileName;
+                                vendorFile.VendorId = model.Id;
+                            }
+                            else
+                            {
+                                vendor.VendorFiles.Add(new VendorFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.Pan.ToString(),
+                                    Name = fileName,
+                                    VendorId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
+                if (model.GSTFile != null && model.GSTFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.GSTFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.GSTFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.GSTFile.SaveAs(path);
+                    model.GSTFileName = fileName;
+
+                    string contentType = model.GSTFile.ContentType;
+                    using (Stream fileStream = model.GSTFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.GST.ToString());
+                            if (vendorFile != null)
+                            {
+                                vendorFile.ContentType = contentType;
+                                vendorFile.Data = bytes;
+                                vendorFile.FileUploadType = FileUploadEnum.GST.ToString();
+                                vendorFile.Name = fileName;
+                                vendorFile.VendorId = model.Id;
+                            }
+                            else
+                            {
+                                vendor.VendorFiles.Add(new VendorFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.GST.ToString(),
+                                    Name = fileName,
+                                    VendorId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
+                if (model.MSMEFile != null && model.MSMEFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.MSMEFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MSMEFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.MSMEFile.SaveAs(path);
+                    model.MSMEFileName = fileName;
+
+                    string contentType = model.MSMEFile.ContentType;
+                    using (Stream fileStream = model.MSMEFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.MSME.ToString());
+                            if (vendorFile != null)
+                            {
+                                vendorFile.ContentType = contentType;
+                                vendorFile.Data = bytes;
+                                vendorFile.FileUploadType = FileUploadEnum.MSME.ToString();
+                                vendorFile.Name = fileName;
+                                vendorFile.VendorId = model.Id;
+                            }
+                            else
+                            {
+                                vendor.VendorFiles.Add(new VendorFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.MSME.ToString(),
+                                    Name = fileName,
+                                    VendorId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
                 if (ModelState.IsValid)
                 {
-                    if (!string.IsNullOrEmpty(model.CIN_No) && string.IsNullOrEmpty(model.CINFileName))
-                    {
-                        ModelState.AddModelError(nameof(model.CINFileName), "Please upload CIN file");
-                        return View(model);
-                    }
-
-                    var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (vendor != null)
                     {
-                        if (model.CINFile != null && model.CINFile.ContentLength > 0)
+                        var isError = false;
+                        if (!string.IsNullOrEmpty(model.CIN_No) && string.IsNullOrEmpty(model.CINFileName))
                         {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.CINFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.CINFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.CINFile.SaveAs(path);
-                            model.CINFileName = fileName;
-
-                            string contentType = model.CINFile.ContentType;
-                            using (Stream fileStream = model.CINFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.CIN.ToString());
-                                    if (vendorFile != null)
-                                    {
-                                        vendorFile.ContentType = contentType;
-                                        vendorFile.Data = bytes;
-                                        vendorFile.FileUploadType = FileUploadEnum.CIN.ToString();
-                                        vendorFile.Name = fileName;
-                                        vendorFile.VendorId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        vendor.VendorFiles.Add(new VendorFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.CIN.ToString(),
-                                            Name = fileName,
-                                            VendorId = model.Id
-                                        });
-                                    }
-                                }
-                            }
+                            ModelState.AddModelError(nameof(model.CINFileName), "Please upload CIN file");
+                            isError = true;
                         }
-
-                        dataContext.SaveChanges();
-
-                        if (model.PANFile != null && model.PANFile.ContentLength > 0)
-                        {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.PANFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.PANFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.PANFile.SaveAs(path);
-                            model.PANFileName = fileName;
-
-                            string contentType = model.PANFile.ContentType;
-                            using (Stream fileStream = model.PANFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Pan.ToString());
-                                    if (vendorFile != null)
-                                    {
-                                        vendorFile.ContentType = contentType;
-                                        vendorFile.Data = bytes;
-                                        vendorFile.FileUploadType = FileUploadEnum.Pan.ToString();
-                                        vendorFile.Name = fileName;
-                                        vendorFile.VendorId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        vendor.VendorFiles.Add(new VendorFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.Pan.ToString(),
-                                            Name = fileName,
-                                            VendorId = model.Id
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        dataContext.SaveChanges();
 
                         if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
                         {
                             ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
-                            return View(model);
+                            isError = true;
                         }
 
                         if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
                         {
                             ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
-                            return View(model);
+                            isError = true;
                         }
-
-                        if (model.GSTFile != null && model.GSTFile.ContentLength > 0)
-                        {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.GSTFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.GSTFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.GSTFile.SaveAs(path);
-                            model.GSTFileName = fileName;
-
-                            string contentType = model.GSTFile.ContentType;
-                            using (Stream fileStream = model.GSTFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.GST.ToString());
-                                    if (vendorFile != null)
-                                    {
-                                        vendorFile.ContentType = contentType;
-                                        vendorFile.Data = bytes;
-                                        vendorFile.FileUploadType = FileUploadEnum.GST.ToString();
-                                        vendorFile.Name = fileName;
-                                        vendorFile.VendorId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        vendor.VendorFiles.Add(new VendorFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.GST.ToString(),
-                                            Name = fileName,
-                                            VendorId = model.Id
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        dataContext.SaveChanges();
-
-                        if (model.MSMEFile != null && model.MSMEFile.ContentLength > 0)
-                        {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.MSMEFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MSMEFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.MSMEFile.SaveAs(path);
-                            model.MSMEFileName = fileName;
-
-                            string contentType = model.MSMEFile.ContentType;
-                            using (Stream fileStream = model.MSMEFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.MSME.ToString());
-                                    if (vendorFile != null)
-                                    {
-                                        vendorFile.ContentType = contentType;
-                                        vendorFile.Data = bytes;
-                                        vendorFile.FileUploadType = FileUploadEnum.MSME.ToString();
-                                        vendorFile.Name = fileName;
-                                        vendorFile.VendorId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        vendor.VendorFiles.Add(new VendorFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.MSME.ToString(),
-                                            Name = fileName,
-                                            VendorId = model.Id
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        dataContext.SaveChanges();
 
                         model.Spy_contact_Phno = model.Spy_contact_Phno.Substring(0, 1) == "0" ? model.Spy_contact_Phno.Substring(1, model.Spy_contact_Phno.Length - 1) : model.Spy_contact_Phno;
 
                         if (model.Spy_contact_Phno.Length != 10)
                         {
                             ModelState.AddModelError(nameof(model.Spy_contact_Phno), "Please add proper contact no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         model.AC_contact_Phno = model.AC_contact_Phno.Substring(0, 1) == "0" ? model.AC_contact_Phno.Substring(1, model.AC_contact_Phno.Length - 1) : model.AC_contact_Phno;
@@ -700,44 +706,53 @@ namespace CVPortal.Controllers
                         if (model.AC_contact_Phno.Length != 10)
                         {
                             ModelState.AddModelError(nameof(model.AC_contact_Phno), "Please add proper contact no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (!string.IsNullOrEmpty(model.CIN_No) && model.CIN_No.Length != 21)
                         {
                             ModelState.AddModelError(nameof(model.CIN_No), "Please add proper CIN no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (model.PAN_No.Length != 10)
                         {
                             ModelState.AddModelError(nameof(model.PAN_No), "Please add proper Pan no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (!string.IsNullOrEmpty(model.GST_Reg_no) && model.GST_Reg_no.Length != 15)
                         {
                             ModelState.AddModelError(nameof(model.GST_Reg_no), "Please add proper GSTIN no.");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (!string.IsNullOrEmpty(model.MSME_no) && model.MSME_no.Length != 12)
                         {
                             ModelState.AddModelError(nameof(model.MSME_no), "Please add proper MSME no.");
-                            return View(model);
+                            isError = true;
+                        }
+
+                        if (!string.IsNullOrEmpty(model.MSME_no) && string.IsNullOrEmpty(model.MSMEFileName))
+                        {
+                            ModelState.AddModelError(nameof(model.MSMEFileName), "Please upload MSME file");
+                            isError = true;
                         }
 
                         if (model.FinancialYear1.ToString().Length != 4)
                         {
                             ModelState.AddModelError(nameof(model.FinancialYear1), "Please add proper year (yyyy).");
-                            return View(model);
+                            isError = true;
                         }
 
                         if (model.FinancialYear2.ToString().Length != 4)
                         {
                             ModelState.AddModelError(nameof(model.FinancialYear2), "Please add proper year (yyyy).");
-                            return View(model);
+                            isError = true;
                         }
+
+                        if (isError)
+                            return View(model);
 
                         vendor.AC_contact_Desig = model.AC_contact_Desig;
                         vendor.Spy_contact_Desig = model.Spy_contact_Desig;
@@ -784,53 +799,56 @@ namespace CVPortal.Controllers
         {
             if (model.IsMain || model.IsExistingUpdate)
             {
-                if (ModelState.IsValid)
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+
+                if (model.BankFile != null && model.BankFile.ContentLength > 0)
                 {
-                    var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
-                    if (vendor != null)
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.BankFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.BankFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.BankFile.SaveAs(path);
+                    model.BankFileName = fileName;
+
+                    string contentType = model.BankFile.ContentType;
+                    using (Stream fileStream = model.BankFile.InputStream)
                     {
-                        if (model.BankFile != null && model.BankFile.ContentLength > 0)
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
                         {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.BankFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.BankFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
 
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.BankFile.SaveAs(path);
-                            model.BankFileName = fileName;
-
-                            string contentType = model.BankFile.ContentType;
-                            using (Stream fileStream = model.BankFile.InputStream)
+                            var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Bank.ToString());
+                            if (vendorFile != null)
                             {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                                vendorFile.ContentType = contentType;
+                                vendorFile.Data = bytes;
+                                vendorFile.FileUploadType = FileUploadEnum.Bank.ToString();
+                                vendorFile.Name = fileName;
+                                vendorFile.VendorId = model.Id;
+                            }
+                            else
+                            {
+                                vendor.VendorFiles.Add(new VendorFile()
                                 {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Bank.ToString());
-                                    if (vendorFile != null)
-                                    {
-                                        vendorFile.ContentType = contentType;
-                                        vendorFile.Data = bytes;
-                                        vendorFile.FileUploadType = FileUploadEnum.Bank.ToString();
-                                        vendorFile.Name = fileName;
-                                        vendorFile.VendorId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        vendor.VendorFiles.Add(new VendorFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.Bank.ToString(),
-                                            Name = fileName,
-                                            VendorId = model.Id
-                                        });
-                                    }
-                                }
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.Bank.ToString(),
+                                    Name = fileName,
+                                    VendorId = model.Id
+                                });
                             }
                         }
+                    }
+                }
 
+                dataContext.SaveChanges();
+
+                if (ModelState.IsValid)
+                {
+                    if (vendor != null)
+                    {
                         if (!model.IsExistingUpdate)
                         {
                             vendor.Benificiary_name = model.Benificiary_name;
@@ -862,93 +880,98 @@ namespace CVPortal.Controllers
         {
             if (!model.IsExistingUpdate)
             {
+                var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
+
+                if (model.AuditedFile != null && model.AuditedFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.AuditedFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.AuditedFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.AuditedFile.SaveAs(path);
+
+                    string contentType = model.AuditedFile.ContentType;
+                    using (Stream fileStream = model.AuditedFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Audited.ToString());
+                            if (vendorFile != null)
+                            {
+                                vendorFile.ContentType = contentType;
+                                vendorFile.Data = bytes;
+                                vendorFile.FileUploadType = FileUploadEnum.Audited.ToString();
+                                vendorFile.Name = fileName;
+                                vendorFile.VendorId = model.Id;
+                            }
+                            else
+                            {
+                                vendor.VendorFiles.Add(new VendorFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.Audited.ToString(),
+                                    Name = fileName,
+                                    VendorId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
+                if (model.MOAFile != null && model.MOAFile.ContentLength > 0)
+                {
+                    var fileName = $"{Path.GetFileNameWithoutExtension(model.MOAFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MOAFile.FileName)}";
+                    var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
+
+                    Directory.CreateDirectory(path);
+
+                    path = Path.Combine(path, fileName);
+                    model.MOAFile.SaveAs(path);
+
+                    string contentType = model.MOAFile.ContentType;
+                    using (Stream fileStream = model.MOAFile.InputStream)
+                    {
+                        using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                        {
+                            byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
+
+                            var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.MOA.ToString());
+                            if (vendorFile != null)
+                            {
+                                vendorFile.ContentType = contentType;
+                                vendorFile.Data = bytes;
+                                vendorFile.FileUploadType = FileUploadEnum.MOA.ToString();
+                                vendorFile.Name = fileName;
+                                vendorFile.VendorId = model.Id;
+                            }
+                            else
+                            {
+                                vendor.VendorFiles.Add(new VendorFile()
+                                {
+                                    ContentType = contentType,
+                                    Data = bytes,
+                                    FileUploadType = FileUploadEnum.MOA.ToString(),
+                                    Name = fileName,
+                                    VendorId = model.Id
+                                });
+                            }
+                        }
+                    }
+                }
+
+                dataContext.SaveChanges();
+
                 if (ModelState.IsValid)
                 {
-                    var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
                     if (vendor != null)
                     {
-                        if (model.AuditedFile != null && model.AuditedFile.ContentLength > 0)
-                        {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.AuditedFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.AuditedFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.AuditedFile.SaveAs(path);
-
-                            string contentType = model.AuditedFile.ContentType;
-                            using (Stream fileStream = model.AuditedFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.Audited.ToString());
-                                    if (vendorFile != null)
-                                    {
-                                        vendorFile.ContentType = contentType;
-                                        vendorFile.Data = bytes;
-                                        vendorFile.FileUploadType = FileUploadEnum.Audited.ToString();
-                                        vendorFile.Name = fileName;
-                                        vendorFile.VendorId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        vendor.VendorFiles.Add(new VendorFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.Audited.ToString(),
-                                            Name = fileName,
-                                            VendorId = model.Id
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        if (model.MOAFile != null && model.MOAFile.ContentLength > 0)
-                        {
-                            var fileName = $"{Path.GetFileNameWithoutExtension(model.MOAFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MOAFile.FileName)}";
-                            var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
-
-                            Directory.CreateDirectory(path);
-
-                            path = Path.Combine(path, fileName);
-                            model.MOAFile.SaveAs(path);
-
-                            string contentType = model.MOAFile.ContentType;
-                            using (Stream fileStream = model.MOAFile.InputStream)
-                            {
-                                using (BinaryReader binaryReader = new BinaryReader(fileStream))
-                                {
-                                    byte[] bytes = binaryReader.ReadBytes((int)fileStream.Length);
-
-                                    var vendorFile = vendor.VendorFiles.FirstOrDefault(x => x.FileUploadType == FileUploadEnum.MOA.ToString());
-                                    if (vendorFile != null)
-                                    {
-                                        vendorFile.ContentType = contentType;
-                                        vendorFile.Data = bytes;
-                                        vendorFile.FileUploadType = FileUploadEnum.MOA.ToString();
-                                        vendorFile.Name = fileName;
-                                        vendorFile.VendorId = model.Id;
-                                    }
-                                    else
-                                    {
-                                        vendor.VendorFiles.Add(new VendorFile()
-                                        {
-                                            ContentType = contentType,
-                                            Data = bytes,
-                                            FileUploadType = FileUploadEnum.MOA.ToString(),
-                                            Name = fileName,
-                                            VendorId = model.Id
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
                         vendor.Step4 = true;
                         vendor.InitiatorApproval = "P";
                         vendor.LegalDepartmentApproval = "P";

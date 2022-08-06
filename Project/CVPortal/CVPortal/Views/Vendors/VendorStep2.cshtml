@@ -89,6 +89,11 @@
             $("#vendorType3").click(function () {
                 $("#GST_Reg_no").removeAttr("disabled");
             });
+
+            if ($("#vendorType2").is(":checked")) {
+                $("#GST_Reg_no").val("");
+                $("#GST_Reg_no").attr("disabled", "disabled");
+            }
         });
     </script>
 }

@@ -62,7 +62,6 @@ namespace CVPortal.ViewModels
 
         public HttpPostedFileBase MSMEFile { get; set; }
 
-        [Required(ErrorMessage = "Please upload MSME file")]
         public string MSMEFileName { get; set; }
 
         [Required(ErrorMessage = "Please enter annual turnover")]
