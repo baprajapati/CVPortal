@@ -61,6 +61,11 @@
                                     <label for="RoleName">Next User</label>
                                     @Html.DropDownListFor(model => model.HANEXT, ViewBag.UserList as SelectList, new { @class = "form-control" })
                                 </div>
+                                <div class="form-group initiatorAccess">
+                                    <label for="InitiatorAccess">Initiator Access</label>
+                                    @Html.DropDownListFor(model => model.InitiatorAccess, ViewBag.InitiatorAccessList as SelectList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.InitiatorAccess, "")
+                                </div>
                             </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
@@ -80,6 +85,21 @@
     <script>
         $(document).ready(function () {
             $('#RoleNames').selectpicker('val', $("#RoleName").val().split(","));
+
+            $('#RoleNames').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+                var selected = $(e.currentTarget).val();
+                if (!selected.includes("Initiator")) {
+                    $(".initiatorAccess").addClass("hidden");
+                } else {
+                    $(".initiatorAccess").removeClass("hidden");
+                }
+            });
+
+            if (!$("#RoleName").val().split(",").includes("Initiator")) {
+                $(".initiatorAccess").addClass("hidden");
+            } else {
+                $(".initiatorAccess").removeClass("hidden");
+            }
         });
     </script>
 }

@@ -24,6 +24,34 @@ namespace CVPortal.Areas.Admin.Controllers
         {
         }
 
+        public SelectList GetInitiatorAccess(string[] selectedValue)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            list.Add(new SelectListItem()
+            {
+                Text = "Customer",
+                Value = "Customer",
+                Selected = selectedValue != null && selectedValue.Contains("Customer")
+            });
+
+            list.Add(new SelectListItem()
+            {
+                Text = "Vendor",
+                Value = "Vendor",
+                Selected = selectedValue != null && selectedValue.Contains("Vendor")
+            });
+
+            list.Add(new SelectListItem()
+            {
+                Text = "Both",
+                Value = "Both",
+                Selected = selectedValue != null && selectedValue.Contains("Both")
+            });
+
+            return new SelectList(list, "Value", "Text");
+        }
+
         public SelectList GetRoles(string[] selectedValue)
         {
             var roles = dataContext.webpages_Roles.Where(x => x.RoleName != "Admin").ToList();
@@ -101,6 +129,7 @@ namespace CVPortal.Areas.Admin.Controllers
                 if (Utility.UserCode == null || string.IsNullOrEmpty(Utility.UserCode.ToString()))
                     return RedirectToAction("../../Account/Login");
 
+                ViewBag.InitiatorAccessList = GetInitiatorAccess(new string[] { "Both" });
                 ViewBag.RoleList = GetRoles(null);
                 ViewBag.DepartmentList = GetDepartments(null);
                 ViewBag.UserList = GetUsers(null, null);
@@ -128,6 +157,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     var data = dataContext.tbl_Users.FirstOrDefault(x => x.Id == id);
                     if (data != null)
                     {
+                        ViewBag.InitiatorAccessList = GetInitiatorAccess(new string[] { data.InitiatorAccess });
                         ViewBag.UserList = GetUsers(new string[] { data.HANEXT }, data.HAUSER);
                         ViewBag.RoleList = GetRoles(Roles.GetRolesForUser(data.EmailAddress));
                         ViewBag.DepartmentList = GetDepartments(new string[] { data.Dept_Code });
@@ -141,6 +171,7 @@ namespace CVPortal.Areas.Admin.Controllers
                             HAUSER = data.HAUSER,
                             HANAME = data.HANAME,
                             Dept_Code = data.Dept_Code,
+                            InitiatorAccess = data.InitiatorAccess,
                             HANEXT = data.HANEXT
                         };
                     }
@@ -181,6 +212,7 @@ namespace CVPortal.Areas.Admin.Controllers
         {
             try
             {
+                ViewBag.InitiatorAccessList = GetInitiatorAccess(new string[] { user.InitiatorAccess });
                 ViewBag.RoleList = GetRoles(new string[] { });
                 ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, null);
                 ViewBag.DepartmentList = GetDepartments(new string[] { user.Dept_Code });
@@ -208,13 +240,19 @@ namespace CVPortal.Areas.Admin.Controllers
                         return View(user);
                     }
 
+                    if(!user.RoleNames.Contains("Initiator"))
+                    {
+                        user.InitiatorAccess = "Both";
+                    }
+
                     string token = WebSecurity.CreateUserAndAccount(user.Email, user.Password, new
                     {
                         HAUSER = user.HAUSER,
                         HANEXT = user.HANEXT,
                         HANAME = user.HANAME,
                         Password = user.Password,
-                        Dept_Code = user.Dept_Code
+                        Dept_Code = user.Dept_Code,
+                        InitiatorAccess = user.InitiatorAccess
                     });
                     Roles.AddUserToRoles(user.Email, user.RoleNames.ToArray());
 
@@ -332,6 +370,7 @@ namespace CVPortal.Areas.Admin.Controllers
                         HANAME = item.HANAME,
                         Dept_Code = item.Dept_Code,
                         HANEXT = item.HANEXT,
+                        InitiatorAccess = item.InitiatorAccess,
                         Status = item.IsActive ? "Active" : "Inactive"
                     });
                 });
@@ -441,6 +480,7 @@ namespace CVPortal.Areas.Admin.Controllers
                     HANAME = item.HANAME,
                     Dept_Code = item.Dept_Code,
                     HANEXT = item.HANEXT,
+                    InitiatorAccess = item.InitiatorAccess,
                     Status = item.IsActive ? "Active" : "Inactive"
                 });
             });
@@ -451,18 +491,19 @@ namespace CVPortal.Areas.Admin.Controllers
             }
 
             DataTable dt = new DataTable("XlsGrid");
-            dt.Columns.AddRange(new DataColumn[7] { new DataColumn("Email"),
+            dt.Columns.AddRange(new DataColumn[8] { new DataColumn("Email"),
                                             new DataColumn("Role Name"),
                                             new DataColumn("Name"),
                                             new DataColumn("User Code"),
                                             new DataColumn("Department Code"),
                                             new DataColumn("Next User Code"),
+                                            new DataColumn("Initiator Access"),
                                             new DataColumn("Status")
             });
 
             foreach (var item in users)
             {
-                dt.Rows.Add(item.Email, item.RoleName, item.HANAME, item.HAUSER, item.Dept_Code, item.HANEXT, item.Status);
+                dt.Rows.Add(item.Email, item.RoleName, item.HANAME, item.HAUSER, item.Dept_Code, item.HANEXT, item.InitiatorAccess, item.Status);
             }
 
             var grid = new GridView();
@@ -538,6 +579,7 @@ namespace CVPortal.Areas.Admin.Controllers
         {
             try
             {
+                ViewBag.InitiatorAccessList = GetInitiatorAccess(new string[] { user.InitiatorAccess });
                 ViewBag.UserList = GetUsers(new string[] { user.HANEXT }, user.HAUSER);
                 ViewBag.RoleList = GetRoles(new string[] { });
                 ViewBag.DepartmentList = GetDepartments(new string[] { user.Dept_Code });
@@ -558,11 +600,17 @@ namespace CVPortal.Areas.Admin.Controllers
                         Roles.RemoveUserFromRoles(data.EmailAddress, roleNames);
                         Roles.AddUserToRoles(data.EmailAddress, user.RoleNames);
 
+                        if (!user.RoleNames.Contains("Initiator"))
+                        {
+                            user.InitiatorAccess = "Both";
+                        }
+
                         data.EmailAddress = user.Email;
                         data.HANEXT = user.HANEXT;
                         data.HAUSER = user.HAUSER;
                         data.HANAME = user.HANAME;
                         data.Dept_Code = user.Dept_Code;
+                        data.InitiatorAccess = user.InitiatorAccess;
                         dataContext.SaveChanges();
                     }
 

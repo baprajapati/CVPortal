@@ -27,44 +27,49 @@
                         @using (Html.BeginForm())
                         {
                             @Html.AntiForgeryToken()
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="RoleName">Role</label>
-                                @Html.DropDownListFor(model => model.RoleName, ViewBag.RoleList as SelectList, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.RoleName, "")
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="RoleName">Role</label>
+                                    @Html.DropDownListFor(model => model.RoleNames, ViewBag.RoleList as SelectList, new { @class = "form-control selectpicker", @multiple = "multiple" })
+                                    @Html.ValidationMessageFor(model => model.RoleName, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Employee Code</label>
+                                    <input type="text" id="txtUserCode" style="display:none;">
+                                    @Html.TextBoxFor(model => model.HAUSER, new { id = "txtHAUSER", @class = "form-control", placeholder = "Employee Code" })
+                                    @Html.ValidationMessageFor(model => model.HAUSER, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Department Code</label>
+                                    @Html.DropDownListFor(model => model.Dept_Code, ViewBag.DepartmentList as SelectList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Dept_Code, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Name</label>
+                                    @Html.TextBoxFor(model => model.HANAME, new { id = "txtHANAME", @class = "form-control", placeholder = "Name" })
+                                    @Html.ValidationMessageFor(model => model.HANAME, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email">Email</label>
+                                    @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control", placeholder = "Email" })
+                                    @Html.ValidationMessageFor(model => model.Email, "")
+                                </div>
+                                <div class="form-group password">
+                                    <label for="Password">Password</label>
+                                    @Html.HiddenFor(model => model.Password)
+                                    @Html.PasswordFor(model => model.Password, new { id = "txtPassword", @class = "form-control", placeholder = "Password" })
+                                    @Html.ValidationMessageFor(model => model.Password, "")
+                                </div>
+                                <div class="form-group">
+                                    <label for="RoleName">Next User</label>
+                                    @Html.DropDownListFor(model => model.HANEXT, ViewBag.UserList as SelectList, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group initiatorAccess">
+                                    <label for="InitiatorAccess">Initiator Access</label>
+                                    @Html.DropDownListFor(model => model.InitiatorAccess, ViewBag.InitiatorAccessList as SelectList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.InitiatorAccess, "")
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="Email">Employee Code</label>
-                                <input type="text" id="txtUserCode" style="display:none;">
-                                @Html.TextBoxFor(model => model.HAUSER, new { id = "txtHAUSER", @class = "form-control", placeholder = "Employee Code" })
-                                @Html.ValidationMessageFor(model => model.HAUSER, "")
-                            </div>
-                            <div class="form-group">
-                                <label for="Email">Department Code</label>
-                                @Html.DropDownListFor(model => model.Dept_Code, ViewBag.DepartmentList as SelectList, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Dept_Code, "")
-                            </div>
-                            <div class="form-group">
-                                <label for="Email">Name</label>
-                                @Html.TextBoxFor(model => model.HANAME, new { id = "txtHANAME", @class = "form-control", placeholder = "Name" })
-                                @Html.ValidationMessageFor(model => model.HANAME, "")
-                            </div>
-                            <div class="form-group">
-                                <label for="Email">Email</label>
-                                @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control", placeholder = "Email" })
-                                @Html.ValidationMessageFor(model => model.Email, "")
-                            </div>
-                            <div class="form-group password">
-                                <label for="Password">Password</label>
-                                @Html.HiddenFor(model => model.Password)
-                                @Html.PasswordFor(model => model.Password, new { id = "txtPassword", @class = "form-control", placeholder = "Password" })
-                                @Html.ValidationMessageFor(model => model.Password, "")
-                            </div>
-                            <div class="form-group">
-                                <label for="RoleName">Next User</label>
-                                @Html.DropDownListFor(model => model.HANEXT, ViewBag.UserList as SelectList, new { @class = "form-control" })
-                            </div>
-                        </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
                                 <a href="@Url.Action("UserIndex","User")" class="btn btn-default">Cancel</a>
@@ -78,25 +83,30 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#RoleName").change(function (e) {
-                setRoles(this.value);
+            $('#RoleNames').selectpicker();
+
+            $('#RoleNames').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+                var selected = $(e.currentTarget).val();
+                setRoles(selected.includes("Initiator"));
             });
 
             $("#txtPassword").keyup(function (e) {
                 $("#Password").val($("#txtPassword").val());
             });
 
-            setRoles($("#RoleName").val());
-            function setRoles(value) {
-                if (value != "Initiator") {
+            function setRoles(isInitiator) {
+                if (!isInitiator) {
                     $("#Password").val("test#123");
                     $(".password").addClass("hidden");
+                    $(".initiatorAccess").addClass("hidden");
                 } else {
                     $("#Password").val("");
                     $(".password").removeClass("hidden");
+                    $(".initiatorAccess").removeClass("hidden");
                 }
             }
         });

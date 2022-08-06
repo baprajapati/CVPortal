@@ -54,7 +54,7 @@ namespace CVPortal.Controllers
         [AllowAnonymous]
         public ActionResult Redirect(int? id)
         {
-            if(TempData["UserRoles"] == null)
+            if (TempData["UserRoles"] == null)
             {
                 FormsAuthentication.SignOut();
                 Utility.UserCode = string.Empty;
@@ -238,8 +238,6 @@ namespace CVPortal.Controllers
                     dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == model.Email);
                 if (vendor != null && vendor.OTP == model.OTP)
                 {
-                    WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
-                    FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = vendor.Email;
                     Session["Role"] = string.Empty;
 
@@ -250,7 +248,7 @@ namespace CVPortal.Controllers
                 var user = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == model.Email || x.HAUSER == model.Email));
                 if (user != null && user.OTP == model.OTP)
                 {
-                    WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
+                    WebSecurity.Login(model.Email, user.Password, false);
                     FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = user.EmailAddress;
                     Utility.UserId = user.Id;
@@ -281,8 +279,6 @@ namespace CVPortal.Controllers
                     dataContext.Cust_reg_tbl.FirstOrDefault(x => x.Email == model.Email);
                 if (customer != null && customer.OTP == model.OTP)
                 {
-                    WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
-                    FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = customer.Email;
                     Session["Role"] = string.Empty;
 
@@ -293,7 +289,7 @@ namespace CVPortal.Controllers
                 var user = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == model.Email || x.HAUSER == model.Email));
                 if (user != null && user.OTP == model.OTP)
                 {
-                    WebSecurity.Login(model.Email, Utility.DefaultPassword, false);
+                    WebSecurity.Login(model.Email, user.Password, false);
                     FormsAuthentication.SetAuthCookie(model.Email, false);
                     Utility.UserCode = user.EmailAddress;
                     Utility.UserId = user.Id;
@@ -342,7 +338,7 @@ namespace CVPortal.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("../Users/Vendor/VendorIndex");
+                            return RedirectToAction($"../Users/{(user.InitiatorAccess == "Customer" && Session["Role"].ToString() == "Initiator" ? "Customer/CustomerIndex" : "Vendor/VendorIndex")}");
                         }
                     }
                     else
@@ -374,7 +370,8 @@ namespace CVPortal.Controllers
                 }
                 else if (model.Id == null)
                 {
-                    return RedirectToAction("../Users/Vendor/VendorIndex");
+                    var user = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && x.Id == Utility.UserId);
+                    return RedirectToAction($"../Users/{(user.InitiatorAccess == "Customer" && Session["Role"].ToString() == "Initiator" ? "Customer/CustomerIndex" : "Vendor/VendorIndex")}");
                 }
             }
 
@@ -404,6 +401,25 @@ namespace CVPortal.Controllers
             Utility.UserCode = string.Empty;
             Utility.UserId = 0;
             return RedirectToAction("CustomerLogin/" + id);
+        }
+
+        [HttpGet]
+        public JsonResult GetInitiatorAccess()
+        {
+            try
+            {
+                if (Session["Role"].ToString() != "Initiator")
+                {
+                    return Json("Both", JsonRequestBehavior.AllowGet);
+                }
+
+                var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.Id == Utility.UserId);
+                return Json(objUser.InitiatorAccess ?? "Both", JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json("Both", JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

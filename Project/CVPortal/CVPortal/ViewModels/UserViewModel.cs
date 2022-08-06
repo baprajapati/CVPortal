@@ -26,10 +26,14 @@ namespace CVPortal.ViewModels
         public string HANAME { get; set; }
 
         [Required]
+        [Display(Name = "Employee Code")]
         public string HAUSER { get; set; }
 
         [Required]
         public string Dept_Code { get; set; }
+
+        [Required]
+        public string InitiatorAccess { get; set; } = "Both";
 
         public string HANEXT { get; set; }
 
