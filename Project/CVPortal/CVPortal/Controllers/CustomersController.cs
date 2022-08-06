@@ -1353,7 +1353,7 @@ namespace CVPortal.Controllers
                     draw = Convert.ToInt32(Request.Form.GetValues("draw")[0]),
                     recordsTotal = (customers.Count > 0) ? customers.Count : 0,
                     recordsFiltered = (customers.Count > 0) ? customers.Count : 0,
-                    data = customers
+                    data = customers.OrderByDescending(x => x.Status).ToList()
                 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)

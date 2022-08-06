@@ -1401,7 +1401,7 @@ namespace CVPortal.Controllers
                     draw = Convert.ToInt32(Request.Form.GetValues("draw")[0]),
                     recordsTotal = (vendors.Count > 0) ? vendors.Count : 0,
                     recordsFiltered = (vendors.Count > 0) ? vendors.Count : 0,
-                    data = vendors
+                    data = vendors.OrderByDescending(x => x.Status).ToList()
                 }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
