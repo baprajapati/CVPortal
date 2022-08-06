@@ -332,6 +332,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="HANAME" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="HANEXT" Type="nvarchar" MaxLength="15" />
           <Property Name="Dept_Code" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="InitiatorAccess" Type="nvarchar" MaxLength="50" />
           <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
           <Property Name="Password" Type="nvarchar" MaxLength="100" />
           <Property Name="Amount" Type="decimal" Precision="15" Scale="5" />
@@ -1194,6 +1195,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="HANAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="HANEXT" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Dept_Code" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="InitiatorAccess" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Amount" Type="Decimal" Precision="15" Scale="5" />
@@ -1884,6 +1886,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="InitiatorAccess" ColumnName="InitiatorAccess" />
                 <ScalarProperty Name="Dept_Code" ColumnName="Dept_Code" />
                 <ScalarProperty Name="HANEXT" ColumnName="HANEXT" />
                 <ScalarProperty Name="HANAME" ColumnName="HANAME" />

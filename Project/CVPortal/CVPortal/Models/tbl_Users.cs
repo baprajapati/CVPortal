@@ -31,6 +31,7 @@ namespace CVPortal.Models
         public string HANAME { get; set; }
         public string HANEXT { get; set; }
         public string Dept_Code { get; set; }
+        public string InitiatorAccess { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
         public Nullable<decimal> Amount { get; set; }
