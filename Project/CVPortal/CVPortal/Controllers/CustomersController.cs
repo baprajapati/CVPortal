@@ -1303,7 +1303,7 @@ namespace CVPortal.Controllers
                 var deptCode = user?.Dept_Code;
 
                 var customerIds = new List<int>();
-                if (Session["Role"].ToString() == "LegalDepartment" || Session["Role"].ToString() == "FinanceDepartment" || Session["Role"].ToString() == "ITDepartment")
+                if (Session["Role"].ToString() == "LegalDepartment" || Session["Role"].ToString() == "FinanceDepartment" || Session["Role"].ToString() == "ITDepartment" || Session["Role"].ToString() == "Admin")
                 {
                     customerIds = dataContext.Cust_reg_tbl.Select(x => x.ID).ToList();
                 }
@@ -1337,7 +1337,7 @@ namespace CVPortal.Controllers
                         Email = item.Email,
                         Cust_name = item.Cust_name,
                         CustomerCode = item.CustomerCode?.ToString(),
-                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : "Pending"),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,

@@ -1350,7 +1350,7 @@ namespace CVPortal.Controllers
                 var deptCode = user?.Dept_Code;
 
                 var vendorIds = new List<int>();
-                if (Session["Role"].ToString() == "LegalDepartment" || Session["Role"].ToString() == "FinanceDepartment" || Session["Role"].ToString() == "ITDepartment")
+                if (Session["Role"].ToString() == "LegalDepartment" || Session["Role"].ToString() == "FinanceDepartment" || Session["Role"].ToString() == "ITDepartment" || Session["Role"].ToString() == "Admin")
                 {
                     vendorIds = dataContext.Vend_reg_tbl.Select(x => x.ID).ToList();
                 }
@@ -1385,7 +1385,7 @@ namespace CVPortal.Controllers
                         vend_name = item.vend_name,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
                         VendorCode = item.VendorCode?.ToString(),
-                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : "Pending",
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : "Pending"),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
