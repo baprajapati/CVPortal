@@ -102,6 +102,8 @@ namespace CVPortal.Models
         public bool IsFinalApproved { get; set; }
         public int CreatedById { get; set; }
         public System.DateTime CreatedByDate { get; set; }
+        public Nullable<bool> LxPostingSts { get; set; }
+        public string LxPostedDateTime { get; set; }
     
         public virtual tbl_Users tbl_Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

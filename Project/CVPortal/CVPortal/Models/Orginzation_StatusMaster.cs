@@ -17,6 +17,7 @@ namespace CVPortal.Models
         public int OrgZ_ID { get; set; }
         public string Orginzation_Status { get; set; }
         public string OrgCode { get; set; }
+        public string OrgCustCode { get; set; }
         public string Orginzation_StsDesc { get; set; }
         public Nullable<bool> Status { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }

@@ -100,6 +100,8 @@
           <Property Name="IsFinalApproved" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
+          <Property Name="LxPostingSts" Type="bit" />
+          <Property Name="LxPostedDateTime" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="CustomerApproval">
           <Key>
@@ -275,6 +277,7 @@
           <Property Name="OrgZ_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Orginzation_Status" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="OrgCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="OrgCustCode" Type="nvarchar" MaxLength="5" />
           <Property Name="Orginzation_StsDesc" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="bit" />
           <Property Name="CreatedOn" Type="datetime" />
@@ -424,6 +427,8 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="IsFinalApproved" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
+          <Property Name="LxPostingSts" Type="bit" />
+          <Property Name="LxPostedDateTime" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="VendorApproval">
           <Key>
@@ -965,6 +970,8 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="IsFinalApproved" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LxPostingSts" Type="Boolean" />
+          <Property Name="LxPostedDateTime" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_Cust_reg_tbl_tbl_Users" FromRole="Cust_reg_tbl" ToRole="tbl_Users" />
           <NavigationProperty Name="CustomerApprovals" Relationship="CVPortalModel.FK_CustomerApproval_Cust_reg_tbl" FromRole="Cust_reg_tbl" ToRole="CustomerApproval" />
           <NavigationProperty Name="CustomerFiles" Relationship="CVPortalModel.FK_CustomerFiles_Cust_reg_tbl" FromRole="Cust_reg_tbl" ToRole="CustomerFile" />
@@ -1147,6 +1154,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="OrgZ_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Orginzation_Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="OrgCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="OrgCustCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <Property Name="Orginzation_StsDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
@@ -1292,6 +1300,8 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="IsFinalApproved" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LxPostingSts" Type="Boolean" />
+          <Property Name="LxPostedDateTime" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" FromRole="Vend_reg_tbl" ToRole="tbl_Users" />
           <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorApproval" />
           <NavigationProperty Name="VendorFiles" Relationship="CVPortalModel.FK_VendorFiles_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorFile" />
@@ -1580,6 +1590,8 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <EntitySetMapping Name="Cust_reg_tbl">
             <EntityTypeMapping TypeName="CVPortalModel.Cust_reg_tbl">
               <MappingFragment StoreEntitySet="Cust_reg_tbl">
+                <ScalarProperty Name="LxPostedDateTime" ColumnName="LxPostedDateTime" />
+                <ScalarProperty Name="LxPostingSts" ColumnName="LxPostingSts" />
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
                 <ScalarProperty Name="IsFinalApproved" ColumnName="IsFinalApproved" />
@@ -1838,6 +1850,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Orginzation_StsDesc" ColumnName="Orginzation_StsDesc" />
+                <ScalarProperty Name="OrgCustCode" ColumnName="OrgCustCode" />
                 <ScalarProperty Name="OrgCode" ColumnName="OrgCode" />
                 <ScalarProperty Name="Orginzation_Status" ColumnName="Orginzation_Status" />
                 <ScalarProperty Name="OrgZ_ID" ColumnName="OrgZ_ID" />
@@ -1900,6 +1913,8 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <EntitySetMapping Name="Vend_reg_tbl">
             <EntityTypeMapping TypeName="CVPortalModel.Vend_reg_tbl">
               <MappingFragment StoreEntitySet="Vend_reg_tbl">
+                <ScalarProperty Name="LxPostedDateTime" ColumnName="LxPostedDateTime" />
+                <ScalarProperty Name="LxPostingSts" ColumnName="LxPostingSts" />
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
                 <ScalarProperty Name="IsFinalApproved" ColumnName="IsFinalApproved" />
