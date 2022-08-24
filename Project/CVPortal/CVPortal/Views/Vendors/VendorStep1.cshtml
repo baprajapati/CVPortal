@@ -202,7 +202,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Contact_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.Contact_no, Model.IsMain ? (object)new { placeholder = "993XXXXXX9", @class = "form-control decimal" } : new { placeholder = "993XXXXXX9", @class = "form-control decimal", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Contact_no)
                 </div>
             </div>
@@ -214,7 +214,7 @@
                 </div>
                 <div class="col-md-3">
                     @Html.HiddenFor(model => model.Email)
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.Email, new { placeholder = "test@gmail.com", @class = "form-control", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Email)
                 </div>
             </div><br />

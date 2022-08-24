@@ -494,7 +494,7 @@ namespace CVPortal.Controllers
             {
                 var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
-                if (model.CINFile != null && model.CINFile.ContentLength > 0)
+                if (model.CINFile != null && !string.IsNullOrEmpty(model.CINFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.CINFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.CINFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
@@ -538,7 +538,7 @@ namespace CVPortal.Controllers
 
                 dataContext.SaveChanges();
 
-                if (model.PANFile != null && model.PANFile.ContentLength > 0)
+                if (model.PANFile != null && !string.IsNullOrEmpty(model.PANFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.PANFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.PANFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
@@ -582,7 +582,7 @@ namespace CVPortal.Controllers
 
                 dataContext.SaveChanges();
 
-                if (model.GSTFile != null && model.GSTFile.ContentLength > 0)
+                if (model.GSTFile != null && !string.IsNullOrEmpty(model.GSTFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.GSTFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.GSTFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
@@ -626,7 +626,7 @@ namespace CVPortal.Controllers
 
                 dataContext.SaveChanges();
 
-                if (model.MSMEFile != null && model.MSMEFile.ContentLength > 0)
+                if (model.MSMEFile != null && !string.IsNullOrEmpty(model.MSMEFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.MSMEFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MSMEFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
@@ -801,7 +801,7 @@ namespace CVPortal.Controllers
             {
                 var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
-                if (model.BankFile != null && model.BankFile.ContentLength > 0)
+                if (model.BankFile != null && !string.IsNullOrEmpty(model.BankFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.BankFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.BankFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
@@ -882,7 +882,7 @@ namespace CVPortal.Controllers
             {
                 var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
-                if (model.AuditedFile != null && model.AuditedFile.ContentLength > 0)
+                if (model.AuditedFile != null && !string.IsNullOrEmpty(model.AuditedFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.AuditedFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.AuditedFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");
@@ -925,7 +925,7 @@ namespace CVPortal.Controllers
 
                 dataContext.SaveChanges();
 
-                if (model.MOAFile != null && model.MOAFile.ContentLength > 0)
+                if (model.MOAFile != null && !string.IsNullOrEmpty(model.MOAFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.MOAFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.MOAFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Vendor/{model.Id}");

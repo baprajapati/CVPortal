@@ -175,11 +175,11 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.AC_contact_Phno, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.AC_contact_Phno, Model.IsMain ? (object)new { placeholder = "993XXXXXX9", @class = "form-control decimal" } : new { placeholder = "993XXXXXX9", @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.AC_contact_Phno)
                 </div>
                 <div class="col-md-5">
-                    @Html.TextBoxFor(model => model.Spy_contact_Phno, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Spy_contact_Phno, Model.IsMain ? (object)new { placeholder = "993XXXXXX9", @class = "form-control decimal" } : new { placeholder = "993XXXXXX9", @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Spy_contact_Phno)
                 </div>
             </div>
@@ -190,11 +190,11 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.AC_contact_Email, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.AC_contact_Email, Model.IsMain ? (object)new { placeholder = "test@gmail.com", @class = "form-control" } : new { placeholder = "test@gmail.com", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.AC_contact_Email)
                 </div>
                 <div class="col-md-5">
-                    @Html.TextBoxFor(model => model.Spy_contact_Email, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Spy_contact_Email, Model.IsMain ? (object)new { placeholder = "test@gmail.com", @class = "form-control" } : new { placeholder = "test@gmail.com", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Spy_contact_Email)
                 </div>
             </div>
@@ -214,7 +214,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.CIN_No, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.CIN_No, Model.IsMain ? (object)new { placeholder = "123XXXXXXXXXXXXXXXXX9", @class = "form-control" } : new { placeholder = "123XXXXXXXXXXXXXXXXX9", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.CIN_No)
                 </div>
                 <div class="col-md-5">
@@ -243,7 +243,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.PAN_No, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.PAN_No, Model.IsMain ? (object)new { placeholder = "123XXXXXX9", @class = "form-control" } : new { placeholder = "123XXXXXX9", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.PAN_No)
                 </div>
                 <div class="col-md-5">
@@ -287,7 +287,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.GST_Reg_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.GST_Reg_no, Model.IsMain ? (object)new { placeholder = "123XXXXXXXXXXX9", @class = "form-control" } : new { placeholder = "123XXXXXXXXXXX9", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.GST_Reg_no)
                 </div>
                 <div class="col-md-5">
@@ -342,7 +342,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.MSME_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.MSME_no, Model.IsMain ? (object)new { placeholder = "123XXXXXXXX9", @class = "form-control" } : new { placeholder = "123XXXXXXXX9", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.MSME_no)
                 </div>
                 <div class="col-md-5">
@@ -370,7 +370,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.Annu_TurnOver, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Annu_TurnOver, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Annu_TurnOver)
                 </div>
             </div>
@@ -421,7 +421,7 @@
                 </div>
                 <div class="col-md-2">
                     <span>Finacial Year</span>
-                    @Html.TextBoxFor(model => model.FinancialYear1, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.FinancialYear1, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.FinancialYear1)
                 </div>
                 <div class="col-md-2">
@@ -433,14 +433,14 @@
                 </div>
                 <div class="col-md-5">
                     <span>Acknowledge No.</span>
-                    @Html.TextBoxFor(model => model.AcknowledgeNo1, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.AcknowledgeNo1, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.AcknowledgeNo1)
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-offset-3 col-md-2">
                     <span>Finacial Year</span>
-                    @Html.TextBoxFor(model => model.FinancialYear2, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.FinancialYear2, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.FinancialYear2)
                 </div>
                 <div class="col-md-2">
@@ -452,7 +452,7 @@
                 </div>
                 <div class="col-md-5">
                     <span>Acknowledge No.</span>
-                    @Html.TextBoxFor(model => model.AcknowledgeNo2, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.AcknowledgeNo2, Model.IsMain ? (object)new { placeholder = "123XXXXXXXXXXX9", @class = "form-control decimal" } : new { placeholder = "123XXXXXXXXXXX9", @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.AcknowledgeNo2)
                 </div>
             </div>

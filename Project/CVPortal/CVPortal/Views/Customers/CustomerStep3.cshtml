@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.Account_no, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.Account_no, Model.IsMain ? (object)new { placeholder = "3195XXXXXX50", @class = "form-control" } : new { placeholder = "3195XXXXXX50", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Account_no)
                 </div>
             </div>
@@ -175,7 +175,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.MICR_code, Model.IsMain ? (object)new { @class = "form-control", maxlength = "9" } : new { @class = "form-control", maxlength = "9", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.MICR_code, Model.IsMain ? (object)new { placeholder = "123XXXXX9", @class = "form-control", maxlength = "9" } : new { placeholder = "123XXXXX9", @class = "form-control", maxlength = "9", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.MICR_code)
                 </div>
             </div>
@@ -190,7 +190,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.IFSC_RTGS_code, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.IFSC_RTGS_code, Model.IsMain ? (object)new { placeholder = "123XXXXXXX9", @class = "form-control" } : new { placeholder = "123XXXXXXX9", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.IFSC_RTGS_code)
                 </div>
             </div>

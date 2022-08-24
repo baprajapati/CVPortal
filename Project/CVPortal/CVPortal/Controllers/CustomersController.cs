@@ -41,6 +41,7 @@ namespace CVPortal.Controllers
                 model.Cust_name = customer.Cust_name;
                 model.CEO_name = customer.CEO_name;
                 model.CEO_Designation = customer.CEO_Designation;
+                model.CEO_Contact_no = customer.CEO_Contact_no;
                 model.Contact_no = customer.Contact_no;
                 model.Email = customer.Email;
                 model.Dlr_Address = customer.Dlr_Address;
@@ -477,6 +478,7 @@ namespace CVPortal.Controllers
                         customer.Cust_name = model.Cust_name;
                         customer.CEO_name = model.CEO_name;
                         customer.CEO_Designation = model.CEO_Designation;
+                        customer.CEO_Contact_no = model.CEO_Contact_no;
                         customer.Contact_no = model.Contact_no;
                         customer.Dlr_Address = model.Dlr_Address;
                         customer.Dlr_Add_Country = model.Dlr_Add_Country;
@@ -514,7 +516,7 @@ namespace CVPortal.Controllers
             {
                 var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
-                if (model.CINFile != null && model.CINFile.ContentLength > 0)
+                if (model.CINFile != null && !string.IsNullOrEmpty(model.CINFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.CINFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.CINFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
@@ -558,7 +560,7 @@ namespace CVPortal.Controllers
 
                 dataContext.SaveChanges();
 
-                if (model.PANFile != null && model.PANFile.ContentLength > 0)
+                if (model.PANFile != null && !string.IsNullOrEmpty(model.PANFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.PANFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.PANFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
@@ -602,7 +604,7 @@ namespace CVPortal.Controllers
 
                 dataContext.SaveChanges();
 
-                if (model.GSTFile != null && model.GSTFile.ContentLength > 0)
+                if (model.GSTFile != null && !string.IsNullOrEmpty(model.GSTFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.GSTFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.GSTFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
@@ -737,7 +739,7 @@ namespace CVPortal.Controllers
             {
                 var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
-                if (model.BankFile != null && model.BankFile.ContentLength > 0)
+                if (model.BankFile != null && !string.IsNullOrEmpty(model.BankFile.FileName))
                 {
                     var fileName = $"{Path.GetFileNameWithoutExtension(model.BankFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.BankFile.FileName)}";
                     var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
@@ -814,7 +816,7 @@ namespace CVPortal.Controllers
         {
             var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.Id);
 
-            if (model.WealthCapitalCertificateFile != null && model.WealthCapitalCertificateFile.ContentLength > 0)
+            if (model.WealthCapitalCertificateFile != null && !string.IsNullOrEmpty(model.WealthCapitalCertificateFile.FileName))
             {
                 var fileName = $"{Path.GetFileNameWithoutExtension(model.WealthCapitalCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.WealthCapitalCertificateFile.FileName)}";
                 var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
@@ -857,7 +859,7 @@ namespace CVPortal.Controllers
 
             dataContext.SaveChanges();
 
-            if (model.SolvancyCertificateFile != null && model.SolvancyCertificateFile.ContentLength > 0)
+            if (model.SolvancyCertificateFile != null && !string.IsNullOrEmpty(model.SolvancyCertificateFile.FileName))
             {
                 var fileName = $"{Path.GetFileNameWithoutExtension(model.SolvancyCertificateFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.SolvancyCertificateFile.FileName)}";
                 var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
@@ -900,7 +902,7 @@ namespace CVPortal.Controllers
 
             dataContext.SaveChanges();
 
-            if (model.InvestmentDeclarationFile != null && model.InvestmentDeclarationFile.ContentLength > 0)
+            if (model.InvestmentDeclarationFile != null && !string.IsNullOrEmpty(model.InvestmentDeclarationFile.FileName))
             {
                 var fileName = $"{Path.GetFileNameWithoutExtension(model.InvestmentDeclarationFile.FileName)}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.{Path.GetExtension(model.InvestmentDeclarationFile.FileName)}";
                 var path = Server.MapPath($"~/Content/FileUpload/Customer/{model.Id}");
@@ -1003,6 +1005,14 @@ namespace CVPortal.Controllers
                 var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == model.CustomerId);
                 if (customer != null)
                 {
+                    if (Session["Role"].ToString() == "Initiator" && customer.CreatedById == Utility.UserId)
+                    {
+                        if (model.DealerType != "Scrap" && dataContext.Cust_reg_tbl.Any(x => x.Cust_CodeVehicles == model.Code))
+                        {
+                            return Json(new { status = false, result = "Customer main code already exist." });
+                        }
+                    }
+
                     var customerApprover = customer.CustomerApprovals.Where(x => !x.IsDeleted && x.CustomerId == model.CustomerId).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
 
                     model.Status = VendorApprovalEnum.Approved.ToString();

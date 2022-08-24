@@ -213,7 +213,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    @Html.TextBoxFor(model => model.ITR_ReturnSts, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                    @Html.RadioButtonFor(model => model.ITR_ReturnSts, "Yes", Model.IsMain ? (object)new { @id = "ITR_ReturnSts1" } : new { @id = "ITR_ReturnSts1", @disabled = "disabled" })
+                    <label for="ITR_ReturnSts1" style="font-weight: 500; margin-right: 30px;">Yes</label>
+                    @Html.RadioButtonFor(model => model.ITR_ReturnSts, "No", Model.IsMain ? (object)new { @id = "ITR_ReturnSts2" } : new { @id = "ITR_ReturnSts2", @disabled = "disabled" })
+                    <label for="ITR_ReturnSts2" style="font-weight: 500; margin-right: 30px;">No</label>
                     @Html.ValidationMessageFor(model => model.ITR_ReturnSts)
                 </div>
             </div>
