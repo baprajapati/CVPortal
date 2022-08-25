@@ -15,7 +15,7 @@ namespace CVPortal.Models
     public partial class StateCodeMaster
     {
         public int ID { get; set; }
-        public Nullable<decimal> StateCode { get; set; }
+        public string StateCode { get; set; }
         public string StateName { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
     }
