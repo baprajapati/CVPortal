@@ -1114,19 +1114,19 @@ namespace CVPortal.Controllers
                         {
                             if (vendor.Nature_of_service == "1")
                             {
-                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 53001000) + 1001;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "1" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 53001000) + 1000;
                             }
                             else if (vendor.Nature_of_service == "2" || vendor.Nature_of_service == "3")
                             {
-                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => (x.Nature_of_service == "2" || x.Nature_of_service == "3") && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 12001000) + 1001;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => (x.Nature_of_service == "2" || x.Nature_of_service == "3") && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 12001000) + 1000;
                             }
                             else if (vendor.Nature_of_service == "4")
                             {
-                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "4" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 21001000) + 1001;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "4" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 21001000) + 1000;
                             }
                             else if (vendor.Nature_of_service == "5")
                             {
-                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "5" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 91001000) + 1001;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "5" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 91001000) + 1000;
                             }
                         }
 

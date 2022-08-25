@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Seucirty_Deposit, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
+                    @Html.TextBoxFor(model => model.Seucirty_Deposit, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @readonly = "readonly" })
                     @Html.ValidationMessageFor(model => model.Seucirty_Deposit)
                 </div>
                 <div class="col-md-1" style="padding-right:0;padding-left:0;">
