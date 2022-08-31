@@ -250,6 +250,9 @@
     <Compile Include="Models\CustomerFile.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerPaymentTermsMaster.cs">
+      <DependentUpon>CVPortalModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerTypeMaster.cs">
       <DependentUpon>CVPortalModel.tt</DependentUpon>
     </Compile>

@@ -31,7 +31,7 @@ namespace CVPortal.Controllers
             var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (customer != null)
             {
-                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true)
+                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true && !customer.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -78,7 +78,7 @@ namespace CVPortal.Controllers
             var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (customer != null)
             {
-                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true)
+                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true && !customer.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -134,7 +134,7 @@ namespace CVPortal.Controllers
             var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (customer != null)
             {
-                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true)
+                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true && !customer.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -178,7 +178,7 @@ namespace CVPortal.Controllers
             var customer = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (customer != null)
             {
-                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true)
+                if (Utility.UserCode.Equals(customer.Email) && customer.Step4 == true && !customer.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -659,13 +659,13 @@ namespace CVPortal.Controllers
                             isError = true;
                         }
 
-                        if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
+                        if ((model.Type_Cust_gst == "R" || model.Type_Cust_gst == "C") && string.IsNullOrEmpty(model.GST_Reg_no))
                         {
                             ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
                             isError = true;
                         }
 
-                        if ((model.Type_Cust_gst == "1" || model.Type_Cust_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
+                        if ((model.Type_Cust_gst == "R" || model.Type_Cust_gst == "C") && string.IsNullOrEmpty(model.GSTFileName))
                         {
                             ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
                             isError = true;
@@ -954,6 +954,7 @@ namespace CVPortal.Controllers
                     customer.ITR_ReturnStsTurnover = model.ITR_ReturnStsTurnover;
                     customer.ITR_ReturnTDSDeduct = model.ITR_ReturnTDSDeduct;
                     customer.Step4 = true;
+                    customer.IsOpened = false;
                     customer.InitiatorApproval = "P";
                     customer.LegalDepartmentApproval = "P";
                     customer.FinanceDepartmentApproval = "P";
@@ -965,7 +966,7 @@ namespace CVPortal.Controllers
                     string mailTo = customer.tbl_Users.EmailAddress;
                     string CC = string.Empty;
                     string BCC = string.Empty;
-                    string subject = "Your OTP details";
+                    string subject = "Customer approval details";
 
                     var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\CustomerApproval.html"));
                     string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/CustomerLogin/{model.Id}");
@@ -1098,7 +1099,7 @@ namespace CVPortal.Controllers
 
                     if (model.TermsCodeId != null)
                     {
-                        customer.TermsCode = dataContext.PaymentTermsMasters.FirstOrDefault(x => x.PTerms_ID == model.TermsCodeId)?.PTerms_Code;
+                        customer.TermsCode = dataContext.CustomerPaymentTermsMasters.FirstOrDefault(x => x.PTerms_ID == model.TermsCodeId)?.PTerms_Code;
                         customer.PaymentType = dataContext.PayTypeMasters.FirstOrDefault(x => x.PayType_ID == model.PaymentTypeId)?.PayType_Code;
                         customer.CurrencyCode = dataContext.CurrencyCodeMasters.FirstOrDefault(x => x.Crncy_ID == model.CurrencyCodeId)?.Crncy_Code;
                         customer.TaxCode = dataContext.LX_TaxCode.FirstOrDefault(x => x.Id == model.TaxCodeId)?.ItemTaxCDE;
@@ -1181,7 +1182,7 @@ namespace CVPortal.Controllers
                         }
                     }
 
-                    string mailTo1 = $"{Utility.UserCode},{customer.Email},{customer.tbl_Users.EmailAddress}";
+                    string mailTo1 = $"{Utility.UserCode},{customer.tbl_Users.EmailAddress}";
                     string CC1 = string.Empty;
                     string BCC1 = string.Empty;
                     string subject1 = "Customer approval details";
@@ -1277,7 +1278,13 @@ namespace CVPortal.Controllers
 
                     dataContext.SaveChanges();
 
-                    string mailTo1 = $"{Utility.UserCode},{customer.Email},{customer.tbl_Users.EmailAddress}";
+                    string mailTo1 = $"{Utility.UserCode},{customer.tbl_Users.EmailAddress}";
+
+                    if (Session["Role"].ToString() == "Initiator")
+                    {
+                        mailTo1 += $",{customer.Email}";
+                    }
+
                     string CC1 = string.Empty;
                     string BCC1 = string.Empty;
                     string subject1 = "Customer approval details";
@@ -1347,7 +1354,7 @@ namespace CVPortal.Controllers
                         Email = item.Email,
                         Cust_name = item.Cust_name,
                         CustomerCode = item.CustomerCode?.ToString(),
-                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : "Pending"),
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")) : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,

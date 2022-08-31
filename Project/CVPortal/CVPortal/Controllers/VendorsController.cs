@@ -31,7 +31,7 @@ namespace CVPortal.Controllers
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (vendor != null)
             {
-                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true)
+                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true && !vendor.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -78,7 +78,7 @@ namespace CVPortal.Controllers
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (vendor != null)
             {
-                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true)
+                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true && !vendor.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -155,7 +155,7 @@ namespace CVPortal.Controllers
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (vendor != null)
             {
-                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true)
+                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true && !vendor.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -198,7 +198,7 @@ namespace CVPortal.Controllers
             var vendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
             if (vendor != null)
             {
-                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true)
+                if (Utility.UserCode.Equals(vendor.Email) && vendor.Step4 == true && !vendor.IsOpened)
                 {
                     return RedirectToAction("FinalForm", new { id });
                 }
@@ -681,13 +681,13 @@ namespace CVPortal.Controllers
                             isError = true;
                         }
 
-                        if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GST_Reg_no))
+                        if ((model.Type_vend_gst == "R" || model.Type_vend_gst == "C") && string.IsNullOrEmpty(model.GST_Reg_no))
                         {
                             ModelState.AddModelError(nameof(model.GST_Reg_no), "Please enter GST reg no");
                             isError = true;
                         }
 
-                        if ((model.Type_vend_gst == "1" || model.Type_vend_gst == "3") && string.IsNullOrEmpty(model.GSTFileName))
+                        if ((model.Type_vend_gst == "R" || model.Type_vend_gst == "C") && string.IsNullOrEmpty(model.GSTFileName))
                         {
                             ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");
                             isError = true;
@@ -973,6 +973,7 @@ namespace CVPortal.Controllers
                     if (vendor != null)
                     {
                         vendor.Step4 = true;
+                        vendor.IsOpened = false;
                         vendor.InitiatorApproval = "P";
                         vendor.LegalDepartmentApproval = "P";
                         vendor.FinanceDepartmentApproval = "P";
@@ -985,7 +986,7 @@ namespace CVPortal.Controllers
                         string mailTo = vendor.tbl_Users.EmailAddress;
                         string CC = string.Empty;
                         string BCC = string.Empty;
-                        string subject = "Your OTP details";
+                        string subject = "Vendor approval details";
 
                         var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
                         string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.Id}");
@@ -1006,6 +1007,7 @@ namespace CVPortal.Controllers
                 if (vendor != null)
                 {
                     vendor.Step4 = true;
+                    vendor.IsOpened = false;
                     vendor.NextApprover = vendor.tbl_Users.HAUSER;
                     vendor.NextApproverRole = "Initiator";
                     dataContext.SaveChanges();
@@ -1014,7 +1016,7 @@ namespace CVPortal.Controllers
                 string mailTo = vendor.tbl_Users.EmailAddress;
                 string CC = string.Empty;
                 string BCC = string.Empty;
-                string subject = "Your OTP details";
+                string subject = "Vendor approval details";
 
                 var htmlContent = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorApproval.html"));
                 string body = htmlContent.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{model.Id}");
@@ -1219,7 +1221,7 @@ namespace CVPortal.Controllers
                         }
                     }
 
-                    string mailTo1 = $"{Utility.UserCode},{vendor.Email},{vendor.tbl_Users.EmailAddress}";
+                    string mailTo1 = $"{Utility.UserCode},{vendor.tbl_Users.EmailAddress}";
                     string CC1 = string.Empty;
                     string BCC1 = string.Empty;
                     string subject1 = "Vendor approval details";
@@ -1314,7 +1316,13 @@ namespace CVPortal.Controllers
 
                     dataContext.SaveChanges();
 
-                    string mailTo1 = $"{Utility.UserCode},{vendor.Email},{vendor.tbl_Users.EmailAddress}";
+                    string mailTo1 = $"{Utility.UserCode},{vendor.tbl_Users.EmailAddress}";
+
+                    if (Session["Role"].ToString() == "Initiator")
+                    {
+                        mailTo1 += $",{vendor.Email}";
+                    }
+
                     string CC1 = string.Empty;
                     string BCC1 = string.Empty;
                     string subject1 = "Vendor approval details";
@@ -1385,7 +1393,7 @@ namespace CVPortal.Controllers
                         vend_name = item.vend_name,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
                         VendorCode = item.VendorCode?.ToString(),
-                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : "Pending") : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : "Pending"),
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")) : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,

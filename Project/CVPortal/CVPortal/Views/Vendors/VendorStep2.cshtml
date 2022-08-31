@@ -267,11 +267,11 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    @Html.RadioButtonFor(model => model.Type_vend_gst, "1", Model.IsMain ? (object)new { @id = "vendorType1" } : new { @id = "vendorType1", disabled = "disabled" })
+                    @Html.RadioButtonFor(model => model.Type_vend_gst, "R", Model.IsMain ? (object)new { @id = "vendorType1" } : new { @id = "vendorType1", disabled = "disabled" })
                     <label for="vendorType1" style="font-weight: 500; margin-right: 30px;">Registered</label>
-                    @Html.RadioButtonFor(model => model.Type_vend_gst, "2", Model.IsMain ? (object)new { @id = "vendorType2" } : new { @id = "vendorType2", disabled = "disabled" })
+                    @Html.RadioButtonFor(model => model.Type_vend_gst, "U", Model.IsMain ? (object)new { @id = "vendorType2" } : new { @id = "vendorType2", disabled = "disabled" })
                     <label for="vendorType2" style="font-weight: 500; margin-right: 30px;">Unregistered</label>
-                    @Html.RadioButtonFor(model => model.Type_vend_gst, "3", Model.IsMain ? (object)new { @id = "vendorType3" } : new { @id = "vendorType3", disabled = "disabled" })
+                    @Html.RadioButtonFor(model => model.Type_vend_gst, "C", Model.IsMain ? (object)new { @id = "vendorType3" } : new { @id = "vendorType3", disabled = "disabled" })
                     <label for="vendorType3" style="font-weight: 500;">Composite</label><br />
                     @Html.ValidationMessageFor(model => model.Type_vend_gst)
                 </div>

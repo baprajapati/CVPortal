@@ -87,7 +87,7 @@
                         {
                             "data": "Status", "name": "Status",
                             "render": function (data, type, row, meta) {
-                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : "<span class='color-yellow'>Pending</span>";
+                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : row.Status == "Pending" ? "<span class='color-yellow'>Pending</span>" : "<span class='color-red'>Rejected</span>";
                             }
                         },
                         {

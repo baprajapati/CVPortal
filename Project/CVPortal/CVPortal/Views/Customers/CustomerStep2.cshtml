@@ -234,11 +234,11 @@
                 </div>
             </div>
             <div class="col-md-9">
-                @Html.RadioButtonFor(model => model.Type_Cust_gst, "1", Model.IsMain ? (object)new { @id = "customerType1" } : new { @id = "customerType1", disabled = "disabled" })
+                @Html.RadioButtonFor(model => model.Type_Cust_gst, "R", Model.IsMain ? (object)new { @id = "customerType1" } : new { @id = "customerType1", disabled = "disabled" })
                 <label for="customerType1" style="font-weight: 500; margin-right: 30px;">Registered</label>
-                @Html.RadioButtonFor(model => model.Type_Cust_gst, "2", Model.IsMain ? (object)new { @id = "customerType2" } : new { @id = "customerType2", disabled = "disabled" })
+                @Html.RadioButtonFor(model => model.Type_Cust_gst, "U", Model.IsMain ? (object)new { @id = "customerType2" } : new { @id = "customerType2", disabled = "disabled" })
                 <label for="customerType2" style="font-weight: 500; margin-right: 30px;">Unregistered</label>
-                @Html.RadioButtonFor(model => model.Type_Cust_gst, "3", Model.IsMain ? (object)new { @id = "customerType3" } : new { @id = "customerType3", disabled = "disabled" })
+                @Html.RadioButtonFor(model => model.Type_Cust_gst, "C", Model.IsMain ? (object)new { @id = "customerType3" } : new { @id = "customerType3", disabled = "disabled" })
                 <label for="customerType3" style="font-weight: 500;">Composite</label><br />
                 @Html.ValidationMessageFor(model => model.Type_Cust_gst)
             </div>

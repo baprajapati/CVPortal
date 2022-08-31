@@ -98,6 +98,7 @@
           <Property Name="Step3" Type="bit" />
           <Property Name="Step4" Type="bit" />
           <Property Name="IsFinalApproved" Type="bit" Nullable="false" />
+          <Property Name="IsOpened" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
           <Property Name="LxPostingSts" Type="bit" />
@@ -137,6 +138,16 @@
           <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="ContentType" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Data" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerPaymentTermsMaster">
+          <Key>
+            <PropertyRef Name="PTerms_ID" />
+          </Key>
+          <Property Name="PTerms_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PTerms_Code" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="PTerms_CodeDesc" Type="nvarchar" MaxLength="50" />
+          <Property Name="PTerms_Status" Type="bit" />
+          <Property Name="CreatedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="CustomerTypeMaster">
           <Key>
@@ -425,6 +436,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Step3" Type="bit" />
           <Property Name="Step4" Type="bit" />
           <Property Name="IsFinalApproved" Type="bit" Nullable="false" />
+          <Property Name="IsOpened" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
           <Property Name="LxPostingSts" Type="bit" />
@@ -699,6 +711,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <EntitySet Name="Cust_reg_tbl" EntityType="Self.Cust_reg_tbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerApproval" EntityType="Self.CustomerApproval" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerFiles" EntityType="Self.CustomerFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerPaymentTermsMaster" EntityType="Self.CustomerPaymentTermsMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerTypeMaster" EntityType="Self.CustomerTypeMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentSequencePrefix" EntityType="Self.DocumentSequencePrefix" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailHistory" EntityType="Self.EmailHistory" Schema="dbo" store:Type="Tables" />
@@ -798,6 +811,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <EntitySet Name="Cust_reg_tbl" EntityType="CVPortalModel.Cust_reg_tbl" />
           <EntitySet Name="CustomerApprovals" EntityType="CVPortalModel.CustomerApproval" />
           <EntitySet Name="CustomerFiles" EntityType="CVPortalModel.CustomerFile" />
+          <EntitySet Name="CustomerPaymentTermsMasters" EntityType="CVPortalModel.CustomerPaymentTermsMaster" />
           <EntitySet Name="CustomerTypeMasters" EntityType="CVPortalModel.CustomerTypeMaster" />
           <EntitySet Name="DocumentSequencePrefixes" EntityType="CVPortalModel.DocumentSequencePrefix" />
           <EntitySet Name="EmailHistories" EntityType="CVPortalModel.EmailHistory" />
@@ -968,6 +982,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Step3" Type="Boolean" />
           <Property Name="Step4" Type="Boolean" />
           <Property Name="IsFinalApproved" Type="Boolean" Nullable="false" />
+          <Property Name="IsOpened" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LxPostingSts" Type="Boolean" />
@@ -1013,6 +1028,16 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="ContentType" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Data" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Cust_reg_tbl" Relationship="CVPortalModel.FK_CustomerFiles_Cust_reg_tbl" FromRole="CustomerFile" ToRole="Cust_reg_tbl" />
+        </EntityType>
+        <EntityType Name="CustomerPaymentTermsMaster">
+          <Key>
+            <PropertyRef Name="PTerms_ID" />
+          </Key>
+          <Property Name="PTerms_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PTerms_Code" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="PTerms_CodeDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PTerms_Status" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="CustomerTypeMaster">
           <Key>
@@ -1298,6 +1323,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Step3" Type="Boolean" />
           <Property Name="Step4" Type="Boolean" />
           <Property Name="IsFinalApproved" Type="Boolean" Nullable="false" />
+          <Property Name="IsOpened" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LxPostingSts" Type="Boolean" />
@@ -1594,6 +1620,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="LxPostingSts" ColumnName="LxPostingSts" />
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="IsOpened" ColumnName="IsOpened" />
                 <ScalarProperty Name="IsFinalApproved" ColumnName="IsFinalApproved" />
                 <ScalarProperty Name="Step4" ColumnName="Step4" />
                 <ScalarProperty Name="Step3" ColumnName="Step3" />
@@ -1700,6 +1727,17 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="FileUploadType" ColumnName="FileUploadType" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerPaymentTermsMasters">
+            <EntityTypeMapping TypeName="CVPortalModel.CustomerPaymentTermsMaster">
+              <MappingFragment StoreEntitySet="CustomerPaymentTermsMaster">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="PTerms_Status" ColumnName="PTerms_Status" />
+                <ScalarProperty Name="PTerms_CodeDesc" ColumnName="PTerms_CodeDesc" />
+                <ScalarProperty Name="PTerms_Code" ColumnName="PTerms_Code" />
+                <ScalarProperty Name="PTerms_ID" ColumnName="PTerms_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1917,6 +1955,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="LxPostingSts" ColumnName="LxPostingSts" />
                 <ScalarProperty Name="CreatedByDate" ColumnName="CreatedByDate" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="IsOpened" ColumnName="IsOpened" />
                 <ScalarProperty Name="IsFinalApproved" ColumnName="IsFinalApproved" />
                 <ScalarProperty Name="Step4" ColumnName="Step4" />
                 <ScalarProperty Name="Step3" ColumnName="Step3" />

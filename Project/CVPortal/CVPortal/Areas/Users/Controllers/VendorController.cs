@@ -98,6 +98,25 @@ namespace CVPortal.Areas.Users.Controllers
             }
         }
 
+        public JsonResult EnableVendor(int id)
+        {
+            try
+            {
+                var data = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
+                if (data != null)
+                {
+                    data.IsOpened = true;
+                    dataContext.SaveChanges();
+                }
+
+                return Json(new { status = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, result = ex.GetBaseException().Message });
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddVendor(VendorViewModel vendor)
@@ -275,7 +294,11 @@ namespace CVPortal.Areas.Users.Controllers
                         }
                         else if ("Pending".Contains(model.Status))
                         {
-                            data = data.Where(x => !x.IsFinalApproved).ToList();
+                            data = data.Where(x => !x.IsFinalApproved && x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
+                        }
+                        else if ("Rejected".Contains(model.Status))
+                        {
+                            data = data.Where(x => !x.IsFinalApproved && !x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
                         }
                         else
                         {
@@ -290,7 +313,11 @@ namespace CVPortal.Areas.Users.Controllers
                         }
                         else if ("Pending".Contains(model.Status))
                         {
-                            data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                            data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
+                        }
+                        else if ("Rejected".Contains(model.Status))
+                        {
+                            data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && !x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
                         }
                         else
                         {
@@ -321,7 +348,7 @@ namespace CVPortal.Areas.Users.Controllers
                         VendorCode = item.VendorCode?.ToString(),
                         Step4 = item.Step4 ?? false,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
-                        Status = item.IsFinalApproved ? "Approved" : "Pending",
+                        Status = item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected"),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
@@ -396,7 +423,11 @@ namespace CVPortal.Areas.Users.Controllers
                         }
                         else if ("Pending".Contains(model.Status))
                         {
-                            data = data.Where(x => !x.IsFinalApproved).ToList();
+                            data = data.Where(x => !x.IsFinalApproved && x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
+                        }
+                        else if ("Rejected".Contains(model.Status))
+                        {
+                            data = data.Where(x => !x.IsFinalApproved && !x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
                         }
                         else
                         {
@@ -409,7 +440,7 @@ namespace CVPortal.Areas.Users.Controllers
                         {
                             data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved).ToList();
                         }
-                        else if ("Pending".Contains(model.Status))
+                        else if ("Pending".Contains(model.Status) || "Rejected".Contains(model.Status))
                         {
                             data = new List<Vend_reg_tbl>();
                         }
@@ -442,7 +473,7 @@ namespace CVPortal.Areas.Users.Controllers
                         VendorCode = item.VendorCode?.ToString(),
                         Step4 = item.Step4 ?? false,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
-                        Status = item.IsFinalApproved ? "Approved" : "Pending",
+                        Status = item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected"),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,

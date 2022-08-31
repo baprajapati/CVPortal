@@ -87,7 +87,7 @@
                         {
                             "data": "Status", "name": "Status",
                             "render": function (data, type, row, meta) {
-                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : "<span class='color-yellow'>Pending</span>";
+                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : row.Status == "Pending" ? "<span class='color-yellow'>Pending</span>" : "<span class='color-red' style='margin-right:10px;'>Rejected</span><a  href='javascript:void(0);' data-vendorid=" + row.Id + " title='Enable' class='enableVendor'>Enable</a>";
                             }
                         },
                         {
@@ -145,6 +145,31 @@
             }).bind('focus', function () {
                 if (!$(this).val().trim())
                     $(this).keydown();
+            });
+
+            $('#lstUsers').on('click', '.enableVendor', function () {
+                var userID = $(this).data('vendorid');
+                bootbox.confirm("Are you sure want to enable vendor ?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("EnableVendor", new { area = "Users", controller = "Vendor" })/' + userID,
+                            type: "GET",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.status) {
+                                    toastr.success("Vendor enabled successfully.", "Vendor");
+                                    users.draw();
+                                } else {
+                                    toastr.error(response.result, "Vendor");
+                                }
+                            },
+                            error: function (response) {
+                                toastr.error(response.responseText, "Vendor");
+                            }
+                        });
+                    }
+                });
             });
         });
 

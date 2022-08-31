@@ -90,6 +90,7 @@ namespace CVPortal.Models
         public Nullable<bool> Step3 { get; set; }
         public Nullable<bool> Step4 { get; set; }
         public bool IsFinalApproved { get; set; }
+        public bool IsOpened { get; set; }
         public int CreatedById { get; set; }
         public System.DateTime CreatedByDate { get; set; }
         public Nullable<bool> LxPostingSts { get; set; }

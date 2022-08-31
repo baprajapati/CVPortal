@@ -71,6 +71,25 @@ namespace CVPortal.Areas.Users.Controllers
             }
         }
 
+        public JsonResult EnableCustomer(int id)
+        {
+            try
+            {
+                var data = dataContext.Cust_reg_tbl.FirstOrDefault(x => x.ID == id);
+                if (data != null)
+                {
+                    data.IsOpened = true;
+                    dataContext.SaveChanges();
+                }
+
+                return Json(new { status = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = false, result = ex.GetBaseException().Message });
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddCustomer(CustomerViewModel customer)
@@ -186,7 +205,11 @@ namespace CVPortal.Areas.Users.Controllers
                         }
                         else if ("Pending".Contains(model.Status))
                         {
-                            data = data.Where(x => !x.IsFinalApproved).ToList();
+                            data = data.Where(x => !x.IsFinalApproved && x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
+                        }
+                        else if ("Rejected".Contains(model.Status))
+                        {
+                            data = data.Where(x => !x.IsFinalApproved && !x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
                         }
                         else
                         {
@@ -201,7 +224,11 @@ namespace CVPortal.Areas.Users.Controllers
                         }
                         else if ("Pending".Contains(model.Status))
                         {
-                            data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved).ToList();
+                            data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
+                        }
+                        else if ("Rejected".Contains(model.Status))
+                        {
+                            data = dataContext.Cust_reg_tbl.Where(x => !x.IsFinalApproved && !x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
                         }
                         else
                         {
@@ -234,7 +261,7 @@ namespace CVPortal.Areas.Users.Controllers
                         Cust_CodeSpares = item.Cust_CodeSpares?.ToString(),
                         Cust_CodeSecurity = item.Cust_CodeSecurity?.ToString(),
                         Step4 = item.Step4 ?? false,
-                        Status = item.IsFinalApproved ? "Approved" : "Pending",
+                        Status = item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected"),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
@@ -315,7 +342,11 @@ namespace CVPortal.Areas.Users.Controllers
                         }
                         else if ("Pending".Contains(model.Status))
                         {
-                            data = data.Where(x => !x.IsFinalApproved).ToList();
+                            data = data.Where(x => !x.IsFinalApproved && x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
+                        }
+                        else if ("Rejected".Contains(model.Status))
+                        {
+                            data = data.Where(x => !x.IsFinalApproved && !x.IsOpened && (x.Step4 == false || x.Step4 == null)).ToList();
                         }
                         else
                         {
@@ -328,7 +359,7 @@ namespace CVPortal.Areas.Users.Controllers
                         {
                             data = dataContext.Cust_reg_tbl.Where(x => x.IsFinalApproved).ToList();
                         }
-                        else if ("Pending".Contains(model.Status))
+                        else if ("Pending".Contains(model.Status) || "Rejected".Contains(model.Status))
                         {
                             data = new List<Cust_reg_tbl>();
                         }
@@ -363,7 +394,7 @@ namespace CVPortal.Areas.Users.Controllers
                         Cust_CodeSpares = item.Cust_CodeSpares?.ToString(),
                         Cust_CodeSecurity = item.Cust_CodeSecurity?.ToString(),
                         Step4 = item.Step4 ?? false,
-                        Status = item.IsFinalApproved ? "Approved" : "Pending",
+                        Status = item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected"),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
@@ -447,8 +478,8 @@ namespace CVPortal.Areas.Users.Controllers
                     htmlContent = htmlContent.Replace("[AC_CONTACT_EMAIL]", customer.AC_contact_Email);
                     htmlContent = htmlContent.Replace("[CINNO_LLPNO]", customer.CINNo_LLPNo);
                     htmlContent = htmlContent.Replace("[PAN_NO]", customer.PAN_No);
-                    htmlContent = htmlContent.Replace("[TYPE_CUST_GST]", customer.Type_Cust_gst == "1" ? "Registered" :
-                        customer.Type_Cust_gst == "2" ? "Unregistered" : "Composite");
+                    htmlContent = htmlContent.Replace("[TYPE_CUST_GST]", customer.Type_Cust_gst == "R" ? "Registered" :
+                        customer.Type_Cust_gst == "U" ? "Unregistered" : "Composite");
                     htmlContent = htmlContent.Replace("[GST_REG_NO]", customer.GST_Reg_no);
                     htmlContent = htmlContent.Replace("[SEUCIRTY_DEPOSIT]", customer.Seucirty_Deposit.ToString());
                     htmlContent = htmlContent.Replace("[DDNO_UTRNO]", customer.DDNo_UTRNo);
