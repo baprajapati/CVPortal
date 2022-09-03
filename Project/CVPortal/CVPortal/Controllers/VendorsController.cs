@@ -1368,6 +1368,11 @@ namespace CVPortal.Controllers
                 }
 
                 var data = dataContext.Vend_reg_tbl.Where(x => vendorIds.Contains(x.ID)).ToList();
+                if (data.Any(x => x.Email == Utility.UserCode))
+                {
+                    data = data.Where(x => x.Email == Utility.UserCode).ToList();
+                }
+
                 var vendorApprovers = dataContext.VendorApprovals.Where(x => !x.IsDeleted).ToList();
                 var vendors = new List<VendorListModel>();
 

@@ -1329,6 +1329,11 @@ namespace CVPortal.Controllers
                 }
 
                 var data = dataContext.Cust_reg_tbl.Where(x => customerIds.Contains(x.ID)).ToList();
+                if(data.Any(x=>x.Email == Utility.UserCode))
+                {
+                    data = data.Where(x => x.Email == Utility.UserCode).ToList();
+                }
+
                 var customerApprovers = dataContext.CustomerApprovals.Where(x => !x.IsDeleted).ToList();
                 var customers = new List<CustomerListModel>();
 
