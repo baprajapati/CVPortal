@@ -18,6 +18,7 @@
 
 .color-red {
     color: red !important;
+    text-decoration: underline;
 }
 
 .color-green {

@@ -1308,11 +1308,7 @@ namespace CVPortal.Controllers
                     }
 
                     vendor.VendorApprovals.Add(data);
-
-                    vendor.Step1 = false;
-                    vendor.Step2 = false;
-                    vendor.Step3 = false;
-                    vendor.Step4 = false;
+                    vendor.NextApprover = null;
 
                     dataContext.SaveChanges();
 
@@ -1393,7 +1389,7 @@ namespace CVPortal.Controllers
                         vend_name = item.vend_name,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
                         VendorCode = item.VendorCode?.ToString(),
-                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")) : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")),
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : (!item.IsOpened && item.Step4 == true && item.NextApprover == null ? "Rejected" : "Pending")) : vendorApprovers.Any(x => x.VendorId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : (!item.IsOpened && item.Step4 == true && item.NextApprover == null ? "Rejected" : "Pending")),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,

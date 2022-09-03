@@ -90,7 +90,7 @@
                         {
                             "data": "Status", "name": "Status",
                             "render": function (data, type, row, meta) {
-                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : row.Status == "Pending" ? "<span class='color-yellow'>Pending</span>" : "<span class='color-red' style='margin-right:10px;'>Rejected</span><a  href='javascript:void(0);' data-customerid=" + row.Id + " title='Enable' class='enableCustomer'>Enable</a>" ;
+                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : row.Status == "Pending" ? "<span class='color-yellow'>Pending</span>" : "<a  href='javascript:void(0);' data-rejectedreason='" + row.RejectedReason + "' class='rejectedReason'><span class='color-red' style='margin-right:10px;'>Rejected</span></a>" + ("@Session["Role"].ToString()" == "Initiator" ? "<a  href='javascript:void(0);' data-customerid=" + row.Id + " title='Enable' class='enableCustomer'>Enable</a>" : "") ;
                             }
                         },
                         {
@@ -120,7 +120,13 @@
             });
 
             $(".export-button").click(function () {
-                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Customer" })' + -'?code=' + $("#Code").val() + '&email=' + $("#Email").val() + " & customerName=" + $("#CustomerName").val() + " & status=" + $("#Status").val();            });
+                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "Customer" })' + -'?code=' + $("#Code").val() + '&email=' + $("#Email").val() + " & customerName=" + $("#CustomerName").val() + " & status=" + $("#Status").val();
+            });
+
+            $('#lstUsers').on('click', '.rejectedReason', function () {
+                var rejectedReason = $(this).data('rejectedreason');
+                bootbox.alert(rejectedReason);
+            });
 
             $('#lstUsers').on('click', '.printCustomer', function () {
                 if (!$(".printCustomer").hasClass("disabled")) {

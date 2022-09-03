@@ -105,15 +105,34 @@ namespace CVPortal.Areas.Users.Controllers
                 var data = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.ID == id);
                 if (data != null)
                 {
+                    data.Step1 = false;
+                    data.Step2 = false;
+                    data.Step3 = false;
+                    data.Step4 = false;
                     data.IsOpened = true;
                     dataContext.SaveChanges();
                 }
 
-                return Json(new { status = true });
+                var remarks = data.VendorApprovals.Where(x => x.Status == "Rejected").OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.Remarks;
+                string CC1 = string.Empty;
+                string BCC1 = string.Empty;
+                string subject1 = "Vendor approval details";
+
+                var htmlContent1 = System.IO.File.ReadAllText(Server.MapPath("\\Content\\EmailTemplate\\VendorRejected.html"));
+                string body1 = htmlContent1.Replace("[URL]", $"{ConfigurationManager.AppSettings["SiteUrl"].ToString()}/Account/VendorLogin/{id}");
+                body1 = body1.Replace("[REMARKS]", remarks);
+                body1 = body1.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"].ToString());
+                body1 = body1.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"].ToString());
+
+                string displayName1 = string.Empty;
+                string attachments1 = string.Empty;
+                Utility.SendMail(data.Email, CC1, BCC1, subject1, body1, displayName1, attachments1, true, Utility.UserId, EmailTypeEnum.Vendor, id);
+
+                return Json(new { status = true }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { status = false, result = ex.GetBaseException().Message });
+                return Json(new { status = false, result = ex.GetBaseException().Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -155,7 +174,8 @@ namespace CVPortal.Areas.Users.Controllers
 
                     var data = new Vend_reg_tbl()
                     {
-                        Org_Sts = "1"
+                        Org_Sts = "1",
+                        IsOpened = true
                     };
 
                     if (!vendor.IsNewVendor)
@@ -348,7 +368,8 @@ namespace CVPortal.Areas.Users.Controllers
                         VendorCode = item.VendorCode?.ToString(),
                         Step4 = item.Step4 ?? false,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
-                        Status = item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected"),
+                        Status = item.IsFinalApproved ? "Approved" : (!item.IsOpened && item.Step4 == true && item.NextApprover == null ? "Rejected" : "Pending"),
+                        RejectedReason = item.VendorApprovals.Where(x => x.VendorId == item.ID && x.Status == "Rejected").OrderByDescending(x => x.CreatedByDate).FirstOrDefault()?.Remarks,
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,
@@ -473,7 +494,7 @@ namespace CVPortal.Areas.Users.Controllers
                         VendorCode = item.VendorCode?.ToString(),
                         Step4 = item.Step4 ?? false,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",
-                        Status = item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected"),
+                        Status = item.IsFinalApproved ? "Approved" : (!item.IsOpened && item.Step4 == true && item.NextApprover == null ? "Rejected" : "Pending"),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,

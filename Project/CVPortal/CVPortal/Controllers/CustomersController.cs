@@ -1269,11 +1269,6 @@ namespace CVPortal.Controllers
                     }
 
                     customer.CustomerApprovals.Add(data);
-
-                    customer.Step1 = false;
-                    customer.Step2 = false;
-                    customer.Step3 = false;
-                    customer.Step4 = false;
                     customer.NextApprover = null;
 
                     dataContext.SaveChanges();
@@ -1354,7 +1349,7 @@ namespace CVPortal.Controllers
                         Email = item.Email,
                         Cust_name = item.Cust_name,
                         CustomerCode = item.CustomerCode?.ToString(),
-                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")) : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : (!item.IsFinalApproved && item.IsOpened && (item.Step4 == false || item.Step4 == null) ? "Pending" : "Rejected")),
+                        Status = Utility.UserId == 0 ? (item.IsFinalApproved ? "Approved" : (!item.IsOpened && item.Step4 == true && item.NextApprover == null ? "Rejected" : "Pending")) : customerApprovers.Any(x => x.CustomerId == item.ID && x.CreatedById == Utility.UserId) ? "Approved" : (item.IsFinalApproved ? "Approved" : (!item.IsOpened && item.Step4 == true && item.NextApprover == null ? "Rejected" : "Pending")),
                         Owner = item.tbl_Users.HANAME,
                         Documents = string.Join(" | ", documents),
                         NextApprover = item.NextApprover,

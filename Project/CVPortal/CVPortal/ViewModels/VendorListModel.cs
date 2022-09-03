@@ -12,6 +12,7 @@ namespace CVPortal.ViewModels
         public string vend_name { get; set; }
         public string Email { get; set; }
         public string Status { get; set; }
+        public string RejectedReason { get; set; }
         public string VendorCode { get; set; }
         public string NewExistingVendor { get; set; }
         public string Owner { get; set; }
