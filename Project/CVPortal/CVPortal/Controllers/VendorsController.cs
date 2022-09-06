@@ -687,6 +687,18 @@ namespace CVPortal.Controllers
                             isError = true;
                         }
 
+                        if (model.IsITRFiled1 == true && string.IsNullOrEmpty(model.AcknowledgeNo1))
+                        {
+                            ModelState.AddModelError(nameof(model.AcknowledgeNo1), "Please enter acknowledge no");
+                            isError = true;
+                        }
+
+                        if (model.IsITRFiled2 == true && string.IsNullOrEmpty(model.AcknowledgeNo2))
+                        {
+                            ModelState.AddModelError(nameof(model.AcknowledgeNo2), "Please enter acknowledge no");
+                            isError = true;
+                        }
+
                         if ((model.Type_vend_gst == "R" || model.Type_vend_gst == "C") && string.IsNullOrEmpty(model.GSTFileName))
                         {
                             ModelState.AddModelError(nameof(model.GSTFileName), "Please upload GST file");

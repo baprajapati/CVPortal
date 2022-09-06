@@ -77,6 +77,24 @@
                 }
             });
 
+            $("#IsITRFiled12").click(function () {
+                $("#AcknowledgeNo1").val("");
+                $("#AcknowledgeNo1").attr("disabled", "disabled");
+            });
+
+            $("#IsITRFiled11").click(function () {
+                $("#AcknowledgeNo1").removeAttr("disabled");
+            });
+
+            $("#IsITRFiled122").click(function () {
+                $("#AcknowledgeNo2").val("");
+                $("#AcknowledgeNo2").attr("disabled", "disabled");
+            });
+
+            $("#IsITRFiled111").click(function () {
+                $("#AcknowledgeNo2").removeAttr("disabled");
+            });
+
             $("#vendorType2").click(function () {
                 $("#GST_Reg_no").val("");
                 $("#GST_Reg_no").attr("disabled", "disabled");
@@ -93,6 +111,16 @@
             if ($("#vendorType2").is(":checked")) {
                 $("#GST_Reg_no").val("");
                 $("#GST_Reg_no").attr("disabled", "disabled");
+            }
+
+            if ($("#IsITRFiled12").is(":checked")) {
+                $("#AcknowledgeNo1").val("");
+                $("#AcknowledgeNo1").attr("disabled", "disabled");
+            }
+
+            if ($("#IsITRFiled122").is(":checked")) {
+                $("#AcknowledgeNo2").val("");
+                $("#AcknowledgeNo2").attr("disabled", "disabled");
             }
         });
     </script>
@@ -433,7 +461,7 @@
                 </div>
                 <div class="col-md-5">
                     <span>Acknowledge No.</span>
-                    @Html.TextBoxFor(model => model.AcknowledgeNo1, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.AcknowledgeNo1, Model.IsMain ? (object)new { placeholder = "123XXXXXXXXXXX9", @class = "form-control decimal" } : new { placeholder = "123XXXXXXXXXXX9", @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.AcknowledgeNo1)
                 </div>
             </div>

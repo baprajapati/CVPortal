@@ -81,11 +81,7 @@ namespace CVPortal.ViewModels
 
         [Required(ErrorMessage = "Please select yes/no")]
         public bool? IsITRFiled2 { get; set; }
-
-        [Required(ErrorMessage = "Please enter acknowledge no")]
         public string AcknowledgeNo1 { get; set; }
-
-        [Required(ErrorMessage = "Please enter acknowledge no")]
         public string AcknowledgeNo2 { get; set; }
 
         public string ITR_Field_dtl { get; set; }
