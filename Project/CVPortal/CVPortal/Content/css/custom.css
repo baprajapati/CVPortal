@@ -210,9 +210,12 @@ table.dataTable tbody td.select-checkbox:before, table.dataTable tbody td.select
     float: right !important;
 }
 
+.text-underline {
+    text-decoration: underline;
+}
+
 .color-red {
     color: red !important;
-    text-decoration: underline;
 }
 
 .color-green {

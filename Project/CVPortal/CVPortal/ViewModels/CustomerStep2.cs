@@ -19,6 +19,7 @@ namespace CVPortal.ViewModels
         [Required(ErrorMessage = "Please enter contact no")]
         public string AC_contact_Phno { get; set; }
 
+        [Required(ErrorMessage = "Please enter mobile no")]
         public string AC_contact_Mob { get; set; }
 
         [Required(ErrorMessage = "Please enter email")]
