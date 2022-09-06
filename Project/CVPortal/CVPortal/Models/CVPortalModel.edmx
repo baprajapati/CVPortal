@@ -101,7 +101,7 @@
           <Property Name="IsOpened" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
-          <Property Name="LxPostingSts" Type="bit" />
+          <Property Name="LxPostingSts" Type="bit" Nullable="false" />
           <Property Name="LxPostedDateTime" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="CustomerApproval">
@@ -439,7 +439,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="IsOpened" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="int" Nullable="false" />
           <Property Name="CreatedByDate" Type="datetime" Nullable="false" />
-          <Property Name="LxPostingSts" Type="bit" />
+          <Property Name="LxPostingSts" Type="bit" Nullable="false" />
           <Property Name="LxPostedDateTime" Type="nvarchar" MaxLength="25" />
         </EntityType>
         <EntityType Name="VendorApproval">
@@ -985,7 +985,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="IsOpened" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LxPostingSts" Type="Boolean" />
+          <Property Name="LxPostingSts" Type="Boolean" Nullable="false" />
           <Property Name="LxPostedDateTime" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_Cust_reg_tbl_tbl_Users" FromRole="Cust_reg_tbl" ToRole="tbl_Users" />
           <NavigationProperty Name="CustomerApprovals" Relationship="CVPortalModel.FK_CustomerApproval_Cust_reg_tbl" FromRole="Cust_reg_tbl" ToRole="CustomerApproval" />
@@ -1326,7 +1326,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="IsOpened" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="Int32" Nullable="false" />
           <Property Name="CreatedByDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LxPostingSts" Type="Boolean" />
+          <Property Name="LxPostingSts" Type="Boolean" Nullable="false" />
           <Property Name="LxPostedDateTime" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_Users" Relationship="CVPortalModel.FK_Vend_reg_tbl_tbl_Users" FromRole="Vend_reg_tbl" ToRole="tbl_Users" />
           <NavigationProperty Name="VendorApprovals" Relationship="CVPortalModel.FK_VendorApproval_Vend_reg_tbl" FromRole="Vend_reg_tbl" ToRole="VendorApproval" />

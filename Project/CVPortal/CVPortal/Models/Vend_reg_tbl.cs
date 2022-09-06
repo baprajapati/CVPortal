@@ -103,7 +103,7 @@ namespace CVPortal.Models
         public bool IsOpened { get; set; }
         public int CreatedById { get; set; }
         public System.DateTime CreatedByDate { get; set; }
-        public Nullable<bool> LxPostingSts { get; set; }
+        public bool LxPostingSts { get; set; }
         public string LxPostedDateTime { get; set; }
     
         public virtual tbl_Users tbl_Users { get; set; }

@@ -307,16 +307,16 @@ namespace CVPortal.Controllers
 
             list.Add(new SelectListItem()
             {
-                Text = "ICICI",
-                Value = "ICICI",
-                Selected = selectedValue != null && selectedValue.Contains("ICICI")
+                Text = "ICI",
+                Value = "ICI",
+                Selected = selectedValue != null && selectedValue.Contains("ICI")
             });
 
             list.Add(new SelectListItem()
             {
                 Text = "BTM",
                 Value = "BTM",
-                Selected = selectedValue != null && selectedValue.Contains("ICICI")
+                Selected = selectedValue != null && selectedValue.Contains("BTM")
             });
 
             return new SelectList(list, "Value", "Text");

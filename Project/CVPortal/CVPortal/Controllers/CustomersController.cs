@@ -314,7 +314,7 @@ namespace CVPortal.Controllers
 
         public SelectList GetTermsCode(string[] selectedValue)
         {
-            var termsCodes = dataContext.PaymentTermsMasters.ToList();
+            var termsCodes = dataContext.CustomerPaymentTermsMasters.ToList();
 
             List<SelectListItem> list = new List<SelectListItem>();
 
@@ -1324,7 +1324,7 @@ namespace CVPortal.Controllers
                     var userIds = new List<int> { Utility.UserId };
                     userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
 
-                    customerIds = dataContext.Cust_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode).Select(x => x.ID).ToList();
+                    customerIds = dataContext.Cust_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
                     customerIds.AddRange(dataContext.CustomerApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.CustomerId).ToList());
                 }
 
