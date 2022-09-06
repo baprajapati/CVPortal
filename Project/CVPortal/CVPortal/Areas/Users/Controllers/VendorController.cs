@@ -175,7 +175,8 @@ namespace CVPortal.Areas.Users.Controllers
                     var data = new Vend_reg_tbl()
                     {
                         Org_Sts = "1",
-                        IsOpened = true
+                        IsOpened = true,
+                        LxPostingSts = !vendor.IsNewVendor
                     };
 
                     if (!vendor.IsNewVendor)
