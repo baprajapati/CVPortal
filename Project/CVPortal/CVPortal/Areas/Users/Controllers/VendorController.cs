@@ -365,6 +365,7 @@ namespace CVPortal.Areas.Users.Controllers
                         Id = item.ID,
                         Email = item.Email,
                         vend_name = item.vend_name,
+                        IsEnableAccess = Session["Role"].ToString() == "Initiator" && item.CreatedById == Utility.UserId,
                         VendorCode = item.VendorCode?.ToString(),
                         Step4 = item.Step4 ?? false,
                         NewExistingVendor = item.IsNewVendor ? "New" : "Existing",

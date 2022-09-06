@@ -276,6 +276,7 @@ namespace CVPortal.Areas.Users.Controllers
                         Id = item.ID,
                         Email = item.Email,
                         Cust_name = item.Cust_name,
+                        IsEnableAccess = Session["Role"].ToString() == "Initiator" && item.CreatedById == Utility.UserId,
                         CustomerCode = item.CustomerCode?.ToString(),
                         Cust_CodeVehicles = item.Cust_CodeVehicles?.ToString(),
                         Cust_CodeSpares = item.Cust_CodeSpares?.ToString(),

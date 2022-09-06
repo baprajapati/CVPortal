@@ -23,5 +23,6 @@ namespace CVPortal.ViewModels
         public string FinanceDepartment { get; set; }
         public string ITDepartment { get; set; }
         public bool Step4 { get; set; }
+        public bool IsEnableAccess { get; set; }
     }
 }

@@ -25,5 +25,6 @@ namespace CVPortal.ViewModels
         public string ITDepartment { get; set; }
         public string Documents { get; set; }
         public bool Step4 { get; set; }
+        public bool IsEnableAccess { get; set; }
     }
 }

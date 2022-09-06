@@ -87,7 +87,7 @@
                         {
                             "data": "Status", "name": "Status",
                             "render": function (data, type, row, meta) {
-                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : row.Status == "Pending" ? "<span class='color-yellow'>Pending</span>" : "<a  href='javascript:void(0);' data-rejectedreason='" + row.RejectedReason + "' class='rejectedReason'><span class='color-red' style='margin-right:10px;'>Rejected</span></a>" + ("@Session["Role"].ToString()" == "Initiator" ? "<a  href='javascript:void(0);' data-vendorid=" + row.Id + " title='Enable' class='enableVendor'>Enable</a>" : "");
+                                return row.Status == "Approved" ? "<span class='color-green'>Approved</span>" : row.Status == "Pending" ? "<span class='color-yellow'>Pending</span>" : "<a  href='javascript:void(0);' data-rejectedreason='" + row.RejectedReason + "' class='rejectedReason'><span class='color-red' style='margin-right:10px;'>Rejected</span></a>" + (row.IsEnableAccess ? "<a  href='javascript:void(0);' data-vendorid=" + row.Id + " title='Enable' class='enableVendor'>Enable</a>" : "");
                             }
                         },
                         {
