@@ -415,23 +415,23 @@
                 </div>
                 <div class="col-md-9">
                     <div class="col-md-4">
-                        @Html.RadioButtonFor(model => model.Nature_of_service, "2", Model.IsMain ? (object)new { @id = "serviceNature1" } : new { @id = "serviceNature1", @disabled = "disabled" })
+                        @Html.RadioButtonFor(model => model.Nature_of_service, "1", Model.IsMain ? (object)new { @id = "serviceNature1" } : new { @id = "serviceNature1", @disabled = "disabled" })
                         <label for="serviceNature1" style="font-weight: 500; margin-right: 30px;">Components</label>
                     </div>
                     <div class="col-md-4">
-                        @Html.RadioButtonFor(model => model.Nature_of_service, "3", Model.IsMain ? (object)new { @id = "serviceNature2" } : new { @id = "serviceNature2", @disabled = "disabled" })
+                        @Html.RadioButtonFor(model => model.Nature_of_service, "2", Model.IsMain ? (object)new { @id = "serviceNature2" } : new { @id = "serviceNature2", @disabled = "disabled" })
                         <label for="serviceNature2" style="font-weight: 500; margin-right: 30px;">Consumables</label>
                     </div>
                     <div class="col-md-4">
-                        @Html.RadioButtonFor(model => model.Nature_of_service, "1", Model.IsMain ? (object)new { @id = "serviceNature3" } : new { @id = "serviceNature3", @disabled = "disabled" })
+                        @Html.RadioButtonFor(model => model.Nature_of_service, "3", Model.IsMain ? (object)new { @id = "serviceNature3" } : new { @id = "serviceNature3", @disabled = "disabled" })
                         <label for="serviceNature3" style="font-weight: 500;">Capital Goods</label>
                     </div>
                     <div class="col-md-4">
-                        @Html.RadioButtonFor(model => model.Nature_of_service, "5", Model.IsMain ? (object)new { @id = "serviceNature4" } : new { @id = "serviceNature4", @disabled = "disabled" })
+                        @Html.RadioButtonFor(model => model.Nature_of_service, "4", Model.IsMain ? (object)new { @id = "serviceNature4" } : new { @id = "serviceNature4", @disabled = "disabled" })
                         <label for="serviceNature4" style="font-weight: 500; margin-right: 30px;">Services</label>
                     </div>
                     <div class="col-md-4">
-                        @Html.RadioButtonFor(model => model.Nature_of_service, "4", Model.IsMain ? (object)new { @id = "serviceNature5" } : new { @id = "serviceNature5", @disabled = "disabled" })
+                        @Html.RadioButtonFor(model => model.Nature_of_service, "5", Model.IsMain ? (object)new { @id = "serviceNature5" } : new { @id = "serviceNature5", @disabled = "disabled" })
                         <label for="serviceNature5" style="font-weight: 500; margin-right: 30px;">Imports</label>
                     </div>
                     @Html.ValidationMessageFor(model => model.Nature_of_service)

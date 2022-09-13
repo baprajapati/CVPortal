@@ -342,11 +342,11 @@ namespace CVPortal.Areas.Admin.Controllers
                     htmlContent = htmlContent.Replace("[HSN_SAC_CODE]", vendor.HSN_SAC_code);
                     htmlContent = htmlContent.Replace("[MSME_NO]", vendor.MSME_no);
                     htmlContent = htmlContent.Replace("[ANNU_TURNOVER]", vendor.Annu_TurnOver.ToString());
-                    htmlContent = htmlContent.Replace("[NATURE_OF_SERVICE]", vendor.Nature_of_service == "1" ? "Components"
-                        : vendor.Nature_of_service == "2" ? "Consumables"
-                        : vendor.Nature_of_service == "3" ? "Capital Goods"
-                        : vendor.Nature_of_service == "4" ? "Services"
-                        : "Imports");
+                    htmlContent = htmlContent.Replace("[NATURE_OF_SERVICE]", vendor.Nature_of_service == "1" ? "Components" // Dinesh Change 11/09/2022
+                       : vendor.Nature_of_service == "2" ? "Consumables"
+                       : vendor.Nature_of_service == "3" ? "Capital Goods"
+                       : vendor.Nature_of_service == "4" ? "Services"
+                       : "Imports");
                     htmlContent = htmlContent.Replace("[FINANCIALYEAR1]", vendor.FinancialYear1.ToString());
                     htmlContent = htmlContent.Replace("[FINANCIALYEAR2]", vendor.FinancialYear2.ToString());
                     htmlContent = htmlContent.Replace("[ISITRFILED1]", vendor.IsITRFiled1 ?? false ? "Yes" : "No");

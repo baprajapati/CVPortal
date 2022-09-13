@@ -165,7 +165,8 @@ namespace CVPortal.Areas.Users.Controllers
                         return View(vendor);
                     }
 
-                    objVendor = dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == vendor.Email && !x.IsFinalApproved);
+                    var vendorCode = Convert.ToInt32(vendor.VendorCode);
+                    objVendor = dataContext.Vend_reg_tbl.Where(x => x.VendorCode == vendorCode && !x.IsFinalApproved).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
                     if (!vendor.IsNewVendor && objVendor != null)
                     {
                         ModelState.AddModelError(nameof(vendor.VendorCode), "Vendor is still not approved.");
@@ -176,15 +177,16 @@ namespace CVPortal.Areas.Users.Controllers
                     {
                         Org_Sts = "1",
                         IsOpened = true,
-                        LxPostingSts = !vendor.IsNewVendor
+                        LxPostingSts = false
                     };
 
                     if (!vendor.IsNewVendor)
                     {
-                        var vendorCode = Convert.ToInt32(vendor.VendorCode);
                         objVendor = dataContext.Vend_reg_tbl.Where(x => x.VendorCode == vendorCode).OrderByDescending(x => x.CreatedByDate).FirstOrDefault();
                         data = objVendor;
                         data.IsFinalApproved = false;
+                        data.LxPostingSts = false;
+                        data.LxPostedDateTime = null;
                         data.ExistingReasonCode = vendor.ExistingReason == VendorExistingOptionEnum.VendorBankDetails.ToString() ? "1" : "2";
 
                         if (vendor.ExistingReason == VendorExistingOptionEnum.VendorBankDetails.ToString())
@@ -590,7 +592,7 @@ namespace CVPortal.Areas.Users.Controllers
                     htmlContent = htmlContent.Replace("[HSN_SAC_CODE]", vendor.HSN_SAC_code);
                     htmlContent = htmlContent.Replace("[MSME_NO]", vendor.MSME_no);
                     htmlContent = htmlContent.Replace("[ANNU_TURNOVER]", vendor.Annu_TurnOver.ToString());
-                    htmlContent = htmlContent.Replace("[NATURE_OF_SERVICE]", vendor.Nature_of_service == "1" ? "Components"
+                    htmlContent = htmlContent.Replace("[NATURE_OF_SERVICE]", vendor.Nature_of_service == "1" ? "Components" // Dinesh Change 11/09/2022
                        : vendor.Nature_of_service == "2" ? "Consumables"
                        : vendor.Nature_of_service == "3" ? "Capital Goods"
                        : vendor.Nature_of_service == "4" ? "Services"

@@ -1075,7 +1075,7 @@ namespace CVPortal.Controllers
                     {
                         if (model.DealerType == "Scrap")
                         {
-                            customer.Cust_CodeVehicles = (dataContext.Cust_reg_tbl.Where(x => x.DealerType == "Scrap").Max(x => x.Cust_CodeSpares) ?? 0) + 1;
+                            customer.Cust_CodeVehicles = (dataContext.Cust_reg_tbl.Where(x => x.DealerType == "Scrap").Max(x => x.Cust_CodeVehicles) ?? 0) + 1;
                         }
                         else
                         {
@@ -1275,7 +1275,7 @@ namespace CVPortal.Controllers
 
                     string mailTo1 = $"{Utility.UserCode},{customer.tbl_Users.EmailAddress}";
 
-                    if (Session["Role"].ToString() == "Initiator")
+                    if (Session["Role"].ToString() == "Initiator" && customer.CreatedById == Utility.UserId)
                     {
                         mailTo1 += $",{customer.Email}";
                     }

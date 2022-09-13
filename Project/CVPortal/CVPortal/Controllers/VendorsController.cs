@@ -1326,7 +1326,7 @@ namespace CVPortal.Controllers
 
                     string mailTo1 = $"{Utility.UserCode},{vendor.tbl_Users.EmailAddress}";
 
-                    if (Session["Role"].ToString() == "Initiator")
+                    if (Session["Role"].ToString() == "Initiator" && vendor.CreatedById == Utility.UserId)
                     {
                         mailTo1 += $",{vendor.Email}";
                     }
