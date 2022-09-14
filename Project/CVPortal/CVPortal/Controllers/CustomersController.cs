@@ -1270,6 +1270,9 @@ namespace CVPortal.Controllers
 
                     customer.CustomerApprovals.Add(data);
                     customer.NextApprover = null;
+                    customer.Cust_CodeVehicles = null;
+                    customer.Cust_CodeSpares = null;
+                    customer.Cust_CodeSecurity = null;
 
                     dataContext.SaveChanges();
 

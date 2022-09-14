@@ -31,7 +31,7 @@
                                 <div class="form-group">
                                     <label for="RoleName">Role</label>
                                     @Html.DropDownListFor(model => model.RoleNames, ViewBag.RoleList as SelectList, new { @class = "form-control selectpicker", @multiple = "multiple" })
-                                    @Html.ValidationMessageFor(model => model.RoleName, "")
+                                    @Html.ValidationMessageFor(model => model.RoleNames, "")
                                 </div>
                                 <div class="form-group">
                                     <label for="Email">Employee Code</label>
@@ -54,9 +54,8 @@
                                     @Html.TextBoxFor(model => model.Email, new { id = "txtEmail", @class = "form-control", placeholder = "Email" })
                                     @Html.ValidationMessageFor(model => model.Email, "")
                                 </div>
-                                <div class="form-group password">
+                                <div class="form-group">
                                     <label for="Password">Password</label>
-                                    @Html.HiddenFor(model => model.Password)
                                     @Html.PasswordFor(model => model.Password, new { id = "txtPassword", @class = "form-control", placeholder = "Password" })
                                     @Html.ValidationMessageFor(model => model.Password, "")
                                 </div>
@@ -89,23 +88,19 @@
         $(document).ready(function () {
             $('#RoleNames').selectpicker();
 
+            if ($('#RoleNames').val().length > 0) {
+                setRoles($('#RoleNames').val().includes("Initiator"));
+            }
+
             $('#RoleNames').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
                 var selected = $(e.currentTarget).val();
                 setRoles(selected.includes("Initiator"));
             });
 
-            $("#txtPassword").keyup(function (e) {
-                $("#Password").val($("#txtPassword").val());
-            });
-
             function setRoles(isInitiator) {
                 if (!isInitiator) {
-                    $("#Password").val("test#123");
-                    $(".password").addClass("hidden");
                     $(".initiatorAccess").addClass("hidden");
                 } else {
-                    $("#Password").val("");
-                    $(".password").removeClass("hidden");
                     $(".initiatorAccess").removeClass("hidden");
                 }
             }
