@@ -110,7 +110,7 @@ namespace CVPortal.Controllers
                     dataContext.Vend_reg_tbl.FirstOrDefault(x => x.Email == email);
                 if (objVendor != null)
                 {
-                    objVendor.OTP = "123456";//new Random().Next(111111, 999999).ToString();
+                    objVendor.OTP = new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
 
                     email = objVendor?.Email;
@@ -134,7 +134,7 @@ namespace CVPortal.Controllers
                 var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == email || x.HAUSER == email));
                 if (objUser != null)
                 {
-                    objUser.OTP = "123456";//new Random().Next(111111, 999999).ToString();
+                    objUser.OTP = new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
                     email = objUser?.EmailAddress;
 
@@ -174,7 +174,7 @@ namespace CVPortal.Controllers
                     dataContext.Cust_reg_tbl.FirstOrDefault(x => x.Email == email);
                 if (objVendor != null)
                 {
-                    objVendor.OTP = "123456";//new Random().Next(111111, 999999).ToString();
+                    objVendor.OTP = new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
                     email = objVendor?.Email;
 
@@ -198,7 +198,7 @@ namespace CVPortal.Controllers
                 var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.IsActive && (x.EmailAddress == email || x.HAUSER == email));
                 if (objUser != null)
                 {
-                    objUser.OTP = "123456";//new Random().Next(111111, 999999).ToString();
+                    objUser.OTP = new Random().Next(111111, 999999).ToString();
                     dataContext.SaveChanges();
                     email = objUser?.EmailAddress;
 
