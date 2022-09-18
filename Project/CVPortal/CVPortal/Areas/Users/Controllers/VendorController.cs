@@ -288,7 +288,7 @@ namespace CVPortal.Areas.Users.Controllers
                     userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
 
                     vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
-                    vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+                    vendorIds.AddRange(dataContext.VendorApprovals.Where(x => !x.IsDeleted && x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
                 }
 
                 var data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
@@ -419,7 +419,7 @@ namespace CVPortal.Areas.Users.Controllers
                     userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
 
                     vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
-                    vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+                    vendorIds.AddRange(dataContext.VendorApprovals.Where(x => !x.IsDeleted && x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
                 }
 
                 var data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
@@ -631,7 +631,7 @@ namespace CVPortal.Areas.Users.Controllers
             userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
 
             var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
-            vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+            vendorIds.AddRange(dataContext.VendorApprovals.Where(x => !x.IsDeleted && x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
 
             var data = dataContext.Vend_reg_tbl.Where(x => !x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
             if (!string.IsNullOrEmpty(vendorCode))
@@ -802,7 +802,7 @@ namespace CVPortal.Areas.Users.Controllers
             userIds.AddRange(dataContext.tbl_Users.Where(x => x.Dept_Code == deptCode).Select(x => x.Id).ToList());
 
             var vendorIds = dataContext.Vend_reg_tbl.Where(x => userIds.Contains(x.CreatedById) || x.NextApprover == userCode || x.Email == Utility.UserCode).Select(x => x.ID).ToList();
-            vendorIds.AddRange(dataContext.VendorApprovals.Where(x => x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
+            vendorIds.AddRange(dataContext.VendorApprovals.Where(x => !x.IsDeleted && x.CreatedById == Utility.UserId).Select(x => x.VendorId).ToList());
 
             var data = dataContext.Vend_reg_tbl.Where(x => x.IsFinalApproved && vendorIds.Contains(x.ID)).ToList();
             if (!string.IsNullOrEmpty(vendorCode))
