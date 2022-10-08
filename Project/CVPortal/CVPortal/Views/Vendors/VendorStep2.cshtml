@@ -122,6 +122,24 @@
                 $("#AcknowledgeNo2").val("");
                 $("#AcknowledgeNo2").attr("disabled", "disabled");
             }
+
+            $('#FinancialYear1').on('keyup', function () {
+                var inp = $('#FinancialYear1').val();
+                var foo = inp.split("-").join("");
+                if (foo.length > 0) {
+                    foo = foo.match(new RegExp('.{1,4}', 'g')).join("-");
+                }
+                $('#FinancialYear1').val(foo);
+            });
+
+            $('#FinancialYear2').on('keyup', function () {
+                var inp = $('#FinancialYear2').val();
+                var foo = inp.split("-").join("");
+                if (foo.length > 0) {
+                    foo = foo.match(new RegExp('.{1,4}', 'g')).join("-");
+                }
+                $('#FinancialYear2').val(foo);
+            });
         });
     </script>
 }
@@ -449,7 +467,7 @@
                 </div>
                 <div class="col-md-2">
                     <span>Finacial Year</span>
-                    @Html.TextBoxFor(model => model.FinancialYear1, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.FinancialYear1, Model.IsMain ? (object)new { @class = "form-control decimal", maxlength = "7", placeholder = "yyyy-yy" } : new { @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.FinancialYear1)
                 </div>
                 <div class="col-md-2">
@@ -468,7 +486,7 @@
             <div class="row">
                 <div class="col-md-offset-3 col-md-2">
                     <span>Finacial Year</span>
-                    @Html.TextBoxFor(model => model.FinancialYear2, Model.IsMain ? (object)new { @class = "form-control decimal" } : new { @class = "form-control decimal", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.FinancialYear2, Model.IsMain ? (object)new { @class = "form-control decimal", maxlength = "7", placeholder = "yyyy-yy" } : new { @class = "form-control decimal", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.FinancialYear2)
                 </div>
                 <div class="col-md-2">

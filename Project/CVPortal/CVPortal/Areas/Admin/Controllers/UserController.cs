@@ -629,5 +629,11 @@ namespace CVPortal.Areas.Admin.Controllers
             var result = dataContext.tbl_Users.Where(c => c.Id != WebSecurity.CurrentUserId && c.HAUSER.ToString().ToLower().Contains(term)).Select(a => new { label = a.HAUSER }).Distinct().ToList();
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult Name(string term)
+        {
+            var result = dataContext.tbl_Users.Where(c => c.Id != WebSecurity.CurrentUserId && c.HANAME.ToString().ToLower().Contains(term)).Select(a => new { label = a.HANAME }).Distinct().ToList();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

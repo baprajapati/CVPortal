@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -102,8 +103,8 @@ namespace CVPortal.Controllers
                 model.Annu_TurnOver = vendor.Annu_TurnOver;
                 model.Nature_of_service = vendor.Nature_of_service;
                 model.ITR_Field_dtl = vendor.ITR_Field_dtl;
-                model.FinancialYear1 = vendor.FinancialYear1;
-                model.FinancialYear2 = vendor.FinancialYear2;
+                model.FinancialYear1 = Regex.Replace(vendor.FinancialYear1.ToString(), ".{1,4}", "$&-").TrimEnd('-');
+                model.FinancialYear2 = Regex.Replace(vendor.FinancialYear2.ToString(), ".{1,4}", "$&-").TrimEnd('-');
                 model.IsITRFiled1 = vendor.IsITRFiled1;
                 model.IsITRFiled2 = vendor.IsITRFiled2;
                 model.AcknowledgeNo1 = vendor.AcknowledgeNo1;
@@ -307,9 +308,9 @@ namespace CVPortal.Controllers
 
             list.Add(new SelectListItem()
             {
-                Text = "ICI",
-                Value = "ICI",
-                Selected = selectedValue != null && selectedValue.Contains("ICI")
+                Text = "ICO",
+                Value = "ICO",
+                Selected = selectedValue != null && selectedValue.Contains("ICO")
             });
 
             list.Add(new SelectListItem()
@@ -751,15 +752,15 @@ namespace CVPortal.Controllers
                             isError = true;
                         }
 
-                        if (model.FinancialYear1.ToString().Length != 4)
+                        if (model.FinancialYear1.Length != 7)
                         {
-                            ModelState.AddModelError(nameof(model.FinancialYear1), "Please add proper year (yyyy).");
+                            ModelState.AddModelError(nameof(model.FinancialYear1), "Please add proper year (yyyy-yy).");
                             isError = true;
                         }
 
-                        if (model.FinancialYear2.ToString().Length != 4)
+                        if (model.FinancialYear2.Length != 7)
                         {
-                            ModelState.AddModelError(nameof(model.FinancialYear2), "Please add proper year (yyyy).");
+                            ModelState.AddModelError(nameof(model.FinancialYear2), "Please add proper year (yyyy-yy).");
                             isError = true;
                         }
 
@@ -785,8 +786,8 @@ namespace CVPortal.Controllers
                         vendor.Nature_of_service = model.Nature_of_service;
                         vendor.NCode = dataContext.VendorNatureServices.FirstOrDefault(x => x.NService.ToString() == model.Nature_of_service)?.NCode.ToString();
                         vendor.ITR_Field_dtl = model.ITR_Field_dtl;
-                        vendor.FinancialYear1 = model.FinancialYear1;
-                        vendor.FinancialYear2 = model.FinancialYear2;
+                        vendor.FinancialYear1 = Convert.ToInt32(model.FinancialYear1?.Replace("-", string.Empty));
+                        vendor.FinancialYear2 = Convert.ToInt32(model.FinancialYear2?.Replace("-", string.Empty));
                         vendor.IsITRFiled1 = model.IsITRFiled1;
                         vendor.IsITRFiled2 = model.IsITRFiled2;
                         vendor.AcknowledgeNo1 = model.AcknowledgeNo1;

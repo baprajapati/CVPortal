@@ -71,10 +71,10 @@ namespace CVPortal.ViewModels
         public string Nature_of_service { get; set; }
 
         [Required(ErrorMessage = "Please enter financial year")]
-        public int? FinancialYear1 { get; set; }
+        public string FinancialYear1 { get; set; }
 
         [Required(ErrorMessage = "Please enter financial year")]
-        public int? FinancialYear2 { get; set; }
+        public string FinancialYear2 { get; set; }
 
         [Required(ErrorMessage = "Please select yes/no")]
         public bool? IsITRFiled1 { get; set; }

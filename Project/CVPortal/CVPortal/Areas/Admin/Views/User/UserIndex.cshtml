@@ -171,6 +171,13 @@
                     $(this).keydown();
             });
 
+            $("#Name").autocomplete({
+                source: '/User/Name', minLength: 0
+            }).bind('focus', function () {
+                if (!$(this).val().trim())
+                    $(this).keydown();
+            });
+
             $(".export-button").click(function () {
                window.location.href = '@Url.Action("DownloadExcel", new { area = "Admin", controller = "User" })' + '?email=' + $("#Email").val()
                     + "&haName=" + $("#Name").val() + "&roleName=" + $("#Role").val() + "&haUser=" + $("#UserCode").val() + "&dept_Code=" + $("#DepartmentCode").val()
