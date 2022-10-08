@@ -447,7 +447,7 @@ namespace CVPortal.Controllers
                         {
                             vendor.Org_Sts = model.Org_Sts;
                             vendor.OrgCode = dataContext.Orginzation_StatusMaster.FirstOrDefault(x => x.Orginzation_Status.ToString() == model.Org_Sts)?.OrgCode?.ToString();
-                            vendor.vend_name = model.vend_name;
+                            vendor.vend_name = model.vend_name.ToUpper();
                             vendor.CEO_name = model.CEO_name;
                             vendor.Designation = model.Designation;
                             vendor.Contact_no = model.Contact_no;

@@ -475,7 +475,7 @@ namespace CVPortal.Controllers
                     {
                         customer.Org_Sts = model.Org_Sts;
                         customer.OrgCode = dataContext.Orginzation_StatusMaster.FirstOrDefault(x => x.Orginzation_Status.ToString() == model.Org_Sts)?.OrgCustCode?.ToString();
-                        customer.Cust_name = model.Cust_name;
+                        customer.Cust_name = model.Cust_name.ToUpper();
                         customer.CEO_name = model.CEO_name;
                         customer.CEO_Designation = model.CEO_Designation;
                         customer.CEO_Contact_no = model.CEO_Contact_no;

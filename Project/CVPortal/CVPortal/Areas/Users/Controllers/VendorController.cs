@@ -203,7 +203,7 @@ namespace CVPortal.Areas.Users.Controllers
                         }
                     }
 
-                    data.vend_name = vendor.vend_name;
+                    data.vend_name = vendor.vend_name.ToUpper();
                     data.Email = vendor.Email;
                     data.VendorCode = !string.IsNullOrEmpty(vendor.VendorCode) ? Convert.ToInt32(vendor.VendorCode) : (int?)null;
                     data.IsNewVendor = vendor.IsNewVendor;

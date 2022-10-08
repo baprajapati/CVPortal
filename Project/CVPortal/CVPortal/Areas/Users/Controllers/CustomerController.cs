@@ -130,7 +130,7 @@ namespace CVPortal.Areas.Users.Controllers
                         IsOpened = true
                     };
 
-                    data.Cust_name = customer.Cust_name;
+                    data.Cust_name = customer.Cust_name.ToUpper();
                     data.Email = customer.Email;
                     data.CreatedById = WebSecurity.CurrentUserId;
                     data.CreatedByDate = DateTime.Now;
