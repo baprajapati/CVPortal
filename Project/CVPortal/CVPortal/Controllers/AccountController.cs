@@ -421,5 +421,83 @@ namespace CVPortal.Controllers
                 return Json("Both", JsonRequestBehavior.AllowGet);
             }
         }
+
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public JsonResult ForgotPassword(ForgotPasswordUser user)
+        {
+            bool IsValid = false;
+            try
+            {
+                string email = string.Empty;
+
+                var objUser = dataContext.tbl_Users.Where(x => x.IsActive && (x.EmailAddress == user.UserCode || x.HAUSER == user.UserCode)).FirstOrDefault();
+
+                if (objUser == null)
+                    throw new Exception("Employee Code/Email is not exist in current context.");
+                else
+                    email = objUser.EmailAddress;
+
+                string token = WebSecurity.GeneratePasswordResetToken(email, 15);
+
+                string mailTo = email;
+                string CC = string.Empty;
+                string BCC = string.Empty;
+                string subject = "Your Login details";
+
+                var forgotPasswordHtmlTemplate = System.IO.File.ReadAllText(string.Format("{0}", Server.MapPath("~/Content/EmailTemplate/ForgotPassword.Html")));
+
+                forgotPasswordHtmlTemplate = forgotPasswordHtmlTemplate.Replace("[EMAILID]", email);
+                forgotPasswordHtmlTemplate = forgotPasswordHtmlTemplate.Replace("[TOKEN]", token);
+                forgotPasswordHtmlTemplate = forgotPasswordHtmlTemplate.Replace("[SITEURL]", ConfigurationManager.AppSettings["SiteUrl"]);
+                forgotPasswordHtmlTemplate = forgotPasswordHtmlTemplate.Replace("[SITENAME]", ConfigurationManager.AppSettings["SiteName"]);
+
+                string body = forgotPasswordHtmlTemplate;
+
+                string displayName = string.Empty;
+                string attachments = string.Empty;
+                IsValid = Utility.SendMail(mailTo, CC, BCC, subject, body, displayName, attachments, true, objUser.Id, EmailTypeEnum.ForgotPassword, objUser.Id);
+                return Json(IsValid);
+            }
+            catch (Exception ex)
+            {
+                return Json(IsValid);
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public JsonResult ResetPassword(ResetPasswordUser user)
+        {
+            bool IsValid = false;
+            try
+            {
+                var userId = WebSecurity.GetUserIdFromPasswordResetToken(user.Token);
+                IsValid = WebSecurity.ResetPassword(user.Token, user.NewPassword);
+                if (IsValid)
+                {
+                    var objUser = dataContext.tbl_Users.FirstOrDefault(x => x.Id == userId);
+                    if (objUser != null)
+                        objUser.Password = user.NewPassword;
+                    dataContext.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Json(IsValid);
+        }
     }
 }

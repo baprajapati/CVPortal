@@ -12,6 +12,7 @@ namespace CVPortal.App_Code
         OTPUser = 3,
         User = 4,
         Vendor = 5,
-        Customer = 6
+        Customer = 6,
+        ForgotPassword = 7
     }
 }
