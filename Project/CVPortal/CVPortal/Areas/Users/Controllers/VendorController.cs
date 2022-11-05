@@ -610,6 +610,7 @@ namespace CVPortal.Areas.Users.Controllers
                     htmlContent = htmlContent.Replace("[ACCOUNT_NO]", vendor.Account_no);
                     htmlContent = htmlContent.Replace("[MICR_CODE]", vendor.MICR_code.ToString());
                     htmlContent = htmlContent.Replace("[IFSC_RTGS_CODE]", vendor.IFSC_RTGS_code);
+                    htmlContent = htmlContent.Replace("[VENDOR_CODE]", vendor.VendorCode != null ? vendor.VendorCode.ToString() : string.Empty);
                     htmlContent = htmlContent.Replace("[DATE]", $"{vendor.Date.ToString().Substring(6, 2)}/{vendor.Date.ToString().Substring(4, 2)}/{vendor.Date.ToString().Substring(0, 4)}");
                 }
 

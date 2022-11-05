@@ -7,6 +7,8 @@
 @section scripts {
     <script type="text/javascript">
         $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+
             $(".back-button-1").click(function () {
                 window.location.href = "/Vendors/VendorStep1/" + $("#Id").val();
             });
@@ -434,7 +436,7 @@
                 <div class="col-md-9">
                     <div class="col-md-4">
                         @Html.RadioButtonFor(model => model.Nature_of_service, "1", Model.IsMain ? (object)new { @id = "serviceNature1" } : new { @id = "serviceNature1", @disabled = "disabled" })
-                        <label for="serviceNature1" style="font-weight: 500; margin-right: 30px;">Components</label>
+                        <label for="serviceNature1" style="font-weight: 500; margin-right: 30px;" data-toggle="tooltip" data-placement="top" title="This is for only BOM Parts components (OE & SPD)">Components</label>
                     </div>
                     <div class="col-md-4">
                         @Html.RadioButtonFor(model => model.Nature_of_service, "2", Model.IsMain ? (object)new { @id = "serviceNature2" } : new { @id = "serviceNature2", @disabled = "disabled" })
@@ -450,7 +452,7 @@
                     </div>
                     <div class="col-md-4">
                         @Html.RadioButtonFor(model => model.Nature_of_service, "5", Model.IsMain ? (object)new { @id = "serviceNature5" } : new { @id = "serviceNature5", @disabled = "disabled" })
-                        <label for="serviceNature5" style="font-weight: 500; margin-right: 30px;">Imports</label>
+                        <label for="serviceNature5" style="font-weight: 500; margin-right: 30px;" data-toggle="tooltip" data-placement="top" title="This is for only for overseas (outside India) Suppliers">Imports</label>
                     </div>
                     @Html.ValidationMessageFor(model => model.Nature_of_service)
                 </div>

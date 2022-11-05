@@ -1140,7 +1140,7 @@ namespace CVPortal.Controllers
                             }
                             else if (vendor.Nature_of_service == "4")
                             {
-                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "4" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 21699001) + 1000;
+                                vendor.VendorCode = (dataContext.Vend_reg_tbl.Where(x => x.Nature_of_service == "4" && x.VendorCode != null).Select(x => x.VendorCode).OrderByDescending(x => x).FirstOrDefault() ?? 21716001) + 1000;
                             }
                             else if (vendor.Nature_of_service == "5")
                             {
