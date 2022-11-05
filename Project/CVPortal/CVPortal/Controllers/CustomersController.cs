@@ -45,12 +45,14 @@ namespace CVPortal.Controllers
                 model.Contact_no = customer.Contact_no;
                 model.Email = customer.Email;
                 model.Dlr_Address = customer.Dlr_Address;
+                model.Dlr_Address1 = customer.Dlr_Address1;
                 model.Dlr_Add_Country = customer.Dlr_Add_Country;
                 model.Dlr_Add_State = customer.Dlr_Add_State;
                 model.Dlr_Add_City = customer.Dlr_Add_City;
                 model.Dlr_Add_Pincode = customer.Dlr_Add_Pincode;
                 model.IsSameAsDlr_Address = customer.IsSameAsDlr_Address ?? false;
                 model.Supp_Address = customer.Supp_Address;
+                model.Supp_Address1 = customer.Supp_Address1;
                 model.Supp_Add_Country = customer.Supp_Add_Country;
                 model.Supp_Add_State = customer.Supp_Add_State;
                 model.Supp_Add_City = customer.Supp_Add_City;
@@ -481,6 +483,7 @@ namespace CVPortal.Controllers
                         customer.CEO_Contact_no = model.CEO_Contact_no;
                         customer.Contact_no = model.Contact_no;
                         customer.Dlr_Address = model.Dlr_Address;
+                        customer.Dlr_Address1 = model.Dlr_Address1;
                         customer.Dlr_Add_Country = model.Dlr_Add_Country;
                         customer.Dlr_Add_State = model.Dlr_Add_State;
                         customer.Dlr_Add_StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Dlr_Add_State)?.StateCode.ToString();
@@ -488,6 +491,7 @@ namespace CVPortal.Controllers
                         customer.Dlr_Add_Pincode = model.Dlr_Add_Pincode;
                         customer.IsSameAsDlr_Address = model.IsSameAsDlr_Address;
                         customer.Supp_Address = model.Supp_Address;
+                        customer.Supp_Address1 = model.Supp_Address1;
                         customer.Supp_Add_Country = model.Supp_Add_Country;
                         customer.Supp_Add_State = model.Supp_Add_State;
                         customer.Supp_Add_StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Supp_Add_State)?.StateCode.ToString();

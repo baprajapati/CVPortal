@@ -32,6 +32,7 @@ namespace CVPortal.Models
         public string CEO_Designation { get; set; }
         public string CEO_Contact_no { get; set; }
         public string Email { get; set; }
+        public string Dlr_Address1 { get; set; }
         public string Dlr_Address { get; set; }
         public string Dlr_Add_Country { get; set; }
         public string Dlr_Add_State { get; set; }
@@ -39,6 +40,7 @@ namespace CVPortal.Models
         public string Dlr_Add_Pincode { get; set; }
         public string Dlr_Add_StateCode { get; set; }
         public Nullable<bool> IsSameAsDlr_Address { get; set; }
+        public string Supp_Address1 { get; set; }
         public string Supp_Address { get; set; }
         public string Supp_Add_Country { get; set; }
         public string Supp_Add_State { get; set; }

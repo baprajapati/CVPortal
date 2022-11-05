@@ -40,6 +40,7 @@
           <Property Name="CEO_Designation" Type="nvarchar" MaxLength="30" />
           <Property Name="CEO_Contact_no" Type="nvarchar" MaxLength="25" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dlr_Address1" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Address" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_Country" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_State" Type="nvarchar" MaxLength="50" />
@@ -47,6 +48,7 @@
           <Property Name="Dlr_Add_Pincode" Type="nvarchar" MaxLength="50" />
           <Property Name="Dlr_Add_StateCode" Type="nvarchar" MaxLength="2" />
           <Property Name="IsSameAsDlr_Address" Type="bit" />
+          <Property Name="Supp_Address1" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Address" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_Country" Type="nvarchar" MaxLength="50" />
           <Property Name="Supp_Add_State" Type="nvarchar" MaxLength="50" />
@@ -366,6 +368,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Designation" Type="nvarchar" MaxLength="30" />
           <Property Name="Contact_no" Type="nvarchar" MaxLength="25" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address11" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1Country" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1State" Type="nvarchar" MaxLength="50" />
@@ -373,6 +376,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Address1Pincode" Type="nvarchar" MaxLength="50" />
           <Property Name="Address1StateCode" Type="nvarchar" MaxLength="2" />
           <Property Name="IsSameAsAddress1" Type="bit" />
+          <Property Name="Address22" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2Country" Type="nvarchar" MaxLength="50" />
           <Property Name="Address2State" Type="nvarchar" MaxLength="50" />
@@ -924,6 +928,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="CEO_Designation" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="CEO_Contact_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dlr_Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -931,6 +936,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Dlr_Add_Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Dlr_Add_StateCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <Property Name="IsSameAsDlr_Address" Type="Boolean" />
+          <Property Name="Supp_Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Supp_Add_State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1253,6 +1259,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Designation" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Contact_no" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address11" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1260,6 +1267,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
           <Property Name="Address1Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address1StateCode" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <Property Name="IsSameAsAddress1" Type="Boolean" />
+          <Property Name="Address22" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Address2State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -1672,6 +1680,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="Supp_Add_State" ColumnName="Supp_Add_State" />
                 <ScalarProperty Name="Supp_Add_Country" ColumnName="Supp_Add_Country" />
                 <ScalarProperty Name="Supp_Address" ColumnName="Supp_Address" />
+                <ScalarProperty Name="Supp_Address1" ColumnName="Supp_Address1" />
                 <ScalarProperty Name="IsSameAsDlr_Address" ColumnName="IsSameAsDlr_Address" />
                 <ScalarProperty Name="Dlr_Add_StateCode" ColumnName="Dlr_Add_StateCode" />
                 <ScalarProperty Name="Dlr_Add_Pincode" ColumnName="Dlr_Add_Pincode" />
@@ -1679,6 +1688,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="Dlr_Add_State" ColumnName="Dlr_Add_State" />
                 <ScalarProperty Name="Dlr_Add_Country" ColumnName="Dlr_Add_Country" />
                 <ScalarProperty Name="Dlr_Address" ColumnName="Dlr_Address" />
+                <ScalarProperty Name="Dlr_Address1" ColumnName="Dlr_Address1" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="CEO_Contact_no" ColumnName="CEO_Contact_no" />
                 <ScalarProperty Name="CEO_Designation" ColumnName="CEO_Designation" />
@@ -2019,6 +2029,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="Address2State" ColumnName="Address2State" />
                 <ScalarProperty Name="Address2Country" ColumnName="Address2Country" />
                 <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address22" ColumnName="Address22" />
                 <ScalarProperty Name="IsSameAsAddress1" ColumnName="IsSameAsAddress1" />
                 <ScalarProperty Name="Address1StateCode" ColumnName="Address1StateCode" />
                 <ScalarProperty Name="Address1Pincode" ColumnName="Address1Pincode" />
@@ -2026,6 +2037,7 @@ warning 6002: The table/view 'CVPortal.dbo.StateCodeMaster' does not have a prim
                 <ScalarProperty Name="Address1State" ColumnName="Address1State" />
                 <ScalarProperty Name="Address1Country" ColumnName="Address1Country" />
                 <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address11" ColumnName="Address11" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Contact_no" ColumnName="Contact_no" />
                 <ScalarProperty Name="Designation" ColumnName="Designation" />

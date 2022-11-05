@@ -30,6 +30,7 @@ namespace CVPortal.Models
         public string Designation { get; set; }
         public string Contact_no { get; set; }
         public string Email { get; set; }
+        public string Address11 { get; set; }
         public string Address1 { get; set; }
         public string Address1Country { get; set; }
         public string Address1State { get; set; }
@@ -37,6 +38,7 @@ namespace CVPortal.Models
         public string Address1Pincode { get; set; }
         public string Address1StateCode { get; set; }
         public Nullable<bool> IsSameAsAddress1 { get; set; }
+        public string Address22 { get; set; }
         public string Address2 { get; set; }
         public string Address2Country { get; set; }
         public string Address2State { get; set; }

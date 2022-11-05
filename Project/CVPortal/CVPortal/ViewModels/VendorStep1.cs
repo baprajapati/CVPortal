@@ -30,6 +30,7 @@ namespace CVPortal.ViewModels
 
         [Required(ErrorMessage = "Please enter address (Registered / Corporate Office)")]
         public string Address1 { get; set; }
+        public string Address11 { get; set; }
 
         [Required(ErrorMessage = "Country required")]
         public string Address1Country { get; set; }
@@ -47,6 +48,7 @@ namespace CVPortal.ViewModels
 
         [Required(ErrorMessage = "Please enter address (PO/Supplies/Mfg/Trd.)")]
         public string Address2 { get; set; }
+        public string Address22 { get; set; }
 
         [Required(ErrorMessage = "Country required")]
         public string Address2Country { get; set; }

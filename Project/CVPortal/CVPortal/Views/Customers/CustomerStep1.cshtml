@@ -219,9 +219,14 @@
                         <span>Dealer Address (Registered / Corporate Office)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                     @Html.TextBoxFor(model => model.Dlr_Address, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Dlr_Address)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-7">
+                    @Html.TextBoxFor(model => model.Dlr_Address1, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                 </div>
                 <div class="col-md-2">
                     @Html.TextBoxFor(model => model.Dlr_Add_Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
@@ -257,9 +262,14 @@
                         <span>Supply Address (Showroom/Workshop)</span><span class="color-red"> * </span>
                     </div>
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-9">
                     @Html.TextBoxFor(model => model.Supp_Address, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.Supp_Address)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-7">
+                    @Html.TextBoxFor(model => model.Supp_Address1, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
                 </div>
                 <div class="col-md-2">
                     @Html.TextBoxFor(model => model.Supp_Add_Pincode, Model.IsMain ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })

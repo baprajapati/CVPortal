@@ -83,12 +83,14 @@
             $("#IsSameAsAddress1").click(function () {
                 if ($(this).is(':checked')) {
                     $("#Address2").val($("#Address1").val());
+                    $("#Address22").val($("#Address11").val());
                     $("#Address2Pincode").val($("#Address1Pincode").val());
                     $("#Address2Country").val($("#Address1Country").val());
                     $("#Address2State").val($("#Address1State").val());
                     $("#Address2City").val($("#Address1City").val());
                 } else {
                     $("#Address2").val("");
+                    $("#Address22").val("");
                     $("#Address2Pincode").val("");
                     $("#Address2Country").val("");
                     $("#Address2State").val("");
@@ -106,190 +108,200 @@
         @Html.HiddenFor(model => model.IsMain)
         @Html.HiddenFor(model => model.IsExistingUpdate)
 
-        <div>
-            <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
-            <label>General Instructions</label>
-            <ol>
-                <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
-                <li>All fields are mandatory. Tick in appropriate box.</li>
-            </ol>
-            <br />
-            <div class="row row-margin text-center main-step-bg-color">
-                <div class="col-md-3 steps steps-active back-button-1">
-                    <label>Step 1</label>
-                </div>
-                <div class="col-md-3 steps">
-                    <label>Step 2</label>
-                </div>
-                <div class="col-md-3 steps">
-                    <label>Step 3</label>
-                </div>
-                <div class="col-md-3 steps">
-                    <label>Step 4</label>
-                </div>
+    <div>
+        <h3 class="form-signin-heading text-center">Domestic Vendor Registration Form</h3>
+        <label>General Instructions</label>
+        <ol>
+            <li>Fill in the form giving relevant details. Incomplete form may not be processed.</li>
+            <li>All fields are mandatory. Tick in appropriate box.</li>
+        </ol>
+        <br />
+        <div class="row row-margin text-center main-step-bg-color">
+            <div class="col-md-3 steps steps-active back-button-1">
+                <label>Step 1</label>
             </div>
-            <br />
-            <label>Vendor Information</label>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="col-md-2">
-                        <span>1.</span>
-                    </div>
-                    <div class="col-md-10">
-                        <span>Organization Status</span><span class="color-red"> * </span><br />
-                        <span>(tick  as applicable)</span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    @Html.HiddenFor(model => model.Org_Sts)
-                    @Html.RadioButtonFor(model => model.Org_Sts, "1", Model.IsMain ? (object)new { @id = "orgStatus1" } : new { @id = "orgStatus1", disabled = "disabled" })
-                    <label for="orgStatus1" style="font-weight: 500;">Private Ltd</label>
-                    <br />
-                    @Html.RadioButtonFor(model => model.Org_Sts, "2", Model.IsMain ? (object)new { @id = "orgStatus2" } : new { @id = "orgStatus2", disabled = "disabled" })
-                    <label for="orgStatus2" style="font-weight: 500;">Partnership/LLP</label>
-                    <br />
-                    @Html.RadioButtonFor(model => model.Org_Sts, "3", Model.IsMain ? (object)new { @id = "orgStatus3" } : new { @id = "orgStatus3", disabled = "disabled" })
-                    <label for="orgStatus3" style="font-weight: 500;">Proprietorship</label><br />
-                    @Html.ValidationMessageFor(model => model.Org_Sts)
-                </div>
-                <div class="col-md-6">
-                    @Html.RadioButtonFor(model => model.Org_Sts, "4", Model.IsMain ? (object)new { @id = "orgStatus4" } : new { @id = "orgStatus4", disabled = "disabled" })
-                    <label for="orgStatus4" style="font-weight: 500;">Public Ltd (Listed)</label>
-                    <br />
-                    @Html.RadioButtonFor(model => model.Org_Sts, "5", Model.IsMain ? (object)new { @id = "orgStatus5" } : new { @id = "orgStatus5", disabled = "disabled" })
-                    <label for="orgStatus5" style="font-weight: 500;">Others</label>
-                </div>
-            </div><br />
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="col-md-2">
-                        <span>2.</span>
-                    </div>
-                    <div class="col-md-10">
-                        <span>Vendor Name</span><span class="color-red"> * </span>
-                    </div>
-                </div>
-                <div class="col-md-9">
-                    @Html.TextBoxFor(model => model.vend_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.vend_name)
-                </div>
-            </div><br />
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="col-md-2">
-                        <span>3.</span>
-                    </div>
-                    <div class="col-md-10">
-                        <span>CEO Name</span><span class="color-red"> * </span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.CEO_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.CEO_name)
-                </div>
-                <div class="col-md-1" style="padding-right:0;padding-left:0;">
-                    <span>Designation</span>
-                </div>
-                <div class="col-md-5">
-                    @Html.TextBoxFor(model => model.Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Designation)
-                </div>
+            <div class="col-md-3 steps">
+                <label>Step 2</label>
             </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="col-md-offset-2 col-md-10">
-                        <span>Contact Numbers</span><span class="color-red"> * </span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Contact_no, Model.IsMain ? (object)new { placeholder = "993XXXXXX9", @class = "form-control decimal" } : new { placeholder = "993XXXXXX9", @class = "form-control decimal", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Contact_no)
-                </div>
+            <div class="col-md-3 steps">
+                <label>Step 3</label>
             </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="col-md-offset-2 col-md-10">
-                        <span>Email Address</span><span class="color-red"> * </span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    @Html.HiddenFor(model => model.Email)
-                    @Html.TextBoxFor(model => model.Email, new { placeholder = "test@gmail.com", @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Email)
-                </div>
-            </div><br />
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="col-md-2">
-                        <span>4.</span>
-                    </div>
-                    <div class="col-md-10">
-                        <span>Address (Registered / Corporate Office)</span><span class="color-red"> * </span>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    @Html.TextBoxFor(model => model.Address1, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address1)
-                </div>
-                <div class="col-md-2">
-                    @Html.TextBoxFor(model => model.Address1Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
-                    @Html.ValidationMessageFor(model => model.Address1Pincode)
-                </div>
+            <div class="col-md-3 steps">
+                <label>Step 4</label>
             </div>
-            <div class="row">
-                <div class="col-md-offset-3 col-md-3">
-                    @Html.TextBoxFor(model => model.Address1Country, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Address1Country)
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Address1State, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Address1State)
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Address1City, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Address1City)
-                </div>
-            </div><br />
-            <div class="row">
-                <div class="col-md-offset-3 col-md-9">
-                    @Html.CheckBoxFor(model => model.IsSameAsAddress1, Model.IsMain || Model.IsExistingUpdate ? (object)new { } : new { @disabled = "disabled" })
-                    <label for="IsSameAsAddress1" style="font-weight: 500;">Same as Address (Registered / Corporate Office)</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="col-md-2">
-                        <span>5.</span>
-                    </div>
-                    <div class="col-md-10">
-                        <span>Address (PO/Supplies/Mfg/Trd.)</span><span class="color-red"> * </span>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    @Html.TextBoxFor(model => model.Address2, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.Address2)
-                </div>
-                <div class="col-md-2">
-                    @Html.TextBoxFor(model => model.Address2Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
-                    @Html.ValidationMessageFor(model => model.Address2Pincode)
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-offset-3 col-md-3">
-                    @Html.TextBoxFor(model => model.Address2Country, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Address2Country)
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Address2State, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Address2State)
-                </div>
-                <div class="col-md-3">
-                    @Html.TextBoxFor(model => model.Address2City, new { @class = "form-control", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.Address2City)
-                </div>
-            </div>
-            <br /><br />
-            <input type="submit" value="Next" class="btn btn-success pull-right" />
         </div>
+        <br />
+        <label>Vendor Information</label>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>1.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>Organization Status</span><span class="color-red"> * </span><br />
+                    <span>(tick  as applicable)</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                @Html.HiddenFor(model => model.Org_Sts)
+                @Html.RadioButtonFor(model => model.Org_Sts, "1", Model.IsMain ? (object)new { @id = "orgStatus1" } : new { @id = "orgStatus1", disabled = "disabled" })
+                <label for="orgStatus1" style="font-weight: 500;">Private Ltd</label>
+                <br />
+                @Html.RadioButtonFor(model => model.Org_Sts, "2", Model.IsMain ? (object)new { @id = "orgStatus2" } : new { @id = "orgStatus2", disabled = "disabled" })
+                <label for="orgStatus2" style="font-weight: 500;">Partnership/LLP</label>
+                <br />
+                @Html.RadioButtonFor(model => model.Org_Sts, "3", Model.IsMain ? (object)new { @id = "orgStatus3" } : new { @id = "orgStatus3", disabled = "disabled" })
+                <label for="orgStatus3" style="font-weight: 500;">Proprietorship</label><br />
+                @Html.ValidationMessageFor(model => model.Org_Sts)
+            </div>
+            <div class="col-md-6">
+                @Html.RadioButtonFor(model => model.Org_Sts, "4", Model.IsMain ? (object)new { @id = "orgStatus4" } : new { @id = "orgStatus4", disabled = "disabled" })
+                <label for="orgStatus4" style="font-weight: 500;">Public Ltd (Listed)</label>
+                <br />
+                @Html.RadioButtonFor(model => model.Org_Sts, "5", Model.IsMain ? (object)new { @id = "orgStatus5" } : new { @id = "orgStatus5", disabled = "disabled" })
+                <label for="orgStatus5" style="font-weight: 500;">Others</label>
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>2.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>Vendor Name</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.vend_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.vend_name)
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>3.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>CEO Name</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.CEO_name, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.CEO_name)
+            </div>
+            <div class="col-md-1" style="padding-right:0;padding-left:0;">
+                <span>Designation</span>
+            </div>
+            <div class="col-md-5">
+                @Html.TextBoxFor(model => model.Designation, Model.IsMain ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Designation)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-offset-2 col-md-10">
+                    <span>Contact Numbers</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Contact_no, Model.IsMain ? (object)new { placeholder = "993XXXXXX9", @class = "form-control decimal" } : new { placeholder = "993XXXXXX9", @class = "form-control decimal", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Contact_no)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-offset-2 col-md-10">
+                    <span>Email Address</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                @Html.HiddenFor(model => model.Email)
+                @Html.TextBoxFor(model => model.Email, new { placeholder = "test@gmail.com", @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>4.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>Address (Registered / Corporate Office)</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.Address1, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Address1)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-7">
+                @Html.TextBoxFor(model => model.Address11, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.Address1Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
+                @Html.ValidationMessageFor(model => model.Address1Pincode)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-3">
+                @Html.TextBoxFor(model => model.Address1Country, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Address1Country)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Address1State, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Address1State)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Address1City, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Address1City)
+            </div>
+        </div><br />
+        <div class="row">
+            <div class="col-md-offset-3 col-md-9">
+                @Html.CheckBoxFor(model => model.IsSameAsAddress1, Model.IsMain || Model.IsExistingUpdate ? (object)new { } : new { @disabled = "disabled" })
+                <label for="IsSameAsAddress1" style="font-weight: 500;">Same as Address (Registered / Corporate Office)</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-2">
+                    <span>5.</span>
+                </div>
+                <div class="col-md-10">
+                    <span>Address (PO/Supplies/Mfg/Trd.)</span><span class="color-red"> * </span>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.Address2, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Address2)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-7">
+                @Html.TextBoxFor(model => model.Address22, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control" } : new { @class = "form-control", @disabled = "disabled" })
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(model => model.Address2Pincode, Model.IsMain || Model.IsExistingUpdate ? (object)new { @class = "form-control", placeholder = "Pincode" } : new { @class = "form-control", @disabled = "disabled", placeholder = "Pincode" })
+                @Html.ValidationMessageFor(model => model.Address2Pincode)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-3 col-md-3">
+                @Html.TextBoxFor(model => model.Address2Country, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Address2Country)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Address2State, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Address2State)
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(model => model.Address2City, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Address2City)
+            </div>
+        </div>
+        <br /><br />
+        <input type="submit" value="Next" class="btn btn-success pull-right" />
+    </div>
     }
 </div>

@@ -45,12 +45,14 @@ namespace CVPortal.Controllers
                 model.Contact_no = vendor.Contact_no;
                 model.Email = vendor.Email;
                 model.Address1 = vendor.Address1;
+                model.Address11 = vendor.Address11;
                 model.Address1Country = vendor.Address1Country;
                 model.Address1State = vendor.Address1State;
                 model.Address1City = vendor.Address1City;
                 model.Address1Pincode = vendor.Address1Pincode;
                 model.IsSameAsAddress1 = vendor.IsSameAsAddress1 ?? false;
                 model.Address2 = vendor.Address2;
+                model.Address22 = vendor.Address22;
                 model.Address2Country = vendor.Address2Country;
                 model.Address2State = vendor.Address2State;
                 model.Address2City = vendor.Address2City;
@@ -460,6 +462,7 @@ namespace CVPortal.Controllers
                         }
 
                         vendor.Address1 = model.Address1;
+                        vendor.Address11 = model.Address11;
                         vendor.Address1Country = model.Address1Country;
                         vendor.Address1State = model.Address1State;
                         vendor.Address1StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Address1State)?.StateCode.ToString();
@@ -467,6 +470,7 @@ namespace CVPortal.Controllers
                         vendor.Address1Pincode = model.Address1Pincode;
                         vendor.IsSameAsAddress1 = model.IsSameAsAddress1;
                         vendor.Address2 = model.Address2;
+                        vendor.Address22 = model.Address22;
                         vendor.Address2Country = model.Address2Country;
                         vendor.Address2State = model.Address2State;
                         vendor.Address2StateCode = dataContext.StateCodeMasters.FirstOrDefault(x => x.StateName == model.Address2State)?.StateCode.ToString();
