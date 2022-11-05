@@ -491,8 +491,8 @@ namespace CVPortal.Areas.Users.Controllers
                     htmlContent = htmlContent.Replace("[CEO_CONTACT_NO]", customer.CEO_Contact_no);
                     htmlContent = htmlContent.Replace("[CONTACT_NO]", customer.Contact_no);
                     htmlContent = htmlContent.Replace("[EMAIL]", customer.Email);
-                    htmlContent = htmlContent.Replace("[ADDRESS1]", $"{customer.Dlr_Address}, {customer.Dlr_Add_Pincode} - {customer.Dlr_Add_City}, {customer.Dlr_Add_State}, {customer.Dlr_Add_Country}");
-                    htmlContent = htmlContent.Replace("[ADDRESS2]", $"{customer.Supp_Address}, {customer.Supp_Add_Pincode} - {customer.Supp_Add_City}, {customer.Supp_Add_State}, {customer.Supp_Add_Country}");
+                    htmlContent = htmlContent.Replace("[ADDRESS1]", $"{customer.Dlr_Address} {customer.Dlr_Address1}, {customer.Dlr_Add_Pincode} - {customer.Dlr_Add_City}, {customer.Dlr_Add_State}, {customer.Dlr_Add_Country}");
+                    htmlContent = htmlContent.Replace("[ADDRESS2]", $"{customer.Supp_Address} {customer.Supp_Address1}, {customer.Supp_Add_Pincode} - {customer.Supp_Add_City}, {customer.Supp_Add_State}, {customer.Supp_Add_Country}");
                     htmlContent = htmlContent.Replace("[AC_CONTACT_DESIG]", customer.AC_contact_Desig);
                     htmlContent = htmlContent.Replace("[AC_CONTACT_NAME]", customer.AC_contact_name);
                     htmlContent = htmlContent.Replace("[AC_CONTACT_PHNO]", customer.AC_contact_Phno);
@@ -656,7 +656,7 @@ namespace CVPortal.Areas.Users.Controllers
             foreach (var item in data)
             {
                 dt.Rows.Add(item.Cust_CodeVehicles, item.Cust_CodeSpares, item.Cust_CodeSecurity, item.Org_Sts, item.Cust_name, item.CEO_name, item.CEO_Designation, item.CEO_Contact_no,
-                    item.Email, item.Contact_no, item.Dlr_Address, item.Dlr_Add_Country, item.Dlr_Add_State, item.Dlr_Add_City, item.Dlr_Add_Pincode, item.Dlr_Add_StateCode, item.IsSameAsDlr_Address == true ? "Yes" : "No", item.Supp_Address,
+                    item.Email, item.Contact_no, $"{item.Dlr_Address} {item.Dlr_Address1}", item.Dlr_Add_Country, item.Dlr_Add_State, item.Dlr_Add_City, item.Dlr_Add_Pincode, item.Dlr_Add_StateCode, item.IsSameAsDlr_Address == true ? "Yes" : "No", $"{item.Supp_Address} {item.Supp_Address1}",
                     item.Supp_Add_Country, item.Supp_Add_State, item.Supp_Add_City, item.Supp_Add_Pincode, item.Supp_Add_StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Mob, item.AC_contact_Email,
                     item.CINNo_LLPNo, item.PAN_No, item.Type_Cust_gst, item.GST_Reg_no, item.Seucirty_Deposit, item.DDNo_UTRNo, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Swift_Code,
                     item.ITR_ReturnSts, item.ITR_ReturnStsTurnover == true ? "Yes" : "No", item.ITR_ReturnTDSDeduct == true ? "Yes" : "No", item.DealerType, $"{item.Date.ToString().Substring(6, 2)}/{item.Date.ToString().Substring(4, 2)}/{item.Date.ToString().Substring(0, 4)}",
@@ -818,7 +818,7 @@ namespace CVPortal.Areas.Users.Controllers
             foreach (var item in data)
             {
                 dt.Rows.Add(item.Cust_CodeVehicles, item.Cust_CodeSpares, item.Cust_CodeSecurity, item.Org_Sts, item.Cust_name, item.CEO_name, item.CEO_Designation, item.CEO_Contact_no,
-                    item.Email, item.Contact_no, item.Dlr_Address, item.Dlr_Add_Country, item.Dlr_Add_State, item.Dlr_Add_City, item.Dlr_Add_Pincode, item.Dlr_Add_StateCode, item.IsSameAsDlr_Address == true ? "Yes" : "No", item.Supp_Address,
+                    item.Email, item.Contact_no, $"{item.Dlr_Address} {item.Dlr_Address1}", item.Dlr_Add_Country, item.Dlr_Add_State, item.Dlr_Add_City, item.Dlr_Add_Pincode, item.Dlr_Add_StateCode, item.IsSameAsDlr_Address == true ? "Yes" : "No", $"{item.Supp_Address} {item.Supp_Address1}",
                     item.Supp_Add_Country, item.Supp_Add_State, item.Supp_Add_City, item.Supp_Add_Pincode, item.Supp_Add_StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Mob, item.AC_contact_Email,
                     item.CINNo_LLPNo, item.PAN_No, item.Type_Cust_gst, item.GST_Reg_no, item.Seucirty_Deposit, item.DDNo_UTRNo, item.Benificiary_name, item.Bank_name, item.Branch_name_Add, item.Account_no, item.MICR_code, item.IFSC_RTGS_code, item.Swift_Code,
                     item.ITR_ReturnSts, item.ITR_ReturnStsTurnover == true ? "Yes" : "No", item.ITR_ReturnTDSDeduct == true ? "Yes" : "No", item.DealerType, $"{item.Date.ToString().Substring(6, 2)}/{item.Date.ToString().Substring(4, 2)}/{item.Date.ToString().Substring(0, 4)}",

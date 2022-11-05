@@ -463,6 +463,12 @@ namespace CVPortal.Controllers
                         isError = true;
                     }
 
+                    if (!string.IsNullOrEmpty(model.Dlr_Address1) && model.Dlr_Address1.Length > 50)
+                    {
+                        ModelState.AddModelError(nameof(model.Dlr_Address), "Please add address less than 50 character.");
+                        isError = true;
+                    }
+
                     if (model.Supp_Address.Length > 50)
                     {
                         ModelState.AddModelError(nameof(model.Supp_Address), "Please add address less than 50 character.");

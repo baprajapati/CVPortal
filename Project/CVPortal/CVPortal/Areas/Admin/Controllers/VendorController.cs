@@ -323,8 +323,8 @@ namespace CVPortal.Areas.Admin.Controllers
                     htmlContent = htmlContent.Replace("[DESIGNATION]", vendor.Designation);
                     htmlContent = htmlContent.Replace("[CONTACT_NO]", vendor.Contact_no);
                     htmlContent = htmlContent.Replace("[EMAIL]", vendor.Email);
-                    htmlContent = htmlContent.Replace("[ADDRESS1]", $"{vendor.Address1}, {vendor.Address1Pincode} - {vendor.Address1City}, {vendor.Address1State}, {vendor.Address1Country}");
-                    htmlContent = htmlContent.Replace("[ADDRESS2]", $"{vendor.Address2}, {vendor.Address2Pincode} - {vendor.Address2City}, {vendor.Address2State}, {vendor.Address2Country}");
+                    htmlContent = htmlContent.Replace("[ADDRESS1]", $"{vendor.Address1} {vendor.Address11}, {vendor.Address1Pincode} - {vendor.Address1City}, {vendor.Address1State}, {vendor.Address1Country}");
+                    htmlContent = htmlContent.Replace("[ADDRESS2]", $"{vendor.Address2} {vendor.Address22}, {vendor.Address2Pincode} - {vendor.Address2City}, {vendor.Address2State}, {vendor.Address2Country}");
                     htmlContent = htmlContent.Replace("[AC_CONTACT_DESIG]", vendor.AC_contact_Desig);
                     htmlContent = htmlContent.Replace("[AC_CONTACT_NAME]", vendor.AC_contact_name);
                     htmlContent = htmlContent.Replace("[AC_CONTACT_PHNO]", vendor.AC_contact_Phno);
@@ -511,7 +511,7 @@ namespace CVPortal.Areas.Admin.Controllers
             foreach (var item in data)
             {
                 dt.Rows.Add(item.IsNewVendor ? "New" : "Existing", item.ExistingReason, item.Org_Sts, item.vend_name, item.CEO_name, item.Designation, item.Contact_no,
-                    item.Email, item.Address1, item.Address1Country, item.Address1State, item.Address1City, item.Address1Pincode, item.Address1StateCode, item.IsSameAsAddress1 == true ? "Yes" : "No", item.Address2,
+                    item.Email, $"{item.Address1} {item.Address11}", item.Address1Country, item.Address1State, item.Address1City, item.Address1Pincode, item.Address1StateCode, item.IsSameAsAddress1 == true ? "Yes" : "No", $"{item.Address2} {item.Address22}",
                     item.Address2Country, item.Address2State, item.Address2City, item.Address2Pincode, item.Address2StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Email,
                     item.Spy_contact_Desig, item.Spy_contact_name, item.Spy_contact_Phno, item.Spy_contact_Email, item.CIN_No, item.PAN_No, item.Type_vend_gst, item.GST_Reg_no, item.Item_Desc,
                     item.HSN_SAC_code, item.MSME_no, item.Annu_TurnOver, item.Nature_of_service, item.FinancialYear1, item.IsITRFiled1 == true ? "Yes":"No", item.AcknowledgeNo1, item.FinancialYear2,item.IsITRFiled2 == true ? "Yes" : "No",
@@ -683,7 +683,7 @@ namespace CVPortal.Areas.Admin.Controllers
             foreach (var item in data)
             {
                 dt.Rows.Add(item.IsNewVendor ? "New" : "Existing", item.ExistingReason, item.Org_Sts, item.vend_name, item.CEO_name, item.Designation, item.Contact_no,
-                    item.Email, item.Address1, item.Address1Country, item.Address1State, item.Address1City, item.Address1Pincode, item.Address1StateCode, item.IsSameAsAddress1 == true ? "Yes" : "No", item.Address2,
+                    item.Email, $"{item.Address1} {item.Address11}", item.Address1Country, item.Address1State, item.Address1City, item.Address1Pincode, item.Address1StateCode, item.IsSameAsAddress1 == true ? "Yes" : "No", $"{item.Address2} {item.Address22}",
                     item.Address2Country, item.Address2State, item.Address2City, item.Address2Pincode, item.Address2StateCode, item.AC_contact_Desig, item.AC_contact_name, item.AC_contact_Phno, item.AC_contact_Email,
                     item.Spy_contact_Desig, item.Spy_contact_name, item.Spy_contact_Phno, item.Spy_contact_Email, item.CIN_No, item.PAN_No, item.Type_vend_gst, item.GST_Reg_no, item.Item_Desc,
                     item.HSN_SAC_code, item.MSME_no, item.Annu_TurnOver, item.Nature_of_service, item.FinancialYear1, item.IsITRFiled1 == true ? "Yes" : "No", item.AcknowledgeNo1, item.FinancialYear2, item.IsITRFiled2 == true ? "Yes" : "No",

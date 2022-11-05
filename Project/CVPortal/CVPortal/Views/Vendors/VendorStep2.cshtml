@@ -388,7 +388,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    @Html.TextBoxFor(model => model.MSME_no, Model.IsMain ? (object)new { placeholder = "123XXXXXXXX9", @class = "form-control" } : new { placeholder = "123XXXXXXXX9", @class = "form-control", @disabled = "disabled" })
+                    @Html.TextBoxFor(model => model.MSME_no, Model.IsMain ? (object)new { placeholder = "123XX-XX-XX-XXXXXXX", @class = "form-control" } : new { placeholder = "123XX-XX-XX-XXXXXXX", @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.MSME_no)
                 </div>
                 <div class="col-md-5">

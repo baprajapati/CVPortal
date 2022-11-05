@@ -744,7 +744,7 @@ namespace CVPortal.Controllers
                             isError = true;
                         }
 
-                        if (!string.IsNullOrEmpty(model.MSME_no) && model.MSME_no.Length != 12)
+                        if (!string.IsNullOrEmpty(model.MSME_no) && model.MSME_no.Length != 19)
                         {
                             ModelState.AddModelError(nameof(model.MSME_no), "Please add proper MSME no.");
                             isError = true;
